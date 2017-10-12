@@ -4,7 +4,7 @@ To boot Steam from the terminal type `steam`.
 Either provide your own personal login, or use the group account:
 
 > Username: ivvrgrp
-> Password: r3a7itY
+> Password: r3a7itY#
 
 SteamVR is already installed in the local area, on the beta branch. If needed, it can be found at `~/.local/share/Steam/steamapps/common/SteamVR`.
 
