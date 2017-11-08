@@ -1,8 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
+﻿using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
+
 public class NetworkManager : MonoBehaviour {
 
 	public static bool serverHosted = false;
@@ -14,18 +15,20 @@ public class NetworkManager : MonoBehaviour {
 	private int socketId;
 	private int hostId;
 	private int connectionId;
+	private int myReliableChannelId;
+	private int myUnreliableChannelId;
 
 	// Use this for initialization
-	void Start () {
+	void Start() {
 		Button btnHost = buttonHost.GetComponent<Button>();
 		Button btnClient = buttonClient.GetComponent<Button>();
 		Button btnDisconnect = buttonDisconnect.GetComponent<Button>();
 
 
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 		if (serverHosted) {
 			int recHostId;
 			int connectionId;
@@ -84,8 +87,8 @@ public class NetworkManager : MonoBehaviour {
 		Debug.Log("Host Started");
 
 		ConnectionConfig config = new ConnectionConfig();
-		int myReiliableChannelId = config.AddChannel(QosType.Reliable);
-		int myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
+		myReliableChannelId = config.AddChannel(QosType.Reliable);
+		myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
 		HostTopology topology = new HostTopology(config, 1);
 		int socketId = NetworkTransport.AddHost(topology, 55607);
 		Debug.Log(socketId);
@@ -98,6 +101,7 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	public void StartDisconnect() {
+		serverHosted = false;
 		buttonDisconnect.SetActive(false);
 		byte error;
 		NetworkTransport.Disconnect(hostId, connectionId, out error);
@@ -107,10 +111,41 @@ public class NetworkManager : MonoBehaviour {
 		buttonClient.SetActive(true);
 	}
 
-	private void SendMessage() {
+	public void SendSerializeableTransform(Transform transfom) {
+		SerializeableTransform serializeableTransform = new SerializeableTransform(transform);
+		BinaryFormatter bf = new BinaryFormatter();
+		using (MemoryStream ms = new MemoryStream()) {
+			bf.Serialize(ms, serializeableTransform);
+			byte error;
+			Debug.Log(ms.ToArray());
+			Debug.Log(ms.ToArray().Length);
+			//NetworkTransport.Send(hostId, connectionId, myReliableChannelId, ms.ToArray(), ms.ToArray().Length, out error);
 
 
+		}
 
+
+	}
+
+	[System.Serializable]
+	private class SerializeableTransform {
+
+		[SerializeField]
+		private Vector3 position;
+		private Quaternion rotation;
+
+		public SerializeableTransform(Transform transform) {
+			this.position = transform.position;
+			this.rotation = transform.rotation;
+		}
+
+		public Vector3 GetPosition() {
+			return position;
+		}
+
+		public Quaternion GetQuaternion() {
+			return rotation;
+		}
 	}
 
 

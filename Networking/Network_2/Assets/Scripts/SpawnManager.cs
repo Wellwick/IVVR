@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpawnManager : MonoBehaviour {
 
 	public GameObject spawnable;
+	public NetworkManager networkmanager;
 
 	// Use this for initialization
 	void Start() {
+		networkmanager = GameObject.FindObjectOfType<NetworkManager>();
 
 	}
 
@@ -17,8 +17,11 @@ public class SpawnManager : MonoBehaviour {
 			if (Input.GetMouseButtonDown(0)) {
 				Vector3 objectPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 				objectPos.z = 0f;
-				Instantiate(spawnable, objectPos, Quaternion.identity);
+				GameObject cube = Instantiate(spawnable, objectPos, Quaternion.identity) as GameObject;
+				networkmanager.SendSerializeableTransform(cube.transform);
 			}
 		}
 	}
 }
+
+
