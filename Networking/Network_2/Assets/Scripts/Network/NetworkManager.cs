@@ -3,10 +3,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviour {
 
 	public static bool serverHosted = false;
+	public static NetworkManager instance;
 
 	public GameObject buttonHost;
 	public GameObject buttonClient;
@@ -17,14 +19,23 @@ public class NetworkManager : MonoBehaviour {
 	private int connectionId;
 	private int myReliableChannelId;
 	private int myUnreliableChannelId;
+	private SpawnManager spawnmanager;
+	private bool networkInitialised;
 
 	// Use this for initialization
 	void Start() {
 		Button btnHost = buttonHost.GetComponent<Button>();
 		Button btnClient = buttonClient.GetComponent<Button>();
 		Button btnDisconnect = buttonDisconnect.GetComponent<Button>();
-
-
+		spawnmanager = GameObject.FindObjectOfType<SpawnManager>();
+		networkInitialised = false;
+		if (instance == null) {
+			DontDestroyOnLoad(this);
+			instance = this;
+		} else {
+			Destroy(this);
+		}
+		
 	}
 
 	// Update is called once per frame
@@ -43,12 +54,23 @@ public class NetworkManager : MonoBehaviour {
 					break;
 				case NetworkEventType.ConnectEvent:
 					Debug.Log("Connection request from id: " + connectionId + " Received");
+					this.connectionId = connectionId;
 					break;
 				case NetworkEventType.DataEvent:
+					SerializeableTransform data;
 					Debug.Log("Data Received");
+					BinaryFormatter bf = new BinaryFormatter();
+					using(MemoryStream ms = new MemoryStream(recBuffer)) {
+						data = bf.Deserialize(ms) as SerializeableTransform;
+					}
+					spawnmanager.SpawnObjectNetwork(data);
+
 					break;
 				case NetworkEventType.DisconnectEvent:
+					serverHosted = false;
 					Debug.Log("Disconnect Received");
+					SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
 					break;
 			}
 		}
@@ -59,20 +81,19 @@ public class NetworkManager : MonoBehaviour {
 		buttonHost.SetActive(false);
 		buttonClient.SetActive(false);
 		Debug.Log("Cleared UI");
-
-		NetworkTransport.Init();
-		Debug.Log("Host Started");
-
-		ConnectionConfig config = new ConnectionConfig();
-		int myReiliableChannelId = config.AddChannel(QosType.Reliable);
-		int myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
-		HostTopology topology = new HostTopology(config, 1);
-		int socketId = NetworkTransport.AddHost(topology, 7777);
-		Debug.Log(socketId);
+		if (!networkInitialised) {
+			NetworkTransport.Init();
+			Debug.Log("Host Started");
+			ConnectionConfig config = new ConnectionConfig();
+			int myReiliableChannelId = config.AddChannel(QosType.Reliable);
+			int myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
+			HostTopology topology = new HostTopology(config, 1);
+			int socketId = NetworkTransport.AddHost(topology, 7777);
+			Debug.Log(socketId);
+			networkInitialised = true;
+		}
 
 		serverHosted = true;
-
-
 
 	}
 
@@ -80,19 +101,20 @@ public class NetworkManager : MonoBehaviour {
 		buttonHost.SetActive(false);
 		buttonClient.SetActive(false);
 		Debug.Log("Cleared UI");
-
 		buttonDisconnect.SetActive(true);
 
-		NetworkTransport.Init();
-		Debug.Log("Host Started");
+		if (!networkInitialised) {
+			NetworkTransport.Init();
+			Debug.Log("Host Started");
 
-		ConnectionConfig config = new ConnectionConfig();
-		myReliableChannelId = config.AddChannel(QosType.Reliable);
-		myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
-		HostTopology topology = new HostTopology(config, 1);
-		int socketId = NetworkTransport.AddHost(topology, 55607);
-		Debug.Log(socketId);
-
+			ConnectionConfig config = new ConnectionConfig();
+			myReliableChannelId = config.AddChannel(QosType.Reliable);
+			myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
+			HostTopology topology = new HostTopology(config, 1);
+			int socketId = NetworkTransport.AddHost(topology, 55607);
+			Debug.Log(socketId);
+			networkInitialised = true;
+		}
 		byte error;
 		int connectionId = NetworkTransport.Connect(socketId, "127.0.0.1", 7777, 0, out error);
 		Debug.Log("Connected to server. ConnectionId: " + connectionId);
@@ -102,24 +124,23 @@ public class NetworkManager : MonoBehaviour {
 
 	public void StartDisconnect() {
 		serverHosted = false;
-		buttonDisconnect.SetActive(false);
 		byte error;
 		NetworkTransport.Disconnect(hostId, connectionId, out error);
 		Debug.Log("Disconnected");
-
-		buttonHost.SetActive(true);
-		buttonClient.SetActive(true);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
-	public void SendSerializeableTransform(Transform transfom) {
-		SerializeableTransform serializeableTransform = new SerializeableTransform(transform);
+	public void SendSerializeableTransform(GameObject spawnable) {
+		Debug.Log("sending message on network");
+		SerializeableTransform st = new SerializeableTransform(spawnable.transform);
+		Debug.Log(st);
 		BinaryFormatter bf = new BinaryFormatter();
 		using (MemoryStream ms = new MemoryStream()) {
-			bf.Serialize(ms, serializeableTransform);
+			bf.Serialize(ms, st);
 			byte error;
 			Debug.Log(ms.ToArray());
 			Debug.Log(ms.ToArray().Length);
-			//NetworkTransport.Send(hostId, connectionId, myReliableChannelId, ms.ToArray(), ms.ToArray().Length, out error);
+			NetworkTransport.Send(hostId, connectionId, myReliableChannelId, ms.ToArray(), 1024, out error);
 
 
 		}
@@ -128,24 +149,29 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	[System.Serializable]
-	private class SerializeableTransform {
+	public class SerializeableTransform {
+		public float posX;
+		public float posY;
+		public float posZ;
+		public float rotX;
+		public float rotY;
+		public float rotZ;
+		public float rotW;
 
-		[SerializeField]
-		private Vector3 position;
-		private Quaternion rotation;
 
 		public SerializeableTransform(Transform transform) {
-			this.position = transform.position;
-			this.rotation = transform.rotation;
+			posX = transform.position.x;
+			posY = transform.position.y;
+			posZ = transform.position.z;
+			rotX = transform.rotation.x;
+			rotY = transform.rotation.y;
+			rotZ = transform.rotation.z;
 		}
 
-		public Vector3 GetPosition() {
-			return position;
+		public override string ToString() {
+			return "x = " + posX + "\ny = " + posY + "\nz = " + posZ;
 		}
 
-		public Quaternion GetQuaternion() {
-			return rotation;
-		}
 	}
 
 
