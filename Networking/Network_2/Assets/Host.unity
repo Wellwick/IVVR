@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -446,7 +446,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 519069856}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 541.5, y: 304.5, z: 0}
+  m_LocalPosition: {x: 485.5, y: 273, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 816353325}
@@ -697,6 +697,8 @@ MonoBehaviour:
   buttonHost: {fileID: 816353324}
   buttonClient: {fileID: 404708258}
   buttonDisconnect: {fileID: 691255831}
+  levelmanager: {fileID: 114473884922887682, guid: 967699119939f23448e7809bd1552009,
+    type: 2}
 --- !u!4 &806922829
 Transform:
   m_ObjectHideFlags: 0
@@ -1213,6 +1215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnable: {fileID: 1027769378231238, guid: c7080f57eb90894459b56422744458f7, type: 2}
+  networkmanager: {fileID: 806922828}
 --- !u!4 &2008999693
 Transform:
   m_ObjectHideFlags: 0
