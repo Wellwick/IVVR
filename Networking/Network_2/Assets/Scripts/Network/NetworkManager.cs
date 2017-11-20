@@ -5,7 +5,8 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class NetworkManager : MonoBehaviour {
+public class NetworkManager : MonoBehaviour
+{
 
     public static bool serverHosted = false;
 
@@ -23,7 +24,8 @@ public class NetworkManager : MonoBehaviour {
     private bool networkInitialised;
 
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         Button btnHost = buttonHost.GetComponent<Button>();
         Button btnClient = buttonClient.GetComponent<Button>();
         Button btnDisconnect = buttonDisconnect.GetComponent<Button>();
@@ -33,8 +35,10 @@ public class NetworkManager : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
-        if (serverHosted) {
+    void Update()
+    {
+        if (serverHosted)
+        {
             int recHostId;
             int connectionId;
             int channelId;
@@ -43,7 +47,8 @@ public class NetworkManager : MonoBehaviour {
             int dataSize;
             byte error;
             NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
-            switch (recData) {
+            switch (recData)
+            {
                 case NetworkEventType.Nothing:
                     break;
                 case NetworkEventType.ConnectEvent:
@@ -54,7 +59,8 @@ public class NetworkManager : MonoBehaviour {
                     SerializeableTransform data;
                     Debug.Log("Data Received");
                     BinaryFormatter bf = new BinaryFormatter();
-                    using (MemoryStream ms = new MemoryStream(recBuffer)) {
+                    using (MemoryStream ms = new MemoryStream(recBuffer))
+                    {
                         data = bf.Deserialize(ms) as SerializeableTransform;
                     }
                     spawnmanager.SpawnObjectNetwork(data);
@@ -71,17 +77,18 @@ public class NetworkManager : MonoBehaviour {
 
     }
 
-    public void StartHost() {
+    public void StartHost()
+    {
         buttonHost.SetActive(false);
         buttonClient.SetActive(false);
         Debug.Log("Cleared UI");
-        if (!networkInitialised) {
+        if (!networkInitialised)
+        {
             NetworkTransport.Init();
             Debug.Log("Host Started");
             ConnectionConfig config = new ConnectionConfig();
             int myReiliableChannelId = config.AddChannel(QosType.Reliable);
-            int myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
-            HostTopology topology = new HostTopology(config, 1);
+            HostTopology topology = new HostTopology(config, 2);
             int socketId = NetworkTransport.AddHost(topology, 7777);
             Debug.Log(socketId);
             networkInitialised = true;
@@ -91,32 +98,34 @@ public class NetworkManager : MonoBehaviour {
 
     }
 
-    public void StartClient() {
+    public void StartClient()
+    {
         buttonHost.SetActive(false);
         buttonClient.SetActive(false);
         Debug.Log("Cleared UI");
         buttonDisconnect.SetActive(true);
 
-        if (!networkInitialised) {
+        if (!networkInitialised)
+        {
             NetworkTransport.Init();
             Debug.Log("Host Started");
 
             ConnectionConfig config = new ConnectionConfig();
             myReliableChannelId = config.AddChannel(QosType.Reliable);
-            myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
-            HostTopology topology = new HostTopology(config, 1);
-            int socketId = NetworkTransport.AddHost(topology, 55607);
+            HostTopology topology = new HostTopology(config, 2);
+            int socketId = NetworkTransport.AddHost(topology);
             Debug.Log(socketId);
             networkInitialised = true;
         }
         byte error;
-        int connectionId = NetworkTransport.Connect(socketId, "127.0.0.1", 7777, 0, out error);
-        Debug.Log("Connected to server. ConnectionId: " + connectionId);
+        int connectionId = NetworkTransport.Connect(socketId, "192.168.0.59", 7777, 0, out error);
+        NetworkError nwError = (NetworkError)Enum.Parse(typeof(NetworkError), error.ToString());
         serverHosted = true;
 
     }
 
-    public void StartDisconnect() {
+    public void StartDisconnect()
+    {
         serverHosted = false;
         byte error;
         NetworkTransport.Disconnect(hostId, connectionId, out error);
@@ -124,12 +133,14 @@ public class NetworkManager : MonoBehaviour {
         levelmanager.LoadLevel(SceneManager.GetActiveScene().name);
     }
 
-    public void SendSerializeableTransform(GameObject spawnable) {
+    public void SendSerializeableTransform(GameObject spawnable)
+    {
         Debug.Log("sending message on network");
         SerializeableTransform st = new SerializeableTransform(spawnable.transform);
         Debug.Log(st);
         BinaryFormatter bf = new BinaryFormatter();
-        using (MemoryStream ms = new MemoryStream()) {
+        using (MemoryStream ms = new MemoryStream())
+        {
             bf.Serialize(ms, st);
             byte error;
             Debug.Log(ms.ToArray());
@@ -143,7 +154,8 @@ public class NetworkManager : MonoBehaviour {
     }
 
     [System.Serializable]
-    public class SerializeableTransform {
+    public class SerializeableTransform
+    {
         public float posX;
         public float posY;
         public float posZ;
@@ -153,7 +165,8 @@ public class NetworkManager : MonoBehaviour {
         public float rotW;
 
 
-        public SerializeableTransform(Transform transform) {
+        public SerializeableTransform(Transform transform)
+        {
             posX = transform.position.x;
             posY = transform.position.y;
             posZ = transform.position.z;
@@ -162,7 +175,8 @@ public class NetworkManager : MonoBehaviour {
             rotZ = transform.rotation.z;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return "x = " + posX + "\ny = " + posY + "\nz = " + posZ;
         }
 
