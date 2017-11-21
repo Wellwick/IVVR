@@ -7,14 +7,27 @@ public class ControllerGrabObject : MonoBehaviour {
 	private SteamVR_TrackedObject trackedObj;
 	private GameObject collidingObject;
 	private GameObject objectInHand;
+	public GameObject firePrefab;
+	private GameObject fire;
 	
 	// Update is called once per frame
 	void Update () {
 		if (Controller.GetHairTriggerDown() && collidingObject)
 			GrabObject();
 
+		if (Controller.GetHairTriggerDown() && !collidingObject)
+			SpawnFire();
+
+		if (Controller.GetHairTriggerUp())
+			RemoveFire();
+
 		if (Controller.GetHairTriggerUp() && objectInHand)
 			ReleaseObject();
+
+		if (fire) {
+			fire.transform.position = trackedObj.transform.position;
+			fire.transform.rotation = trackedObj.transform.rotation;
+		}
 	}
 
 	private SteamVR_Controller.Device Controller {
@@ -72,5 +85,19 @@ public class ControllerGrabObject : MonoBehaviour {
 		}
 
 		objectInHand = null;
+	}
+
+	public void SpawnFire() {
+		//set the fire prefab to the position and orientation of the controller and spawn the fire
+		//fire.SetActive(true);
+		//fireTransform = trackedObj.transform;
+		fire = Instantiate(firePrefab, 
+			trackedObj.transform.position, 
+			Quaternion.identity) as GameObject;
+
+	}
+
+	public void RemoveFire() {
+		Destroy(fire);
 	}
 }

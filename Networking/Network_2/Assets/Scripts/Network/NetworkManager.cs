@@ -70,7 +70,7 @@ public class NetworkManager : MonoBehaviour
                     serverHosted = false;
                     Debug.Log("Disconnect Received");
                     levelmanager.LoadLevel(SceneManager.GetActiveScene().name);
-
+                    Debug.Log("The error was: " + ((NetworkError)error).ToString());
                     break;
             }
         }
@@ -87,7 +87,7 @@ public class NetworkManager : MonoBehaviour
             NetworkTransport.Init();
             Debug.Log("Host Started");
             ConnectionConfig config = new ConnectionConfig();
-            int myReiliableChannelId = config.AddChannel(QosType.Reliable);
+            int myReiliableChannelId = config.AddChannel(QosType.ReliableSequenced);
             HostTopology topology = new HostTopology(config, 2);
             int socketId = NetworkTransport.AddHost(topology, 7777);
             Debug.Log(socketId);
@@ -111,15 +111,14 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("Host Started");
 
             ConnectionConfig config = new ConnectionConfig();
-            myReliableChannelId = config.AddChannel(QosType.Reliable);
+            myReliableChannelId = config.AddChannel(QosType.ReliableSequenced);
             HostTopology topology = new HostTopology(config, 2);
             int socketId = NetworkTransport.AddHost(topology);
             Debug.Log(socketId);
             networkInitialised = true;
         }
         byte error;
-        int connectionId = NetworkTransport.Connect(socketId, "192.168.0.59", 7777, 0, out error);
-        NetworkError nwError = (NetworkError)Enum.Parse(typeof(NetworkError), error.ToString());
+        int connectionId = NetworkTransport.Connect(socketId, "188.223.171.115", 7777, 0, out error);
         serverHosted = true;
 
     }

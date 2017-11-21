@@ -23,3 +23,5 @@ For a scene to be able to catch the Vive's input, the default camera must be rem
 # Current Problems
 
 The audio jack for the Vive does not seem to be working. For now, will need a long cable to attach to the tower in order to hear audio.
+
+If you encounter the error `It looks like another Unity instance is running with this project open.` when opening a Unity project, navigate to it's directory and delete the Temp/UnityLockfile.
