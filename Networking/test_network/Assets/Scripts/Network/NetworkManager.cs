@@ -8,8 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NetworkManager : MonoBehaviour
-{
+public class NetworkManager : MonoBehaviour {
 
     public static bool serverHosted = false;
 
@@ -33,8 +32,7 @@ public class NetworkManager : MonoBehaviour
 
 
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
         Button btnHost = buttonHost.GetComponent<Button>();
         Button btnClient = buttonClient.GetComponent<Button>();
         Button btnDisconnect = buttonDisconnect.GetComponent<Button>();
@@ -45,8 +43,7 @@ public class NetworkManager : MonoBehaviour
 
     }
 
-    void Update()
-    {
+    void Update() {
         if (isHost == false) {
             if (stream.DataAvailable) {
                 string data;
@@ -65,8 +62,9 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public void StartHost()
-    {
+    public void StartHost() {
+        buttonHost.SetActive(false);
+        buttonClient.SetActive(false);
         IPAddress localAddr = IPAddress.Parse(ipaddress);
         serversocket = new TcpListener(localAddr, port) as TcpListener;
         Debug.Log("created socket for server");
@@ -81,10 +79,12 @@ public class NetworkManager : MonoBehaviour
 
 
 
+
     }
 
-    public void StartClient()
-    {
+    public void StartClient() {
+        buttonHost.SetActive(false);
+        buttonClient.SetActive(false);
         IPAddress localAddr = IPAddress.Parse(ipaddress);
         TcpClient socket = new TcpClient();
         Debug.Log("created socket for client");
@@ -98,8 +98,7 @@ public class NetworkManager : MonoBehaviour
     }
 
 
-    public void SendSerializeableString(string message)
-    {
+    public void SendSerializeableString(string message) {
         Debug.Log("sending message on network");
         Debug.Log(message);
         BinaryFormatter bf = new BinaryFormatter();
@@ -110,8 +109,7 @@ public class NetworkManager : MonoBehaviour
     }
 
 
-    public void SendSerializeableTransform(GameObject spawnable)
-    {
+    public void SendSerializeableTransform(GameObject spawnable) {
         Debug.Log("sending message on network");
         SerializeableTransform st = new SerializeableTransform(spawnable.transform);
         Debug.Log(st);
@@ -129,8 +127,7 @@ public class NetworkManager : MonoBehaviour
     }
 
     [System.Serializable]
-    public class SerializeableTransform
-    {
+    public class SerializeableTransform {
         public float posX;
         public float posY;
         public float posZ;
@@ -140,8 +137,7 @@ public class NetworkManager : MonoBehaviour
         public float rotW;
 
 
-        public SerializeableTransform(Transform transform)
-        {
+        public SerializeableTransform(Transform transform) {
             posX = transform.position.x;
             posY = transform.position.y;
             posZ = transform.position.z;
@@ -150,8 +146,7 @@ public class NetworkManager : MonoBehaviour
             rotZ = transform.rotation.z;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return "x = " + posX + "\ny = " + posY + "\nz = " + posZ;
         }
 

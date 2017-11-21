@@ -16,7 +16,6 @@ public class NetworkManager : MonoBehaviour
     public LevelManager levelmanager;
 
     private int socketId;
-    private int hostId;
     private int connectionId;
     private int myReliableChannelId;
     private int myUnreliableChannelId;
@@ -69,6 +68,7 @@ public class NetworkManager : MonoBehaviour
                 case NetworkEventType.DisconnectEvent:
                     serverHosted = false;
                     Debug.Log("Disconnect Received");
+                    Debug.Log(error);
                     levelmanager.LoadLevel(SceneManager.GetActiveScene().name);
                     Debug.Log("The error was: " + ((NetworkError)error).ToString());
                     break;
@@ -98,6 +98,7 @@ public class NetworkManager : MonoBehaviour
 
     }
 
+
     public void StartClient()
     {
         buttonHost.SetActive(false);
@@ -119,6 +120,13 @@ public class NetworkManager : MonoBehaviour
         }
         byte error;
         int connectionId = NetworkTransport.Connect(socketId, "188.223.171.115", 7777, 0, out error);
+<<<<<<< HEAD
+=======
+
+        SendSerializeableString("hello");
+        Debug.Log(error);
+
+>>>>>>> 0fdbadba0a3d72e5b885fddbfe7df26a06f43d66
         serverHosted = true;
 
     }
@@ -127,9 +135,27 @@ public class NetworkManager : MonoBehaviour
     {
         serverHosted = false;
         byte error;
-        NetworkTransport.Disconnect(hostId, connectionId, out error);
+        NetworkTransport.Disconnect(socketId, connectionId, out error);
         Debug.Log("Disconnected");
         levelmanager.LoadLevel(SceneManager.GetActiveScene().name);
+    }
+
+    public void SendSerializeableString(string message) {
+        Debug.Log("sending message on network");
+        Debug.Log(message);
+        BinaryFormatter bf = new BinaryFormatter();
+        using (MemoryStream ms = new MemoryStream())
+        {
+            bf.Serialize(ms, message);
+            byte error;
+            Debug.Log(ms.ToArray());
+            Debug.Log(ms.ToArray().Length);
+            NetworkTransport.Send(socketId, connectionId, myReliableChannelId, ms.ToArray(), 1024, out error);
+
+
+        }
+
+
     }
 
     public void SendSerializeableTransform(GameObject spawnable)
@@ -144,7 +170,7 @@ public class NetworkManager : MonoBehaviour
             byte error;
             Debug.Log(ms.ToArray());
             Debug.Log(ms.ToArray().Length);
-            NetworkTransport.Send(hostId, connectionId, myReliableChannelId, ms.ToArray(), 1024, out error);
+            NetworkTransport.Send(socketId, connectionId, myReliableChannelId, ms.ToArray(), 1024, out error);
 
 
         }
