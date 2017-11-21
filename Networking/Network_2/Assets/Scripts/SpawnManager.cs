@@ -2,7 +2,7 @@
 
 public class SpawnManager : MonoBehaviour {
     public GameObject spawnable;
-    public NetworkManager networkmanager;
+    private NetworkManager networkmanager;
     // Use this for initialization
     void Start() {
         networkmanager = GameObject.FindObjectOfType<NetworkManager>();
