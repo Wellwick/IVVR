@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,5 +12,5 @@ public class Prefabs : MonoBehaviour {
 		Fire
 	}
 
-	public GameObject[] prefabs = new GameObject[Enum.GetValues(typeof(PID)).Length];
+	public GameObject[] prefabs = new GameObject[Enum.GetNames(typeof(PID)).Length];
 }

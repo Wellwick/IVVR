@@ -94,7 +94,6 @@ public class ControllerGrabObject : MonoBehaviour {
 		fire = Instantiate(firePrefab, 
 			trackedObj.transform.position, 
 			Quaternion.identity) as GameObject;
-
 	}
 
 	public void RemoveFire() {

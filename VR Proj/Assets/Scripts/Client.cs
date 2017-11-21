@@ -44,7 +44,7 @@ public class Client : MonoBehaviour {
             int recHostId;
             int connectionId;
             int channelId;
-            byte[] recBuffer = new byte[1024];
+            byte[] recBuffer = new byte[1024]; //Info for actions to occur
             int bufferSize = 1024;
             int dataSize;
             byte error;
@@ -53,22 +53,21 @@ public class Client : MonoBehaviour {
             {
                 case NetworkEventType.Nothing:
                     break;
-                case NetworkEventType.ConnectEvent:
+                case NetworkEventType.ConnectEvent: //AR connects
                     Debug.Log("Connection request from id: " + connectionId + " Received");
                     this.connectionId = connectionId;
                     break;
                 case NetworkEventType.DataEvent:
                     Debug.Log("Data Received");
-                    if (recBuffer[0] == 0) {
+                    if (recBuffer[0] == 0) { // recBuffer set by connection, value chosen by AR end
 						leftController.GetComponent<ControllerGrabObject>().RemoveFire();
 						rightController.GetComponent<ControllerGrabObject>().RemoveFire();
 					} else if (recBuffer[0] == 1) {
 						leftController.GetComponent<ControllerGrabObject>().SpawnFire();
 						rightController.GetComponent<ControllerGrabObject>().SpawnFire();
-					}
-
+                    }
                     break;
-                case NetworkEventType.DisconnectEvent:
+                case NetworkEventType.DisconnectEvent: //AR disconnects
                     networkInitialised = false;
 					Debug.Log("Disconnect Received");
                     break;

@@ -89,7 +89,7 @@ public class NetworkManager : MonoBehaviour
             ConnectionConfig config = new ConnectionConfig();
             int myReiliableChannelId = config.AddChannel(QosType.ReliableSequenced);
             HostTopology topology = new HostTopology(config, 2);
-            int socketId = NetworkTransport.AddHost(topology, 7777);
+            int socketId = NetworkTransport.AddHost(topology, 9090);
             Debug.Log(socketId);
             networkInitialised = true;
         }
@@ -120,13 +120,9 @@ public class NetworkManager : MonoBehaviour
         }
         byte error;
         int connectionId = NetworkTransport.Connect(socketId, "188.223.171.115", 7777, 0, out error);
-<<<<<<< HEAD
-=======
 
         SendSerializeableString("hello");
         Debug.Log(error);
-
->>>>>>> 0fdbadba0a3d72e5b885fddbfe7df26a06f43d66
         serverHosted = true;
 
     }
