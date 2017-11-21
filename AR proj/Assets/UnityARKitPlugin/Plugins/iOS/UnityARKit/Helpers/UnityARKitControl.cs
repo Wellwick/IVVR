@@ -38,7 +38,7 @@ namespace UnityEngine.XR.iOS
         void OnGUI()
         {
             if (GUI.Button (new Rect (100, 100, 200, 50), "Stop")) {
-                UnityARSessionNativeInterface.GetARSessionNativeInterface().Pause ();
+                UnityARSessionNativeInterface.GetARSessionNativeInterface ().Pause ();
             }
 
             if (GUI.Button (new Rect (300, 100, 200, 50), "Start")) {
@@ -67,12 +67,6 @@ namespace UnityEngine.XR.iOS
             if (GUI.Button (new Rect (500, 200, 150, 50), "PlaneOption:" + planeOptionStr)) {
                 currentPlaneIndex = (currentPlaneIndex + 1) % 2;
             }
-
-			string size = gameObject.GetComponent<PointCloudParticleExample>().particleSize;
-			if (GUI.Button (new Rect (500, 200, 150, 50), "Particle Size:" + size)) {
-				gameObject.GetComponent<PointCloudParticleExample> ().particleSize++;
-				
-			}
         }
     }
 }

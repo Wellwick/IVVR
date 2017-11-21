@@ -8,7 +8,7 @@ public class ParticlePainter : MonoBehaviour {
     public float minDistanceThreshold;
     public float maxDistanceThreshold;
     private bool frameUpdated = false;
-    private float particleSize = 2.0f;
+    public float particleSize = .1f;
     public float penDistance = 0.2f;
     public ColorPicker colorPicker;
     private ParticleSystem currentPS;

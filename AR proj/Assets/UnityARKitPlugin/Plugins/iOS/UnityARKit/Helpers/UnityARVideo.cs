@@ -17,9 +17,6 @@ namespace UnityEngine.XR.iOS
 
 		private bool bCommandBufferInitialized;
 
-		//In attempt to block camera movement, only update camera pose if cameraInitialised = false
-		private bool cameraInitialised;
-
 		public void Start()
 		{
 			UnityARSessionNativeInterface.ARFrameUpdatedEvent += UpdateFrame;
@@ -28,15 +25,11 @@ namespace UnityEngine.XR.iOS
 
 		void UpdateFrame(UnityARCamera cam)
 		{
-			////This way of blocking the camera movement did not seem to work
-			//if (!cameraInitialised) {
-			_displayTransform = new Matrix4x4 ();
-			_displayTransform.SetColumn (0, cam.displayTransform.column0);
-			_displayTransform.SetColumn (1, cam.displayTransform.column1);
-			_displayTransform.SetColumn (2, cam.displayTransform.column2);
-			_displayTransform.SetColumn (3, cam.displayTransform.column3);
-			//cameraInitialised = true;
-			//}
+			_displayTransform = new Matrix4x4();
+			_displayTransform.SetColumn(0, cam.displayTransform.column0);
+			_displayTransform.SetColumn(1, cam.displayTransform.column1);
+			_displayTransform.SetColumn(2, cam.displayTransform.column2);
+			_displayTransform.SetColumn(3, cam.displayTransform.column3);		
 		}
 
 		void InitializeCommandBuffer()
