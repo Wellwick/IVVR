@@ -16,6 +16,7 @@ public class Client : MonoBehaviour {
 
 	public GameObject leftController;
 	public GameObject rightController;
+    public GameObject Camera;
 
 	// Use this for initialization
 	void Start () {
@@ -59,12 +60,24 @@ public class Client : MonoBehaviour {
                     break;
                 case NetworkEventType.DataEvent:
                     Debug.Log("Data Received");
-                    if (recBuffer[0] == 0) { // recBuffer set by connection, value chosen by AR end
-						leftController.GetComponent<ControllerGrabObject>().RemoveFire();
-						rightController.GetComponent<ControllerGrabObject>().RemoveFire();
-					} else if (recBuffer[0] == 1) {
-						leftController.GetComponent<ControllerGrabObject>().SpawnFire();
-						rightController.GetComponent<ControllerGrabObject>().SpawnFire();
+                    switch (recBuffer[0]){
+                        case 0:
+                            leftController.GetComponent<ControllerGrabObject>().RemoveFire();
+						    rightController.GetComponent<ControllerGrabObject>().RemoveFire();
+                            break;
+                        case 1:
+                            leftController.GetComponent<ControllerGrabObject>().SpawnFire();
+						    rightController.GetComponent<ControllerGrabObject>().SpawnFire();
+                            break;
+                        case 2:
+                            Camera.GetComponent<shootBall>().throwBall(); //shootBall.cs is on camera(eyes) shoots ball in direction facing.
+                            break;
+                        case 3:
+                            Camera.GetComponent<wallDemo>().spawnWall();
+                            break;
+                        case 4:
+                            Camera.GetComponent<wallDemo>().killWall();
+                            break;
                     }
                     break;
                 case NetworkEventType.DisconnectEvent: //AR disconnects

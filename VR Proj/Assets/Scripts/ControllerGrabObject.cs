@@ -9,6 +9,7 @@ public class ControllerGrabObject : MonoBehaviour {
 	private GameObject objectInHand;
 	public GameObject firePrefab;
 	private GameObject fire;
+	public Rigidbody ballPrefab; //to throw
 	
 	// Update is called once per frame
 	void Update () {
@@ -98,5 +99,13 @@ public class ControllerGrabObject : MonoBehaviour {
 
 	public void RemoveFire() {
 		Destroy(fire);
+	}
+
+	//Throw a ball forwards
+	public void throwBall(float speed){
+		Rigidbody ball = (Rigidbody) Instantiate(ballPrefab,
+			trackedObj.transform.position,
+			Quaternion.identity); //Spawn ball in direction and location of controller
+		ball.velocity = transform.forward * speed; //Give ball velocity forwards
 	}
 }
