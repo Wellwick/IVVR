@@ -1,0 +1,11 @@
+<linker>
+	<assembly fullname="Assembly-CSharp">
+		<type fullname="UI_Dropdown">
+			<method name="InfoToggle"/>
+			<method name="UIConnect"/>
+			<method name="ActionDropdownIndexChange"/>
+			<method name="DoAction"/>
+			<method name="ObjectDropdownIndexChange"/>
+		</type>
+	</assembly>
+</linker>

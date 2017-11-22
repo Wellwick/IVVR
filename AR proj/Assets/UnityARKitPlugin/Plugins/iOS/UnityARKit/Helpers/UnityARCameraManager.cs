@@ -87,4 +87,13 @@ public class UnityARCameraManager : MonoBehaviour {
 
 	}
 
+
+	public Vector3 getPosition(){
+		if (m_camera != null) {
+			Matrix4x4 matrix = m_session.GetCameraPose ();
+			return m_camera.transform.localPosition = UnityARMatrixOps.GetPosition (matrix);
+		}
+		return new Vector3 ();
+	}
+
 }
