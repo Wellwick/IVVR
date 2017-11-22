@@ -20,7 +20,7 @@ public class NetworkManager : MonoBehaviour {
 		ConnectionConfig config = new ConnectionConfig();
 		unreliableChannel = config.AddChannel(QosType.Unreliable);
 		HostTopology topology = new HostTopology(config, 2);
-		int socketId = NetworkTransport.AddHost(topology, 7777);
+		socketId = NetworkTransport.AddHost(topology, 7777);
 		Debug.Log(socketId);
 
 	}

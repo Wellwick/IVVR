@@ -17,9 +17,11 @@ public class Client : MonoBehaviour {
 	public GameObject leftController;
 	public GameObject rightController;
     public GameObject Camera;
+    public GameObject spooker;
 
 	// Use this for initialization
 	void Start () {
+        //needs to host!
         networkInitialised = false;
 
         if (!networkInitialised)
@@ -29,18 +31,30 @@ public class Client : MonoBehaviour {
 
             ConnectionConfig config = new ConnectionConfig();
             myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
-            HostTopology topology = new HostTopology(config, 2);
+            HostTopology topology = new HostTopology(config, 1);
             socketId = NetworkTransport.AddHost(topology);
             Debug.Log(socketId);
-            networkInitialised = true;
+            networkInitialised = false;/* TODO For the time being! */
         }
-        byte error;
-        connectionId = NetworkTransport.Connect(socketId, "188.223.171.115", 7777, 0, out error);
+        // VR device is no longer the one trying to connect
+        /* BRING THIS BACK FOR PHONE */
+        //connectionId = NetworkTransport.Connect(socketId, "137.205.112.42", 9090, 0, out error);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (networkInitialised)
+		//test for buttons to do stuff! 
+        /* GET RID OF THIS FOR PHONE */
+        if (Input.GetKeyDown(KeyCode.A))
+            Camera.GetComponent<shootBall>().throwBall();
+        else if (Input.GetKeyDown(KeyCode.S))
+            Camera.GetComponent<wallDemo>().spawnWall();
+        else if (Input.GetKeyDown(KeyCode.D))
+            Camera.GetComponent<wallDemo>().demolishWall();
+        else if (Input.GetKeyDown(KeyCode.F))
+            spooker.GetComponent<Spook>().spookPlayer();
+        
+        if (networkInitialised)
         {
             int recHostId;
             int connectionId;
@@ -76,7 +90,10 @@ public class Client : MonoBehaviour {
                             Camera.GetComponent<wallDemo>().spawnWall();
                             break;
                         case 4:
-                            Camera.GetComponent<wallDemo>().killWall();
+                            Camera.GetComponent<wallDemo>().demolishWall();
+                            break;
+                        case 5:
+                            spooker.GetComponent<Spook>().spookPlayer();
                             break;
                     }
                     break;
