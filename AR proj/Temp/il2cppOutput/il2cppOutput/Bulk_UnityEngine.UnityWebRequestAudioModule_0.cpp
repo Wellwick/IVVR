@@ -19,21 +19,21 @@
 #include "object-internals.h"
 
 // UnityEngine.Networking.DownloadHandlerAudioClip
-struct DownloadHandlerAudioClip_t1728970536;
+struct DownloadHandlerAudioClip_t131808952;
 // System.String
 struct String_t;
 // UnityEngine.Networking.DownloadHandler
-struct DownloadHandler_t801465532;
+struct DownloadHandler_t4038028702;
 // System.Char[]
-struct CharU5BU5D_t1188297506;
+struct CharU5BU5D_t1241517462;
 // System.Void
-struct Void_t117209531;
+struct Void_t3481060289;
 
 
 
 
-#ifndef U3CMODULEU3E_T4000807569_H
-#define U3CMODULEU3E_T4000807569_H
+#ifndef U3CMODULEU3E_T789025549_H
+#define U3CMODULEU3E_T789025549_H
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
@@ -41,7 +41,7 @@ struct Void_t117209531;
 #endif
 
 // <Module>
-struct  U3CModuleU3E_t4000807569 
+struct  U3CModuleU3E_t789025549 
 {
 public:
 
@@ -51,7 +51,7 @@ public:
 #ifdef __clang__
 #pragma clang diagnostic pop
 #endif
-#endif // U3CMODULEU3E_T4000807569_H
+#endif // U3CMODULEU3E_T789025549_H
 #ifndef RUNTIMEOBJECT_H
 #define RUNTIMEOBJECT_H
 #ifdef __clang__
@@ -122,7 +122,7 @@ public:
 	// System.String System.String::Empty
 	String_t* ___Empty_2;
 	// System.Char[] System.String::WhiteChars
-	CharU5BU5D_t1188297506* ___WhiteChars_3;
+	CharU5BU5D_t1241517462* ___WhiteChars_3;
 
 public:
 	inline static int32_t get_offset_of_Empty_2() { return static_cast<int32_t>(offsetof(String_t_StaticFields, ___Empty_2)); }
@@ -135,9 +135,9 @@ public:
 	}
 
 	inline static int32_t get_offset_of_WhiteChars_3() { return static_cast<int32_t>(offsetof(String_t_StaticFields, ___WhiteChars_3)); }
-	inline CharU5BU5D_t1188297506* get_WhiteChars_3() const { return ___WhiteChars_3; }
-	inline CharU5BU5D_t1188297506** get_address_of_WhiteChars_3() { return &___WhiteChars_3; }
-	inline void set_WhiteChars_3(CharU5BU5D_t1188297506* value)
+	inline CharU5BU5D_t1241517462* get_WhiteChars_3() const { return ___WhiteChars_3; }
+	inline CharU5BU5D_t1241517462** get_address_of_WhiteChars_3() { return &___WhiteChars_3; }
+	inline void set_WhiteChars_3(CharU5BU5D_t1241517462* value)
 	{
 		___WhiteChars_3 = value;
 		Il2CppCodeGenWriteBarrier((&___WhiteChars_3), value);
@@ -148,8 +148,8 @@ public:
 #pragma clang diagnostic pop
 #endif
 #endif // STRING_T_H
-#ifndef VALUETYPE_T961760270_H
-#define VALUETYPE_T961760270_H
+#ifndef VALUETYPE_T4009437022_H
+#define VALUETYPE_T4009437022_H
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
@@ -157,7 +157,7 @@ public:
 #endif
 
 // System.ValueType
-struct  ValueType_t961760270  : public RuntimeObject
+struct  ValueType_t4009437022  : public RuntimeObject
 {
 public:
 
@@ -168,16 +168,16 @@ public:
 #pragma clang diagnostic pop
 #endif
 // Native definition for P/Invoke marshalling of System.ValueType
-struct ValueType_t961760270_marshaled_pinvoke
+struct ValueType_t4009437022_marshaled_pinvoke
 {
 };
 // Native definition for COM marshalling of System.ValueType
-struct ValueType_t961760270_marshaled_com
+struct ValueType_t4009437022_marshaled_com
 {
 };
-#endif // VALUETYPE_T961760270_H
-#ifndef VOID_T117209531_H
-#define VOID_T117209531_H
+#endif // VALUETYPE_T4009437022_H
+#ifndef VOID_T3481060289_H
+#define VOID_T3481060289_H
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
@@ -185,7 +185,7 @@ struct ValueType_t961760270_marshaled_com
 #endif
 
 // System.Void
-struct  Void_t117209531 
+struct  Void_t3481060289 
 {
 public:
 
@@ -195,9 +195,9 @@ public:
 #ifdef __clang__
 #pragma clang diagnostic pop
 #endif
-#endif // VOID_T117209531_H
-#ifndef ENUM_T2683167568_H
-#define ENUM_T2683167568_H
+#endif // VOID_T3481060289_H
+#ifndef ENUM_T3373012579_H
+#define ENUM_T3373012579_H
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
@@ -205,24 +205,24 @@ public:
 #endif
 
 // System.Enum
-struct  Enum_t2683167568  : public ValueType_t961760270
+struct  Enum_t3373012579  : public ValueType_t4009437022
 {
 public:
 
 public:
 };
 
-struct Enum_t2683167568_StaticFields
+struct Enum_t3373012579_StaticFields
 {
 public:
 	// System.Char[] System.Enum::split_char
-	CharU5BU5D_t1188297506* ___split_char_0;
+	CharU5BU5D_t1241517462* ___split_char_0;
 
 public:
-	inline static int32_t get_offset_of_split_char_0() { return static_cast<int32_t>(offsetof(Enum_t2683167568_StaticFields, ___split_char_0)); }
-	inline CharU5BU5D_t1188297506* get_split_char_0() const { return ___split_char_0; }
-	inline CharU5BU5D_t1188297506** get_address_of_split_char_0() { return &___split_char_0; }
-	inline void set_split_char_0(CharU5BU5D_t1188297506* value)
+	inline static int32_t get_offset_of_split_char_0() { return static_cast<int32_t>(offsetof(Enum_t3373012579_StaticFields, ___split_char_0)); }
+	inline CharU5BU5D_t1241517462* get_split_char_0() const { return ___split_char_0; }
+	inline CharU5BU5D_t1241517462** get_address_of_split_char_0() { return &___split_char_0; }
+	inline void set_split_char_0(CharU5BU5D_t1241517462* value)
 	{
 		___split_char_0 = value;
 		Il2CppCodeGenWriteBarrier((&___split_char_0), value);
@@ -233,14 +233,14 @@ public:
 #pragma clang diagnostic pop
 #endif
 // Native definition for P/Invoke marshalling of System.Enum
-struct Enum_t2683167568_marshaled_pinvoke
+struct Enum_t3373012579_marshaled_pinvoke
 {
 };
 // Native definition for COM marshalling of System.Enum
-struct Enum_t2683167568_marshaled_com
+struct Enum_t3373012579_marshaled_com
 {
 };
-#endif // ENUM_T2683167568_H
+#endif // ENUM_T3373012579_H
 #ifndef INTPTR_T_H
 #define INTPTR_T_H
 #ifdef __clang__
@@ -286,8 +286,8 @@ public:
 #pragma clang diagnostic pop
 #endif
 #endif // INTPTR_T_H
-#ifndef AUDIOTYPE_T2677206257_H
-#define AUDIOTYPE_T2677206257_H
+#ifndef AUDIOTYPE_T501443869_H
+#define AUDIOTYPE_T501443869_H
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
@@ -295,14 +295,14 @@ public:
 #endif
 
 // UnityEngine.AudioType
-struct  AudioType_t2677206257 
+struct  AudioType_t501443869 
 {
 public:
 	// System.Int32 UnityEngine.AudioType::value__
 	int32_t ___value___1;
 
 public:
-	inline static int32_t get_offset_of_value___1() { return static_cast<int32_t>(offsetof(AudioType_t2677206257, ___value___1)); }
+	inline static int32_t get_offset_of_value___1() { return static_cast<int32_t>(offsetof(AudioType_t501443869, ___value___1)); }
 	inline int32_t get_value___1() const { return ___value___1; }
 	inline int32_t* get_address_of_value___1() { return &___value___1; }
 	inline void set_value___1(int32_t value)
@@ -314,9 +314,9 @@ public:
 #ifdef __clang__
 #pragma clang diagnostic pop
 #endif
-#endif // AUDIOTYPE_T2677206257_H
-#ifndef DOWNLOADHANDLER_T801465532_H
-#define DOWNLOADHANDLER_T801465532_H
+#endif // AUDIOTYPE_T501443869_H
+#ifndef DOWNLOADHANDLER_T4038028702_H
+#define DOWNLOADHANDLER_T4038028702_H
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
@@ -324,14 +324,14 @@ public:
 #endif
 
 // UnityEngine.Networking.DownloadHandler
-struct  DownloadHandler_t801465532  : public RuntimeObject
+struct  DownloadHandler_t4038028702  : public RuntimeObject
 {
 public:
 	// System.IntPtr UnityEngine.Networking.DownloadHandler::m_Ptr
 	intptr_t ___m_Ptr_0;
 
 public:
-	inline static int32_t get_offset_of_m_Ptr_0() { return static_cast<int32_t>(offsetof(DownloadHandler_t801465532, ___m_Ptr_0)); }
+	inline static int32_t get_offset_of_m_Ptr_0() { return static_cast<int32_t>(offsetof(DownloadHandler_t4038028702, ___m_Ptr_0)); }
 	inline intptr_t get_m_Ptr_0() const { return ___m_Ptr_0; }
 	inline intptr_t* get_address_of_m_Ptr_0() { return &___m_Ptr_0; }
 	inline void set_m_Ptr_0(intptr_t value)
@@ -344,18 +344,18 @@ public:
 #pragma clang diagnostic pop
 #endif
 // Native definition for P/Invoke marshalling of UnityEngine.Networking.DownloadHandler
-struct DownloadHandler_t801465532_marshaled_pinvoke
+struct DownloadHandler_t4038028702_marshaled_pinvoke
 {
 	intptr_t ___m_Ptr_0;
 };
 // Native definition for COM marshalling of UnityEngine.Networking.DownloadHandler
-struct DownloadHandler_t801465532_marshaled_com
+struct DownloadHandler_t4038028702_marshaled_com
 {
 	intptr_t ___m_Ptr_0;
 };
-#endif // DOWNLOADHANDLER_T801465532_H
-#ifndef DOWNLOADHANDLERAUDIOCLIP_T1728970536_H
-#define DOWNLOADHANDLERAUDIOCLIP_T1728970536_H
+#endif // DOWNLOADHANDLER_T4038028702_H
+#ifndef DOWNLOADHANDLERAUDIOCLIP_T131808952_H
+#define DOWNLOADHANDLERAUDIOCLIP_T131808952_H
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
@@ -363,7 +363,7 @@ struct DownloadHandler_t801465532_marshaled_com
 #endif
 
 // UnityEngine.Networking.DownloadHandlerAudioClip
-struct  DownloadHandlerAudioClip_t1728970536  : public DownloadHandler_t801465532
+struct  DownloadHandlerAudioClip_t131808952  : public DownloadHandler_t4038028702
 {
 public:
 
@@ -374,32 +374,32 @@ public:
 #pragma clang diagnostic pop
 #endif
 // Native definition for P/Invoke marshalling of UnityEngine.Networking.DownloadHandlerAudioClip
-struct DownloadHandlerAudioClip_t1728970536_marshaled_pinvoke : public DownloadHandler_t801465532_marshaled_pinvoke
+struct DownloadHandlerAudioClip_t131808952_marshaled_pinvoke : public DownloadHandler_t4038028702_marshaled_pinvoke
 {
 };
 // Native definition for COM marshalling of UnityEngine.Networking.DownloadHandlerAudioClip
-struct DownloadHandlerAudioClip_t1728970536_marshaled_com : public DownloadHandler_t801465532_marshaled_com
+struct DownloadHandlerAudioClip_t131808952_marshaled_com : public DownloadHandler_t4038028702_marshaled_com
 {
 };
-#endif // DOWNLOADHANDLERAUDIOCLIP_T1728970536_H
+#endif // DOWNLOADHANDLERAUDIOCLIP_T131808952_H
 
 
 
 // System.Void UnityEngine.Networking.DownloadHandler::.ctor()
-extern "C"  void DownloadHandler__ctor_m293024845 (DownloadHandler_t801465532 * __this, const RuntimeMethod* method) IL2CPP_METHOD_ATTR;
+extern "C"  void DownloadHandler__ctor_m3984254184 (DownloadHandler_t4038028702 * __this, const RuntimeMethod* method) IL2CPP_METHOD_ATTR;
 // System.Void UnityEngine.Networking.DownloadHandlerAudioClip::InternalCreateAudioClip(System.String,UnityEngine.AudioType)
-extern "C"  void DownloadHandlerAudioClip_InternalCreateAudioClip_m230006200 (DownloadHandlerAudioClip_t1728970536 * __this, String_t* ___url0, int32_t ___audioType1, const RuntimeMethod* method) IL2CPP_METHOD_ATTR;
+extern "C"  void DownloadHandlerAudioClip_InternalCreateAudioClip_m547297491 (DownloadHandlerAudioClip_t131808952 * __this, String_t* ___url0, int32_t ___audioType1, const RuntimeMethod* method) IL2CPP_METHOD_ATTR;
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
 #pragma clang diagnostic ignored "-Wunused-variable"
 #endif
 // Conversion methods for marshalling of: UnityEngine.Networking.DownloadHandlerAudioClip
-extern "C" void DownloadHandlerAudioClip_t1728970536_marshal_pinvoke(const DownloadHandlerAudioClip_t1728970536& unmarshaled, DownloadHandlerAudioClip_t1728970536_marshaled_pinvoke& marshaled)
+extern "C" void DownloadHandlerAudioClip_t131808952_marshal_pinvoke(const DownloadHandlerAudioClip_t131808952& unmarshaled, DownloadHandlerAudioClip_t131808952_marshaled_pinvoke& marshaled)
 {
 	marshaled.___m_Ptr_0 = unmarshaled.get_m_Ptr_0();
 }
-extern "C" void DownloadHandlerAudioClip_t1728970536_marshal_pinvoke_back(const DownloadHandlerAudioClip_t1728970536_marshaled_pinvoke& marshaled, DownloadHandlerAudioClip_t1728970536& unmarshaled)
+extern "C" void DownloadHandlerAudioClip_t131808952_marshal_pinvoke_back(const DownloadHandlerAudioClip_t131808952_marshaled_pinvoke& marshaled, DownloadHandlerAudioClip_t131808952& unmarshaled)
 {
 	intptr_t unmarshaled_m_Ptr_temp_0;
 	memset(&unmarshaled_m_Ptr_temp_0, 0, sizeof(unmarshaled_m_Ptr_temp_0));
@@ -407,15 +407,15 @@ extern "C" void DownloadHandlerAudioClip_t1728970536_marshal_pinvoke_back(const 
 	unmarshaled.set_m_Ptr_0(unmarshaled_m_Ptr_temp_0);
 }
 // Conversion method for clean up from marshalling of: UnityEngine.Networking.DownloadHandlerAudioClip
-extern "C" void DownloadHandlerAudioClip_t1728970536_marshal_pinvoke_cleanup(DownloadHandlerAudioClip_t1728970536_marshaled_pinvoke& marshaled)
+extern "C" void DownloadHandlerAudioClip_t131808952_marshal_pinvoke_cleanup(DownloadHandlerAudioClip_t131808952_marshaled_pinvoke& marshaled)
 {
 }
 // Conversion methods for marshalling of: UnityEngine.Networking.DownloadHandlerAudioClip
-extern "C" void DownloadHandlerAudioClip_t1728970536_marshal_com(const DownloadHandlerAudioClip_t1728970536& unmarshaled, DownloadHandlerAudioClip_t1728970536_marshaled_com& marshaled)
+extern "C" void DownloadHandlerAudioClip_t131808952_marshal_com(const DownloadHandlerAudioClip_t131808952& unmarshaled, DownloadHandlerAudioClip_t131808952_marshaled_com& marshaled)
 {
 	marshaled.___m_Ptr_0 = unmarshaled.get_m_Ptr_0();
 }
-extern "C" void DownloadHandlerAudioClip_t1728970536_marshal_com_back(const DownloadHandlerAudioClip_t1728970536_marshaled_com& marshaled, DownloadHandlerAudioClip_t1728970536& unmarshaled)
+extern "C" void DownloadHandlerAudioClip_t131808952_marshal_com_back(const DownloadHandlerAudioClip_t131808952_marshaled_com& marshaled, DownloadHandlerAudioClip_t131808952& unmarshaled)
 {
 	intptr_t unmarshaled_m_Ptr_temp_0;
 	memset(&unmarshaled_m_Ptr_temp_0, 0, sizeof(unmarshaled_m_Ptr_temp_0));
@@ -423,27 +423,27 @@ extern "C" void DownloadHandlerAudioClip_t1728970536_marshal_com_back(const Down
 	unmarshaled.set_m_Ptr_0(unmarshaled_m_Ptr_temp_0);
 }
 // Conversion method for clean up from marshalling of: UnityEngine.Networking.DownloadHandlerAudioClip
-extern "C" void DownloadHandlerAudioClip_t1728970536_marshal_com_cleanup(DownloadHandlerAudioClip_t1728970536_marshaled_com& marshaled)
+extern "C" void DownloadHandlerAudioClip_t131808952_marshal_com_cleanup(DownloadHandlerAudioClip_t131808952_marshaled_com& marshaled)
 {
 }
 // System.Void UnityEngine.Networking.DownloadHandlerAudioClip::.ctor(System.String,UnityEngine.AudioType)
-extern "C"  void DownloadHandlerAudioClip__ctor_m2407059676 (DownloadHandlerAudioClip_t1728970536 * __this, String_t* ___url0, int32_t ___audioType1, const RuntimeMethod* method)
+extern "C"  void DownloadHandlerAudioClip__ctor_m1294147705 (DownloadHandlerAudioClip_t131808952 * __this, String_t* ___url0, int32_t ___audioType1, const RuntimeMethod* method)
 {
 	{
-		DownloadHandler__ctor_m293024845(__this, /*hidden argument*/NULL);
+		DownloadHandler__ctor_m3984254184(__this, /*hidden argument*/NULL);
 		String_t* L_0 = ___url0;
 		int32_t L_1 = ___audioType1;
-		DownloadHandlerAudioClip_InternalCreateAudioClip_m230006200(__this, L_0, L_1, /*hidden argument*/NULL);
+		DownloadHandlerAudioClip_InternalCreateAudioClip_m547297491(__this, L_0, L_1, /*hidden argument*/NULL);
 		return;
 	}
 }
 // System.Void UnityEngine.Networking.DownloadHandlerAudioClip::InternalCreateAudioClip(System.String,UnityEngine.AudioType)
-extern "C"  void DownloadHandlerAudioClip_InternalCreateAudioClip_m230006200 (DownloadHandlerAudioClip_t1728970536 * __this, String_t* ___url0, int32_t ___audioType1, const RuntimeMethod* method)
+extern "C"  void DownloadHandlerAudioClip_InternalCreateAudioClip_m547297491 (DownloadHandlerAudioClip_t131808952 * __this, String_t* ___url0, int32_t ___audioType1, const RuntimeMethod* method)
 {
-	typedef void (*DownloadHandlerAudioClip_InternalCreateAudioClip_m230006200_ftn) (DownloadHandlerAudioClip_t1728970536 *, String_t*, int32_t);
-	static DownloadHandlerAudioClip_InternalCreateAudioClip_m230006200_ftn _il2cpp_icall_func;
+	typedef void (*DownloadHandlerAudioClip_InternalCreateAudioClip_m547297491_ftn) (DownloadHandlerAudioClip_t131808952 *, String_t*, int32_t);
+	static DownloadHandlerAudioClip_InternalCreateAudioClip_m547297491_ftn _il2cpp_icall_func;
 	if (!_il2cpp_icall_func)
-	_il2cpp_icall_func = (DownloadHandlerAudioClip_InternalCreateAudioClip_m230006200_ftn)il2cpp_codegen_resolve_icall ("UnityEngine.Networking.DownloadHandlerAudioClip::InternalCreateAudioClip(System.String,UnityEngine.AudioType)");
+	_il2cpp_icall_func = (DownloadHandlerAudioClip_InternalCreateAudioClip_m547297491_ftn)il2cpp_codegen_resolve_icall ("UnityEngine.Networking.DownloadHandlerAudioClip::InternalCreateAudioClip(System.String,UnityEngine.AudioType)");
 	_il2cpp_icall_func(__this, ___url0, ___audioType1);
 }
 #ifdef __clang__

@@ -22,8 +22,8 @@
 
 
 
-#ifndef U3CMODULEU3E_T4000807570_H
-#define U3CMODULEU3E_T4000807570_H
+#ifndef U3CMODULEU3E_T789025550_H
+#define U3CMODULEU3E_T789025550_H
 #ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
@@ -31,7 +31,7 @@
 #endif
 
 // <Module>
-struct  U3CModuleU3E_t4000807570 
+struct  U3CModuleU3E_t789025550 
 {
 public:
 
@@ -41,7 +41,7 @@ public:
 #ifdef __clang__
 #pragma clang diagnostic pop
 #endif
-#endif // U3CMODULEU3E_T4000807570_H
+#endif // U3CMODULEU3E_T789025550_H
 #ifndef RUNTIMEOBJECT_H
 #define RUNTIMEOBJECT_H
 #ifdef __clang__
