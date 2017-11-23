@@ -14,6 +14,8 @@ public class NetworkManager : MonoBehaviour {
 	private int connectionId;
 	private int myReliableChannelId;
 	private int myUnreliableChannelId;
+	private int myUpdateChannelId;
+    private int myStateChannelId;
 	private bool networkInitialised;
     private bool clientConnected;
 
@@ -39,6 +41,8 @@ public class NetworkManager : MonoBehaviour {
             Debug.Log("Host Started");
             ConnectionConfig config = new ConnectionConfig();
             myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
+            myUpdateChannelId = config.AddChannel(QosType.Reliable);
+            // myStateChannelId = config.AddChannel(QosType.StateUpdate);
             HostTopology topology = new HostTopology(config, 2);
             socketId = NetworkTransport.AddHost(topology, 9090);
             Debug.Log("Socket ID: " + socketId);
@@ -85,6 +89,8 @@ public class NetworkManager : MonoBehaviour {
             {
                 case NetworkEventType.Nothing:
                     //because nothing is happening, let's try and update the AR on positions
+                    break;
+                    /* IGNORING THIS STUFF FOR NOW!
                     if (clientConnected && (Time.timeSinceLevelLoad - timer > (1.0/updateRatePerSec))) {
                         Debug.Log("Trying to update client on " + networkedObjects.Count + " objects");
                         for (int i = 0; i < networkedObjects.Count; i++) {
@@ -93,13 +99,14 @@ public class NetworkManager : MonoBehaviour {
                             bf = new BinaryFormatter();
                             using (MemoryStream ms = new MemoryStream()) {
                                 bf.Serialize(ms, message);
-                                NetworkTransport.Send(socketId, this.connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error2);
+                                NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, ms.ToArray(), 1024, out error2);
                             }
                         }
                         //finished update, save timer val
                         timer = Time.timeSinceLevelLoad;
                     }
                     break;
+                    */
                 case NetworkEventType.ConnectEvent: //AR connects
                     Debug.Log("Connection request from id: " + connectionId + " Received");
                     this.connectionId = connectionId;
@@ -149,6 +156,20 @@ public class NetworkManager : MonoBehaviour {
                     networkInitialised = false;
 					Debug.Log("Disconnect Received");
                     break;
+            }
+            if (clientConnected && Input.GetKeyDown(KeyCode.U)) {
+                Debug.Log("Trying to update client on " + networkedObjects.Count + " objects");
+                for (int i = 0; i < networkedObjects.Count; i++) {
+                    NetworkMessage message = new NetworkMessage(3, i, null, networkedObjects[i].transform);
+                    byte error2;
+                    bf = new BinaryFormatter();
+                    using (MemoryStream ms = new MemoryStream()) {
+                        bf.Serialize(ms, message);
+                        NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, ms.ToArray(), 1024, out error2);
+                    }
+                }
+                //finished update, save timer val
+                timer = Time.timeSinceLevelLoad;
             }
         }
 	}
