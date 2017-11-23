@@ -62,18 +62,27 @@ public class NetworkManager : MonoBehaviour {
 				break;
 			case NetworkEventType.DataEvent:
 				NetworkMessage data;
+				GameObject instance;
 				Debug.Log("Data Received");
 				BinaryFormatter bf = new BinaryFormatter();
 				using(MemoryStream ms = new MemoryStream(recBuffer)){
 					data = bf.Deserialize(ms) as NetworkMessage;
 				}
 				switch (data.type){
-					case 0:
-					case 1:
-						GameObject instance = spawnManager.SpawnObject(data.prefabId.Value, data.transform);
+					case 0: //start
+					case 1: //adding request from VR
+						instance = spawnManager.SpawnObject(data.prefabId.Value, data.transform);
 						NetworkIdentities.networkedObjects.Add(data.id.Value, instance);
 						break;
+					case 3: //receiving updates
+						Debug.Log("Trying to update");
+						NetworkIdentities.networkedObjects.TryGetValue(data.id.Value, out instance);
+						SerializeableTransform st = data.transform;
+						instance.transform.position = new Vector3(st.posX, st.posY, st.posZ);
+						instance.transform.rotation = new Quaternion(st.rotX, st.rotY, st.rotZ, st.rotW);
+						break;
 					default:
+						Debug.Log("invalid message type");
 						break;
 
 				}
@@ -108,15 +117,11 @@ public class NetworkManager : MonoBehaviour {
 		BinaryFormatter bf = new BinaryFormatter();
 		using(MemoryStream ms = new MemoryStream()){
 			bf.Serialize(ms, message);
+			Debug.Log(ms.ToArray().Length);
 			NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error);
 		}
 	}
 
-	public void RequestUpdate(int prefabId){
-		//NetworkMessage message = new NetworkMessage(2, id, null, null);
-
-
-	}
 
 	#endregion
 
