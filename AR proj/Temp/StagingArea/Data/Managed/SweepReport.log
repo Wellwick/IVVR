@@ -2,16 +2,16 @@
 All Assemblies
 ---------------------------------------------------
 Summary:
-  Total Type Removals = 2267
+  Total Type Removals = 2301
     Nested = 181
-    Interfaces = 141
-    Abstract Classes = 150
+    Interfaces = 142
+    Abstract Classes = 155
     Generic Types = 85
     Generic Interfaces = 6
     Generic Abstract Classes = 3
     Attributes = 176
-  Total Field Removals = 749
-  Total Method Removals = 11844
+  Total Field Removals = 750
+  Total Method Removals = 11986
 ---------------------------------------------------
 ---------------------------------------------------
 Assembly: Mono.Security
@@ -9367,7 +9367,7 @@ Summary:
     Attributes = 0
   Total Field Removals = 0
   Total Method Removals = 0
-  References Removed = 28
+  References Removed = 26
     UnityEngine.AccessibilityModule
     UnityEngine.AIModule
     UnityEngine.ARModule
@@ -9386,9 +9386,7 @@ Summary:
     UnityEngine.TerrainModule
     UnityEngine.TerrainPhysicsModule
     UnityEngine.UIElementsModule
-    UnityEngine.UNETModule
     UnityEngine.UnityAnalyticsModule
-    UnityEngine.UnityWebRequestAudioModule
     UnityEngine.UnityWebRequestTextureModule
     UnityEngine.UnityWebRequestWWWModule
     UnityEngine.VehiclesModule
@@ -10358,7 +10356,7 @@ Summary:
 Assembly: UnityEngine.CoreModule
 ---------------------------------------------------
 Summary:
-  Total Type Removals = 413
+  Total Type Removals = 412
     Nested = 9
     Interfaces = 10
     Abstract Classes = 17
@@ -10568,7 +10566,6 @@ Summary:
     UnityEngine.AtomicSafetyHandleVersionMask
     UnityEngine.AttributeHelperEngine
         .ctor()
-    UnityEngine.AudioType
     UnityEngine.BatteryStatus
     UnityEngine.BillboardAsset
     UnityEngine.BillboardRenderer
@@ -16104,20 +16101,178 @@ Summary:
 Assembly: UnityEngine.UNETModule
 ---------------------------------------------------
 Summary:
-  Total Type Removals = 0
+  Total Type Removals = 34
     Nested = 0
-    Interfaces = 0
-    Abstract Classes = 0
+    Interfaces = 1
+    Abstract Classes = 4
     Generic Types = 0
     Generic Interfaces = 0
     Generic Abstract Classes = 0
     Attributes = 0
-  Total Field Removals = 0
-  Total Method Removals = 0
+  Total Field Removals = 1
+  Total Method Removals = 119
   References Removed = 2
     UnityEngine.UnityWebRequestWWWModule
     UnityEngine.WebModule
 ---------------------------------------------------
+    <PrivateImplementationDetails>
+    UnityEngine.Networking.ConnectionConfig
+        g_MinPacketSize
+        get_Channels()
+        get_IsAcksLong()
+        set_AckDelay(System.UInt32)
+        set_AcksType(UnityEngine.Networking.ConnectionAcksType)
+        set_AllCostTimeout(System.UInt32)
+        set_BandwidthPeakFactor(System.Single)
+        set_ConnectTimeout(System.UInt32)
+        set_DisconnectTimeout(System.UInt32)
+        set_FragmentSize(System.UInt16)
+        set_InitialBandwidth(System.UInt32)
+        set_IsAcksLong(System.Boolean)
+        set_MaxCombinedReliableMessageCount(System.UInt16)
+        set_MaxCombinedReliableMessageSize(System.UInt16)
+        set_MaxConnectionAttempt(System.Byte)
+        set_MaxSentMessageQueueSize(System.UInt16)
+        set_MinUpdateTimeout(System.UInt32)
+        set_NetworkDropThreshold(System.Byte)
+        set_OverflowDropThreshold(System.Byte)
+        set_PacketSize(System.UInt16)
+        set_PingTimeout(System.UInt32)
+        set_ReducedPingTimeout(System.UInt32)
+        set_ResendTimeout(System.UInt32)
+        set_SendDelay(System.UInt32)
+        set_SSLCAFilePath(System.String)
+        set_SSLCertFilePath(System.String)
+        set_SSLPrivateKeyFilePath(System.String)
+        set_UdpSocketReceiveBufferMaxSize(System.UInt32)
+        set_UsePlatformSpecificProtocols(System.Boolean)
+        set_WebSocketReceiveBufferMaxSize(System.UInt16)
+    UnityEngine.Networking.ConnectionConfigInternal
+        .ctor()
+        get_ChannelSize()
+        GetChannel(System.Int32)
+    UnityEngine.Networking.ConnectionSimulatorConfig
+    UnityEngine.Networking.GlobalConfig
+    UnityEngine.Networking.GlobalConfigInternal
+    UnityEngine.Networking.HostTopology
+        AddSpecialConnectionConfig(UnityEngine.Networking.ConnectionConfig)
+        set_MessagePoolSizeGrowthFactor(System.Single)
+        set_ReceivedMessagePoolSize(System.UInt16)
+        set_SentMessagePoolSize(System.UInt16)
+    UnityEngine.Networking.Match.BasicResponse
+    UnityEngine.Networking.Match.CreateMatchRequest
+    UnityEngine.Networking.Match.CreateMatchResponse
+    UnityEngine.Networking.Match.CreateOrJoinMatchRequest
+    UnityEngine.Networking.Match.DestroyMatchRequest
+    UnityEngine.Networking.Match.DropConnectionRequest
+    UnityEngine.Networking.Match.DropConnectionResponse
+    UnityEngine.Networking.Match.IResponse
+    UnityEngine.Networking.Match.JoinMatchRequest
+    UnityEngine.Networking.Match.JoinMatchResponse
+    UnityEngine.Networking.Match.ListMatchRequest
+    UnityEngine.Networking.Match.ListMatchResponse
+    UnityEngine.Networking.Match.MatchDesc
+    UnityEngine.Networking.Match.MatchDirectConnectInfo
+    UnityEngine.Networking.Match.MatchInfo
+    UnityEngine.Networking.Match.MatchInfoSnapshot
+    UnityEngine.Networking.Match.NetworkMatch
+    UnityEngine.Networking.Match.Request
+    UnityEngine.Networking.Match.Response
+    UnityEngine.Networking.Match.ResponseBase
+    UnityEngine.Networking.Match.SetMatchAttributesRequest
+    UnityEngine.Networking.NetworkTransport
+        .ctor()
+        AddHost(UnityEngine.Networking.HostTopology,System.Int32)
+        AddHostWithSimulator(UnityEngine.Networking.HostTopology,System.Int32,System.Int32)
+        AddHostWithSimulator(UnityEngine.Networking.HostTopology,System.Int32,System.Int32,System.Int32)
+        AddHostWithSimulator(UnityEngine.Networking.HostTopology,System.Int32,System.Int32,System.Int32,System.String)
+        AddSceneId(System.Int32)
+        AddWebsocketHost(UnityEngine.Networking.HostTopology,System.Int32)
+        AddWebsocketHost(UnityEngine.Networking.HostTopology,System.Int32,System.String)
+        AddWsHostWrapper(UnityEngine.Networking.HostTopologyInternal,System.String,System.Int32)
+        AddWsHostWrapperWithoutIp(UnityEngine.Networking.HostTopologyInternal,System.Int32)
+        ConnectAsNetworkHost(System.Int32,System.String,System.Int32,UnityEngine.Networking.Types.NetworkID,UnityEngine.Networking.Types.SourceID,UnityEngine.Networking.Types.NodeID,System.Byte&)
+        ConnectEndPoint(System.Int32,System.Net.EndPoint,System.Int32,System.Byte&)
+        ConnectToNetworkPeer(System.Int32,System.String,System.Int32,System.Int32,System.Int32,UnityEngine.Networking.Types.NetworkID,UnityEngine.Networking.Types.SourceID,UnityEngine.Networking.Types.NodeID,System.Byte&)
+        ConnectToNetworkPeer(System.Int32,System.String,System.Int32,System.Int32,System.Int32,UnityEngine.Networking.Types.NetworkID,UnityEngine.Networking.Types.SourceID,UnityEngine.Networking.Types.NodeID,System.Int32,System.Single,System.Byte&)
+        ConnectWithSimulator(System.Int32,System.String,System.Int32,System.Int32,System.Byte&,UnityEngine.Networking.ConnectionSimulatorConfig)
+        Disconnect(System.Int32,System.Int32,System.Byte&)
+        DisconnectNetworkHost(System.Int32,System.Byte&)
+        DoesEndPointUsePlatformProtocols(System.Net.EndPoint)
+        FinishSendMulticast(System.Int32,System.Byte&)
+        get_IsStarted()
+        GetAckBufferCount(System.Int32,System.Int32,System.Byte&)
+        GetAssetId(UnityEngine.GameObject)
+        GetBroadcastConnectionInfo(System.Int32,System.Int32&,System.Byte&)
+        GetBroadcastConnectionInfo(System.Int32,System.String&,System.Int32&,System.Byte&)
+        GetBroadcastConnectionMessage(System.Int32,System.Byte[],System.Int32,System.Int32&,System.Byte&)
+        GetConnectionInfo(System.Int32,System.Int32,System.Int32&,System.UInt64&,System.UInt16&,System.Byte&)
+        GetConnectionInfo(System.Int32,System.Int32,System.String&,System.Int32&,UnityEngine.Networking.Types.NetworkID&,UnityEngine.Networking.Types.NodeID&,System.Byte&)
+        GetCurrentIncomingMessageAmount()
+        GetCurrentOutgoingMessageAmount()
+        GetCurrentRtt(System.Int32,System.Int32,System.Byte&)
+        GetCurrentRTT(System.Int32,System.Int32,System.Byte&)
+        GetIncomingMessageQueueSize(System.Int32,System.Byte&)
+        GetIncomingPacketCount(System.Int32,System.Int32,System.Byte&)
+        GetIncomingPacketCountForAllHosts()
+        GetIncomingPacketDropCountForAllHosts()
+        GetIncomingPacketLossCount(System.Int32,System.Int32,System.Byte&)
+        GetMaxAllowedBandwidth(System.Int32,System.Int32,System.Byte&)
+        GetNetIOTimeuS()
+        GetNetworkLostPacketNum(System.Int32,System.Int32,System.Byte&)
+        GetNetworkTimestamp()
+        GetNextSceneId()
+        GetOutgoingFullBytesCount()
+        GetOutgoingFullBytesCountForConnection(System.Int32,System.Int32,System.Byte&)
+        GetOutgoingFullBytesCountForHost(System.Int32,System.Byte&)
+        GetOutgoingMessageCount()
+        GetOutgoingMessageCountForConnection(System.Int32,System.Int32,System.Byte&)
+        GetOutgoingMessageCountForHost(System.Int32,System.Byte&)
+        GetOutgoingMessageQueueSize(System.Int32,System.Byte&)
+        GetOutgoingPacketCount()
+        GetOutgoingPacketCountForConnection(System.Int32,System.Int32,System.Byte&)
+        GetOutgoingPacketCountForHost(System.Int32,System.Byte&)
+        GetOutgoingPacketNetworkLossPercent(System.Int32,System.Int32,System.Byte&)
+        GetOutgoingPacketOverflowLossPercent(System.Int32,System.Int32,System.Byte&)
+        GetOutgoingSystemBytesCount()
+        GetOutgoingSystemBytesCountForConnection(System.Int32,System.Int32,System.Byte&)
+        GetOutgoingSystemBytesCountForHost(System.Int32,System.Byte&)
+        GetOutgoingUserBytesCount()
+        GetOutgoingUserBytesCountForConnection(System.Int32,System.Int32,System.Byte&)
+        GetOutgoingUserBytesCountForHost(System.Int32,System.Byte&)
+        GetPacketReceivedRate(System.Int32,System.Int32,System.Byte&)
+        GetPacketSentRate(System.Int32,System.Int32,System.Byte&)
+        GetRemoteDelayTimeMS(System.Int32,System.Int32,System.Int32,System.Byte&)
+        GetRemotePacketReceivedRate(System.Int32,System.Int32,System.Byte&)
+        Init(UnityEngine.Networking.GlobalConfig)
+        InitWithParameters(UnityEngine.Networking.GlobalConfigInternal)
+        Internal_ConnectEndPoint(System.Int32,System.IntPtr,System.Int32,System.Int32,System.Byte&)
+        IsBroadcastDiscoveryRunning()
+        NotifyConnectionSendable(System.Int32,System.Int32,System.Byte&)
+        QueueMessageForSending(System.Int32,System.Int32,System.Int32,System.Byte[],System.Int32,System.Byte&)
+        QueueMessageForSendingWrapper(System.Int32,System.Int32,System.Int32,System.Byte[],System.Int32,System.Byte&)
+        ReceiveFromHost(System.Int32,System.Int32&,System.Int32&,System.Byte[],System.Int32,System.Int32&,System.Byte&)
+        ReceiveRelayEventFromHost(System.Int32,System.Byte&)
+        RemoveHost(System.Int32)
+        SendMulticast(System.Int32,System.Int32,System.Byte&)
+        SendQueuedMessages(System.Int32,System.Int32,System.Byte&)
+        SetBroadcastCredentials(System.Int32,System.Int32,System.Int32,System.Int32,System.Byte&)
+        SetPacketStat(System.Int32,System.Int32,System.Int32,System.Int32)
+        Shutdown()
+        StartBroadcastDiscovery(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte[],System.Int32,System.Int32,System.Byte&)
+        StartBroadcastDiscoveryWithData(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte[],System.Int32,System.Int32,System.Byte&)
+        StartBroadcastDiscoveryWithoutData(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte&)
+        StartSendMulticast(System.Int32,System.Int32,System.Byte[],System.Int32,System.Byte&)
+        StopBroadcastDiscovery()
+    UnityEngine.Networking.ReactorModel
+    UnityEngine.Networking.Types.AppID
+    UnityEngine.Networking.Types.HostPriority
+    UnityEngine.Networking.Types.NetworkAccessLevel
+    UnityEngine.Networking.Types.NetworkAccessToken
+    UnityEngine.Networking.Types.NetworkID
+    UnityEngine.Networking.Types.NodeID
+    UnityEngine.Networking.Types.SourceID
+    UnityEngine.Networking.Utility
 ---------------------------------------------------
 Assembly: UnityEngine.UnityConnectModule
 ---------------------------------------------------
@@ -16159,10 +16314,34 @@ Summary:
         HasKey(System.String)
         remove_Updated(UnityEngine.RemoteSettings/UpdatedEventHandler)
 ---------------------------------------------------
+Assembly: UnityEngine.UnityWebRequestAudioModule
+---------------------------------------------------
+Summary:
+  Total Type Removals = 2
+    Nested = 0
+    Interfaces = 0
+    Abstract Classes = 1
+    Generic Types = 0
+    Generic Interfaces = 0
+    Generic Abstract Classes = 0
+    Attributes = 0
+  Total Field Removals = 0
+  Total Method Removals = 5
+  References Removed = 0
+---------------------------------------------------
+    UnityEngine.Networking.DownloadHandlerAudioClip
+        get_audioClip()
+        GetContent(UnityEngine.Networking.UnityWebRequest)
+        GetData()
+        GetText()
+        InternalGetData()
+    UnityEngine.Networking.DownloadHandlerMovieTexture
+    UnityEngine.Networking.UnityWebRequestMultimedia
+---------------------------------------------------
 Assembly: UnityEngine.UnityWebRequestModule
 ---------------------------------------------------
 Summary:
-  Total Type Removals = 14
+  Total Type Removals = 13
     Nested = 0
     Interfaces = 1
     Abstract Classes = 0
@@ -16171,10 +16350,28 @@ Summary:
     Generic Abstract Classes = 0
     Attributes = 0
   Total Field Removals = 0
-  Total Method Removals = 1
+  Total Method Removals = 19
   References Removed = 0
 ---------------------------------------------------
     UnityEngine.Networking.DownloadHandler
+        CompleteContent()
+        get_data()
+        get_isDone()
+        get_text()
+        GetCheckedDownloader<T>(UnityEngine.Networking.UnityWebRequest)
+        GetContentType()
+        GetData()
+        GetProgress()
+        GetText()
+        GetTextEncoder()
+        INTERNAL_CALL_InternalCreateAssetBundleCached(UnityEngine.Networking.DownloadHandler,System.String,System.String,UnityEngine.Hash128&,System.UInt32)
+        InternalCreateAssetBundle(System.String,System.UInt32)
+        InternalCreateAssetBundleCached(System.String,System.String,UnityEngine.Hash128,System.UInt32)
+        InternalCreateBuffer()
+        InternalCreateScript()
+        InternalCreateVFS(System.String)
+        ReceiveContentLength(System.Int32)
+        ReceiveData(System.Byte[],System.Int32)
     UnityEngine.Networking.DownloadHandlerAssetBundle
     UnityEngine.Networking.DownloadHandlerBuffer
     UnityEngine.Networking.DownloadHandlerFile
@@ -16226,7 +16423,7 @@ Summary:
 ---------------------------------------------------
 ---------------------------------------------------
 Mono.Cecil.ExportedType Removals:
-  Total: 1045
+  Total: 1032
 ---------------------------------------------------
 JetBrains.Annotations.AssertionMethodAttribute
 JetBrains.Annotations.BaseTypeRequiredAttribute
@@ -16362,7 +16559,6 @@ UnityEngine.AudioReverbZone
 UnityEngine.AudioRolloffMode
 UnityEngine.AudioSourceCurveType
 UnityEngine.AudioSpeakerMode
-UnityEngine.AudioType
 UnityEngine.AudioVelocityUpdateMode
 UnityEngine.Avatar
 UnityEngine.AvatarBuilder
@@ -16822,14 +17018,8 @@ UnityEngine.MultilineAttribute
 UnityEngine.Network
 UnityEngine.NetworkConnectionError
 UnityEngine.NetworkDisconnection
-UnityEngine.Networking.ChannelQOS
-UnityEngine.Networking.ConnectionAcksType
-UnityEngine.Networking.ConnectionConfig
-UnityEngine.Networking.ConnectionConfigInternal
 UnityEngine.Networking.ConnectionSimulatorConfig
-UnityEngine.Networking.DownloadHandler
 UnityEngine.Networking.DownloadHandlerAssetBundle
-UnityEngine.Networking.DownloadHandlerAudioClip
 UnityEngine.Networking.DownloadHandlerBuffer
 UnityEngine.Networking.DownloadHandlerFile
 UnityEngine.Networking.DownloadHandlerMovieTexture
@@ -16837,8 +17027,6 @@ UnityEngine.Networking.DownloadHandlerScript
 UnityEngine.Networking.DownloadHandlerTexture
 UnityEngine.Networking.GlobalConfig
 UnityEngine.Networking.GlobalConfigInternal
-UnityEngine.Networking.HostTopology
-UnityEngine.Networking.HostTopologyInternal
 UnityEngine.Networking.IMultipartFormSection
 UnityEngine.Networking.Match.BasicResponse
 UnityEngine.Networking.Match.CreateMatchRequest
@@ -16866,10 +17054,6 @@ UnityEngine.Networking.Match.ResponseBase
 UnityEngine.Networking.Match.SetMatchAttributesRequest
 UnityEngine.Networking.MultipartFormDataSection
 UnityEngine.Networking.MultipartFormFileSection
-UnityEngine.Networking.NetworkError
-UnityEngine.Networking.NetworkEventType
-UnityEngine.Networking.NetworkTransport
-UnityEngine.Networking.QosType
 UnityEngine.Networking.ReactorModel
 UnityEngine.Networking.Types.AppID
 UnityEngine.Networking.Types.HostPriority

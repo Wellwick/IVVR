@@ -35,17 +35,29 @@ void RegisterStaticallyLinkedModulesGranular()
 	void RegisterModule_IMGUI();
 	RegisterModule_IMGUI();
 
+	void RegisterModule_UNET();
+	RegisterModule_UNET();
+
+	void RegisterModule_UnityWebRequest();
+	RegisterModule_UnityWebRequest();
+
+	void RegisterModule_UnityWebRequestAudio();
+	RegisterModule_UnityWebRequestAudio();
+
 	void RegisterModule_GameCenter();
 	RegisterModule_GameCenter();
 
 	void RegisterModule_Wind();
 	RegisterModule_Wind();
 
-	void RegisterModule_UnityWebRequest();
-	RegisterModule_UnityWebRequest();
-
 	void RegisterModule_JSONSerialize();
 	RegisterModule_JSONSerialize();
+
+	void RegisterModule_Web();
+	RegisterModule_Web();
+
+	void RegisterModule_UnityWebRequestWWW();
+	RegisterModule_UnityWebRequestWWW();
 
 	void RegisterModule_ImageConversion();
 	RegisterModule_ImageConversion();

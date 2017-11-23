@@ -1008,6 +1008,202 @@ void RegisterAllStrippedInternalCalls()
 
 	//End Registrations for type : UnityEngine.MonoBehaviour
 
+	//Start Registrations for type : UnityEngine.Networking.ConnectionConfigInternal
+
+		//System.Byte UnityEngine.Networking.ConnectionConfigInternal::AddChannel(UnityEngine.Networking.QosType)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_AddChannel();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_AddChannel();
+
+		//System.Int32 UnityEngine.Networking.ConnectionConfigInternal::InitSSLCAFilePath(System.String)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitSSLCAFilePath();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitSSLCAFilePath();
+
+		//System.Int32 UnityEngine.Networking.ConnectionConfigInternal::InitSSLCertFilePath(System.String)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitSSLCertFilePath();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitSSLCertFilePath();
+
+		//System.Int32 UnityEngine.Networking.ConnectionConfigInternal::InitSSLPrivateKeyFilePath(System.String)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitSSLPrivateKeyFilePath();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitSSLPrivateKeyFilePath();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::Dispose()
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_Dispose();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_Dispose();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitAckDelay(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitAckDelay();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitAckDelay();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitAcksType(System.Int32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitAcksType();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitAcksType();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitAllCostTimeout(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitAllCostTimeout();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitAllCostTimeout();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitBandwidthPeakFactor(System.Single)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitBandwidthPeakFactor();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitBandwidthPeakFactor();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitConnectTimeout(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitConnectTimeout();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitConnectTimeout();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitDisconnectTimeout(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitDisconnectTimeout();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitDisconnectTimeout();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitFragmentSize(System.UInt16)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitFragmentSize();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitFragmentSize();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitInitialBandwidth(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitInitialBandwidth();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitInitialBandwidth();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitMaxCombinedReliableMessageCount(System.UInt16)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitMaxCombinedReliableMessageCount();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitMaxCombinedReliableMessageCount();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitMaxCombinedReliableMessageSize(System.UInt16)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitMaxCombinedReliableMessageSize();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitMaxCombinedReliableMessageSize();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitMaxConnectionAttempt(System.Byte)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitMaxConnectionAttempt();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitMaxConnectionAttempt();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitMaxSentMessageQueueSize(System.UInt16)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitMaxSentMessageQueueSize();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitMaxSentMessageQueueSize();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitMinUpdateTimeout(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitMinUpdateTimeout();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitMinUpdateTimeout();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitNetworkDropThreshold(System.Byte)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitNetworkDropThreshold();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitNetworkDropThreshold();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitOverflowDropThreshold(System.Byte)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitOverflowDropThreshold();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitOverflowDropThreshold();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitPacketSize(System.UInt16)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitPacketSize();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitPacketSize();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitPingTimeout(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitPingTimeout();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitPingTimeout();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitReducedPingTimeout(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitReducedPingTimeout();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitReducedPingTimeout();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitResendTimeout(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitResendTimeout();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitResendTimeout();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitSendDelay(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitSendDelay();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitSendDelay();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitUdpSocketReceiveBufferMaxSize(System.UInt32)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitUdpSocketReceiveBufferMaxSize();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitUdpSocketReceiveBufferMaxSize();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitUsePlatformSpecificProtocols(System.Boolean)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitUsePlatformSpecificProtocols();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitUsePlatformSpecificProtocols();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitWebSocketReceiveBufferMaxSize(System.UInt16)
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitWebSocketReceiveBufferMaxSize();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitWebSocketReceiveBufferMaxSize();
+
+		//System.Void UnityEngine.Networking.ConnectionConfigInternal::InitWrapper()
+		void Register_UnityEngine_Networking_ConnectionConfigInternal_InitWrapper();
+		Register_UnityEngine_Networking_ConnectionConfigInternal_InitWrapper();
+
+	//End Registrations for type : UnityEngine.Networking.ConnectionConfigInternal
+
+	//Start Registrations for type : UnityEngine.Networking.DownloadHandler
+
+		//System.Void UnityEngine.Networking.DownloadHandler::InternalDestroy()
+		void Register_UnityEngine_Networking_DownloadHandler_InternalDestroy();
+		Register_UnityEngine_Networking_DownloadHandler_InternalDestroy();
+
+	//End Registrations for type : UnityEngine.Networking.DownloadHandler
+
+	//Start Registrations for type : UnityEngine.Networking.DownloadHandlerAudioClip
+
+		//System.Void UnityEngine.Networking.DownloadHandlerAudioClip::InternalCreateAudioClip(System.String,UnityEngine.AudioType)
+		void Register_UnityEngine_Networking_DownloadHandlerAudioClip_InternalCreateAudioClip();
+		Register_UnityEngine_Networking_DownloadHandlerAudioClip_InternalCreateAudioClip();
+
+	//End Registrations for type : UnityEngine.Networking.DownloadHandlerAudioClip
+
+	//Start Registrations for type : UnityEngine.Networking.HostTopologyInternal
+
+		//System.Int32 UnityEngine.Networking.HostTopologyInternal::AddSpecialConnectionConfigWrapper(UnityEngine.Networking.ConnectionConfigInternal)
+		void Register_UnityEngine_Networking_HostTopologyInternal_AddSpecialConnectionConfigWrapper();
+		Register_UnityEngine_Networking_HostTopologyInternal_AddSpecialConnectionConfigWrapper();
+
+		//System.Void UnityEngine.Networking.HostTopologyInternal::Dispose()
+		void Register_UnityEngine_Networking_HostTopologyInternal_Dispose();
+		Register_UnityEngine_Networking_HostTopologyInternal_Dispose();
+
+		//System.Void UnityEngine.Networking.HostTopologyInternal::InitMessagePoolSizeGrowthFactor(System.Single)
+		void Register_UnityEngine_Networking_HostTopologyInternal_InitMessagePoolSizeGrowthFactor();
+		Register_UnityEngine_Networking_HostTopologyInternal_InitMessagePoolSizeGrowthFactor();
+
+		//System.Void UnityEngine.Networking.HostTopologyInternal::InitReceivedPoolSize(System.UInt16)
+		void Register_UnityEngine_Networking_HostTopologyInternal_InitReceivedPoolSize();
+		Register_UnityEngine_Networking_HostTopologyInternal_InitReceivedPoolSize();
+
+		//System.Void UnityEngine.Networking.HostTopologyInternal::InitSentMessagePoolSize(System.UInt16)
+		void Register_UnityEngine_Networking_HostTopologyInternal_InitSentMessagePoolSize();
+		Register_UnityEngine_Networking_HostTopologyInternal_InitSentMessagePoolSize();
+
+		//System.Void UnityEngine.Networking.HostTopologyInternal::InitWrapper(UnityEngine.Networking.ConnectionConfigInternal,System.Int32)
+		void Register_UnityEngine_Networking_HostTopologyInternal_InitWrapper();
+		Register_UnityEngine_Networking_HostTopologyInternal_InitWrapper();
+
+	//End Registrations for type : UnityEngine.Networking.HostTopologyInternal
+
+	//Start Registrations for type : UnityEngine.Networking.NetworkTransport
+
+		//System.Boolean UnityEngine.Networking.NetworkTransport::SendWrapper(System.Int32,System.Int32,System.Int32,System.Byte[],System.Int32,System.Byte&)
+		void Register_UnityEngine_Networking_NetworkTransport_SendWrapper();
+		Register_UnityEngine_Networking_NetworkTransport_SendWrapper();
+
+		//System.Int32 UnityEngine.Networking.NetworkTransport::AddHostWrapper(UnityEngine.Networking.HostTopologyInternal,System.String,System.Int32,System.Int32,System.Int32)
+		void Register_UnityEngine_Networking_NetworkTransport_AddHostWrapper();
+		Register_UnityEngine_Networking_NetworkTransport_AddHostWrapper();
+
+		//System.Int32 UnityEngine.Networking.NetworkTransport::AddHostWrapperWithoutIp(UnityEngine.Networking.HostTopologyInternal,System.Int32,System.Int32,System.Int32)
+		void Register_UnityEngine_Networking_NetworkTransport_AddHostWrapperWithoutIp();
+		Register_UnityEngine_Networking_NetworkTransport_AddHostWrapperWithoutIp();
+
+		//System.Int32 UnityEngine.Networking.NetworkTransport::Connect(System.Int32,System.String,System.Int32,System.Int32,System.Byte&)
+		void Register_UnityEngine_Networking_NetworkTransport_Connect();
+		Register_UnityEngine_Networking_NetworkTransport_Connect();
+
+		//System.Int32 UnityEngine.Networking.NetworkTransport::GetMaxPacketSize()
+		void Register_UnityEngine_Networking_NetworkTransport_GetMaxPacketSize();
+		Register_UnityEngine_Networking_NetworkTransport_GetMaxPacketSize();
+
+		//System.Void UnityEngine.Networking.NetworkTransport::InitWithNoParameters()
+		void Register_UnityEngine_Networking_NetworkTransport_InitWithNoParameters();
+		Register_UnityEngine_Networking_NetworkTransport_InitWithNoParameters();
+
+		//UnityEngine.Networking.NetworkEventType UnityEngine.Networking.NetworkTransport::Receive(System.Int32&,System.Int32&,System.Int32&,System.Byte[],System.Int32,System.Int32&,System.Byte&)
+		void Register_UnityEngine_Networking_NetworkTransport_Receive();
+		Register_UnityEngine_Networking_NetworkTransport_Receive();
+
+	//End Registrations for type : UnityEngine.Networking.NetworkTransport
+
 	//Start Registrations for type : UnityEngine.Object
 
 		//System.String UnityEngine.Object::ToString()

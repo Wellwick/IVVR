@@ -51,6 +51,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\_Scripts\NetworkManager.cs" />
+     <Compile Include="Assets\_Scripts\TextManager.cs" />
+     <Compile Include="Assets\_Scripts\UI_Dropdown.cs" />
      <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\ARKitRemoteConnection.cs" />
      <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\ConnectionMessageIds.cs" />
      <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\ConnectToEditor.cs" />
@@ -64,8 +67,6 @@
      <Compile Include="Assets\UnityARKitPlugin\Examples\UnityARBallz\BallMover.cs" />
      <Compile Include="Assets\UnityARKitPlugin\Examples\UnityARBallz\Ballz.cs" />
      <Compile Include="Assets\UnityARKitPlugin\Examples\UnityARBallz\ModeSwitcher.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Examples\UnityARKitScene\TextManager.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Examples\UnityARKitScene\UI_Dropdown.cs" />
      <Compile Include="Assets\UnityARKitPlugin\Examples\UnityParticlePainter\HSVPicker\Enums\ColorValues.cs" />
      <Compile Include="Assets\UnityARKitPlugin\Examples\UnityParticlePainter\HSVPicker\Events\ColorChangedEvent.cs" />
      <Compile Include="Assets\UnityARKitPlugin\Examples\UnityParticlePainter\HSVPicker\Events\HSVChangedEvent.cs" />

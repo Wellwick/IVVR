@@ -1,5 +1,8 @@
 <linker>
 <assembly fullname="Assembly-CSharp">
+<type fullname="NetworkManager" preserve="all"/>
+<type fullname="TextManager" preserve="all"/>
+<type fullname="UI_Dropdown" preserve="all"/>
 <type fullname="UnityEngine.XR.iOS.ConnectToEditor" preserve="all"/>
 <type fullname="UnityEngine.XR.iOS.EditorHitTest" preserve="all"/>
 <type fullname="UnityEngine.XR.iOS.UnityRemoteVideo" preserve="all"/>
@@ -9,8 +12,6 @@
 <type fullname="BallMover" preserve="all"/>
 <type fullname="Ballz" preserve="all"/>
 <type fullname="ModeSwitcher" preserve="all"/>
-<type fullname="TextManager" preserve="all"/>
-<type fullname="UI_Dropdown" preserve="all"/>
 <type fullname="ColorPickerTester" preserve="all"/>
 <type fullname="TiltWindow" preserve="all"/>
 <type fullname="ColorImage" preserve="all"/>
