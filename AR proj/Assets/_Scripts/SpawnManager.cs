@@ -9,6 +9,8 @@ public class SpawnManager : MonoBehaviour {
 
 
 	public GameObject SpawnObject(int prefabId, NetworkManager.SerializeableTransform st){
-		return Instantiate(prebabs.prefabs[prefabId], new Vector3(st.posX, st.posY, st.posZ), new Quaternion(st.rotX, st.rotY, st.rotZ, st.rotW)) as GameObject;
+		Vector3 position = new Vector3(st.posX, st.posY, st.posZ);
+		Debug.Log(position);
+		return Instantiate(prebabs.prefabs[prefabId], position, new Quaternion(st.rotX, st.rotY, st.rotZ, st.rotW)) as GameObject;
 	}
 }

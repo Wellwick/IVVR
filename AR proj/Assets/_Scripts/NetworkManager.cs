@@ -69,6 +69,7 @@ public class NetworkManager : MonoBehaviour {
 					case 0:
 						GameObject instance = spawnManager.SpawnObject(data.prefabId.Value, data.transform);
 						NetworkIdentities.networkedObjects.Add(data.id.Value, instance);
+						Debug.Log(NetworkIdentities.networkedObjects.Count);
 						break;
 					default:
 						break;
@@ -133,6 +134,10 @@ public class NetworkManager : MonoBehaviour {
 			this.prefabId = prefabId;
 			this.transform = transform; 
 
+		}
+
+		public override string ToString(){
+			return "Message type: " + type + "\n Object Id: " + id + "\nPrefab Id: " + prefabId +  "\n" + transform.ToString();
 		}
 
     }
