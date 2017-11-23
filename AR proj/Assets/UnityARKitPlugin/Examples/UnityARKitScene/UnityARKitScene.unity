@@ -1968,7 +1968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 045cdfc8b8c33b1448b7bc84b3a11bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prebabs: {fileID: 0}
+  prebabs: {fileID: 820563321}
 --- !u!4 &981521882
 Transform:
   m_ObjectHideFlags: 0
