@@ -67,9 +67,9 @@ public class NetworkManager : MonoBehaviour {
 				}
 				switch (data.type){
 					case 0:
+					case 1:
 						GameObject instance = spawnManager.SpawnObject(data.prefabId.Value, data.transform);
 						NetworkIdentities.networkedObjects.Add(data.id.Value, instance);
-						Debug.Log(NetworkIdentities.networkedObjects.Count);
 						break;
 					default:
 						break;
@@ -97,6 +97,7 @@ public class NetworkManager : MonoBehaviour {
 
 	public void ProjectBall(){
 		Debug.Log ("Projecting ball");
+		//NetworkMessage message = new Network
 		byte[] send = new byte[1024];
 		byte error;
 		send [0] = 2;
