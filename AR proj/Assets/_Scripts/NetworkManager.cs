@@ -59,7 +59,12 @@ public class NetworkManager : MonoBehaviour {
 				this.connectionId = connectionId;
 				break;
 			case NetworkEventType.DataEvent:
+				NetworkMessage data;
 				Debug.Log("Data Received");
+				BinaryFormatter bf = new BinaryFormatter();
+				using(MemoryStream ms = new MemoryStream(recBuffer)){
+					data = bf.Deserialize(ms) as NetworkMessage;
+				}
 				break;
 			case NetworkEventType.DisconnectEvent: //AR disconnects
 				networkInitialised = false;

@@ -86,7 +86,7 @@ public class NetworkManager : MonoBehaviour {
                         BinaryFormatter bf = new BinaryFormatter();
                         using (MemoryStream ms = new MemoryStream()) {
                             bf.Serialize(ms, message);
-                            NetworkTransport.Send(socketId, connectionId, ms.ToArray(), 1024, out error2);
+                            NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error2);
                         }
                     }
                     break;
@@ -126,13 +126,15 @@ public class NetworkManager : MonoBehaviour {
 
     //Add object to the list
     public void addObject(GameObject gameObject, Prefabs.PID objectType) {
+       /*
         networkedObjects.Add(gameObject);
         byte[] send = new byte[1024];
         send[0] = 1; //this means new data
         send[1] = networkedObjects.Size() - 1; //will be the last element in the list
         send[2] = (byte)objectType; //lets the AR know what object type it is
         byte error;
-        NetworkTransport.Send(socketId, connectionId, send, send.Length, out error);
+        NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, send, send.Length, out error);
+        */
     }
 
 
