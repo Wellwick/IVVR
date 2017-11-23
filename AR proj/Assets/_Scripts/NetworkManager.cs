@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 public class NetworkManager : MonoBehaviour {
 
 	public static bool serverHosted = false;
-
+	public SpawnManager spawnManager;
 	private int socketId;
 	private int connectionId;
 	private int myUnreliableChannelId;
@@ -65,6 +65,16 @@ public class NetworkManager : MonoBehaviour {
 				using(MemoryStream ms = new MemoryStream(recBuffer)){
 					data = bf.Deserialize(ms) as NetworkMessage;
 				}
+				switch (data.type){
+					case 0:
+						GameObject instance = spawnManager.SpawnObject(data.prefabId.Value, data.transform);
+						NetworkIdentities.networkedObjects.Add(data.id.Value, instance);
+						break;
+					default:
+						break;
+
+				}
+
 				break;
 			case NetworkEventType.DisconnectEvent: //AR disconnects
 				networkInitialised = false;
@@ -111,11 +121,11 @@ public class NetworkManager : MonoBehaviour {
 	[System.Serializable]
     public class NetworkMessage{
         
-		byte type;
-        int? id;
-        byte? prefabId;
+		public byte type;
+        public int? id;
+        public byte? prefabId;
 
-        SerializeableTransform transform;
+        public SerializeableTransform transform;
 
 		public NetworkMessage(byte type, int? id, byte? prefabId, SerializeableTransform transform){
 			this.type = type;
