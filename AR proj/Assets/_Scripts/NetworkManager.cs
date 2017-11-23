@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -85,4 +87,64 @@ public class NetworkManager : MonoBehaviour {
 		NetworkTransport.Send (socketId, connectionId, myUnreliableChannelId, send, send.Length, out error);
 		Debug.Log (((NetworkError)error).ToString());
 	}
+
+	public void RequestUpdate(int id){
+		NetworkMessage message = new NetworkMessage(2, id, null, null);
+		/* 
+		BinaryFormatter bf = new BinaryFormatter();
+		using (MemoryStream ms = new MemoryStream(recBuffer))
+		{
+			data = bf.Deserialize(ms) as SerializeableTransform;
+		}
+		spawnmanager.SpawnObjectNetwork(data);
+		*/
+
+	}
+
+
+
+	[System.Serializable]
+    public class NetworkMessage{
+        
+		byte type;
+        int? id;
+        byte? prefabId;
+
+        SerializeableTransform transform;
+
+		public NetworkMessage(byte type, int? id, byte? prefabId, SerializeableTransform transform){
+			this.type = type;
+			this.id = id;
+			this.prefabId = prefabId;
+			this.transform = transform; 
+
+		}
+
+    }
+
+    [System.Serializable]
+    public class SerializeableTransform{
+        public float posX;
+        public float posY;
+        public float posZ;
+        public float rotX;
+        public float rotY;
+        public float rotZ;
+        public float rotW;
+
+
+        public SerializeableTransform(Transform transform){
+            posX = transform.position.x;
+            posY = transform.position.y;
+            posZ = transform.position.z;
+            rotX = transform.rotation.x;
+            rotY = transform.rotation.y;
+            rotZ = transform.rotation.z;
+        }
+
+        public override string ToString(){
+            return "x = " + posX + "\ny = " + posY + "\nz = " + posZ;
+        }
+
+    }
 }

@@ -175,6 +175,21 @@ public class NetworkManager : MonoBehaviour
     }
 
     [System.Serializable]
+    public class NetworkMessage{
+        
+        enum {Start, Add, Update };
+        int id;
+        byte prefabId;
+
+        SerializeableTransform transform;
+
+        public NetworkMessage(byte type){
+            type = 
+        } 
+
+    }
+
+    [System.Serializable]
     public class SerializeableTransform
     {
         public float posX;
