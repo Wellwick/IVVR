@@ -15,6 +15,7 @@ public class NetworkManager : MonoBehaviour {
 	private int myReliableChannelId;
 	private int myUnreliableChannelId;
 	private bool networkInitialised;
+    private bool clientConnected;
 
 	public GameObject leftController;
 	public GameObject rightController;
@@ -22,6 +23,10 @@ public class NetworkManager : MonoBehaviour {
     public GameObject spooker;
 
     public List<GameObject> networkedObjects;
+
+    //value to check when we should send a new batch of updates
+    private float timer;
+    public int updateRatePerSec = 20;
 
 	// Use this for initialization
 	void Start () {
@@ -47,6 +52,8 @@ public class NetworkManager : MonoBehaviour {
             //assume they are all balls to start!
             networkedObjects.Add(netObjects[i]);
         }
+        //initialise timer
+        timer = Time.timeSinceLevelLoad;
 	}
 	
 	// Update is called once per frame
@@ -77,6 +84,21 @@ public class NetworkManager : MonoBehaviour {
             switch (recData)
             {
                 case NetworkEventType.Nothing:
+                    //because nothing is happening, let's try and update the AR on positions
+                    if (clientConnected && (Time.timeSinceLevelLoad - timer > (1.0/updateRatePerSec))) {
+                        Debug.Log("Trying to update client on " + networkedObjects.Count + " objects");
+                        for (int i = 0; i < networkedObjects.Count; i++) {
+                            NetworkMessage message = new NetworkMessage(3, i, null, networkedObjects[i].transform);
+                            byte error2;
+                            bf = new BinaryFormatter();
+                            using (MemoryStream ms = new MemoryStream()) {
+                                bf.Serialize(ms, message);
+                                NetworkTransport.Send(socketId, this.connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error2);
+                            }
+                        }
+                        //finished update, save timer val
+                        timer = Time.timeSinceLevelLoad;
+                    }
                     break;
                 case NetworkEventType.ConnectEvent: //AR connects
                     Debug.Log("Connection request from id: " + connectionId + " Received");
@@ -90,6 +112,7 @@ public class NetworkManager : MonoBehaviour {
                             NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error2);
                         }
                     }
+                    clientConnected = true;
                     break;
                 case NetworkEventType.DataEvent:
                     Debug.Log("Data Received");
