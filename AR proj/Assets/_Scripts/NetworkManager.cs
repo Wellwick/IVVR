@@ -14,6 +14,8 @@ public class NetworkManager : MonoBehaviour {
 	private int myUnreliableChannelId;
 	private bool networkInitialised;
 
+	#region Unity_Functions
+	
 	// Use this for initialization
 	void Start () {
 		//needs to host!
@@ -88,6 +90,10 @@ public class NetworkManager : MonoBehaviour {
 
 	}
 
+	#endregion
+
+	#region Networking
+
 	public void Connect(){
 		byte error;
 		connectionId = NetworkTransport.Connect (socketId, "137.205.112.42", 9090, 0, out error);
@@ -95,14 +101,16 @@ public class NetworkManager : MonoBehaviour {
 
 	}
 
-	public void ProjectBall(){
+	public void RequestSpawn(byte prefabId){
 		Debug.Log ("Projecting ball");
-		//NetworkMessage message = new Network
+		NetworkMessage message = new NetworkMessage(2, null, prefabId, null);
 		byte[] send = new byte[1024];
 		byte error;
-		send [0] = 2;
-		NetworkTransport.Send (socketId, connectionId, myUnreliableChannelId, send, send.Length, out error);
-		Debug.Log (((NetworkError)error).ToString());
+		BinaryFormatter bf = new BinaryFormatter();
+		using(MemoryStream ms = new MemoryStream()){
+			bf.Serialize(ms, message);
+			NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error);
+		}
 	}
 
 	public void RequestUpdate(int id){
@@ -118,7 +126,9 @@ public class NetworkManager : MonoBehaviour {
 
 	}
 
+	#endregion
 
+	#region Classes
 
 	[System.Serializable]
     public class NetworkMessage{
@@ -168,4 +178,6 @@ public class NetworkManager : MonoBehaviour {
         }
 
     }
+
+	#endregion
 }
