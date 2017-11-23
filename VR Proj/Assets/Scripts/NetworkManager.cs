@@ -55,7 +55,7 @@ public class NetworkManager : MonoBehaviour {
         //Debug.Log("Coordinates for Left Controller: " + leftController.transform.position.ToString());
         /* GET RID OF THIS FOR PHONE */
         if (Input.GetKeyDown(KeyCode.A))
-            Camera.GetComponent<shootBall>().throwBall();
+            Camera.GetComponent<shootBall>().throwBall(1);
         else if (Input.GetKeyDown(KeyCode.S))
             Camera.GetComponent<wallDemo>().spawnWall();
         else if (Input.GetKeyDown(KeyCode.D))
@@ -72,6 +72,7 @@ public class NetworkManager : MonoBehaviour {
             int bufferSize = 1024;
             int dataSize;
             byte error;
+            BinaryFormatter bf; //in case it is needed in the switch
             NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
             switch (recData)
             {
@@ -81,9 +82,9 @@ public class NetworkManager : MonoBehaviour {
                     Debug.Log("Connection request from id: " + connectionId + " Received");
                     this.connectionId = connectionId;
                     for (int i = 0; i<networkedObjects.Count; i++) {
-                        NetworkMessage message = new NetworkMessage(0, i, (byte)Prefabs.PID.Ball, networkedObjects[i].transform);
+                        NetworkMessage message = new NetworkMessage(0, i, (int)Prefabs.PID.Ball, networkedObjects[i].transform);
                         byte error2;
-                        BinaryFormatter bf = new BinaryFormatter();
+                        bf = new BinaryFormatter();
                         using (MemoryStream ms = new MemoryStream()) {
                             bf.Serialize(ms, message);
                             NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error2);
@@ -92,18 +93,23 @@ public class NetworkManager : MonoBehaviour {
                     break;
                 case NetworkEventType.DataEvent:
                     Debug.Log("Data Received");
-                    switch (recBuffer[0]){
+                    NetworkMessage data;
+                    bf = new BinaryFormatter();
+                    using (MemoryStream ms = new MemoryStream(recBuffer)){
+                        data = bf.Deserialize(ms) as NetworkMessage;
+                    }
+                    switch (data.type){
                         case 0:
-                            leftController.GetComponent<ControllerGrabObject>().RemoveFire();
-						    rightController.GetComponent<ControllerGrabObject>().RemoveFire();
+                            //leftController.GetComponent<ControllerGrabObject>().RemoveFire();
+						    //rightController.GetComponent<ControllerGrabObject>().RemoveFire();
                             break;
                         case 1:
-                            leftController.GetComponent<ControllerGrabObject>().SpawnFire();
-						    rightController.GetComponent<ControllerGrabObject>().SpawnFire();
+                            //leftController.GetComponent<ControllerGrabObject>().SpawnFire();
+						    //rightController.GetComponent<ControllerGrabObject>().SpawnFire();
                             break;
                         case 2:
                             Debug.Log("Trying to throw ball");
-                            Camera.GetComponent<shootBall>().throwBall(); //shootBall.cs is on camera(eyes) shoots ball in direction facing.
+                            Camera.GetComponent<shootBall>().throwBall(data.prefabId.Value); //shootBall.cs is on camera(eyes) shoots ball in direction facing.
                             break;
                         case 3:
                             Camera.GetComponent<wallDemo>().spawnWall();
@@ -126,15 +132,15 @@ public class NetworkManager : MonoBehaviour {
 
     //Add object to the list
     public void addObject(GameObject gameObject, Prefabs.PID objectType) {
-       /*
         networkedObjects.Add(gameObject);
-        byte[] send = new byte[1024];
-        send[0] = 1; //this means new data
-        send[1] = networkedObjects.Size() - 1; //will be the last element in the list
-        send[2] = (byte)objectType; //lets the AR know what object type it is
-        byte error;
-        NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, send, send.Length, out error);
-        */
+        NetworkMessage message = new NetworkMessage(1, networkedObjects.Count - 1, (int)objectType, gameObject.transform);
+        byte error2;
+        BinaryFormatter bf = new BinaryFormatter();
+        using (MemoryStream ms = new MemoryStream()) {
+            bf.Serialize(ms, message);
+            NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error2);
+        }
+        
     }
 
 
@@ -142,13 +148,13 @@ public class NetworkManager : MonoBehaviour {
     [System.Serializable]
     public class NetworkMessage{
         
-		byte type;
-        int? id;
-        byte? prefabId;
+		public byte type;
+        public int? id;
+        public int? prefabId;
 
-        SerializeableTransform transform;
+        public SerializeableTransform transform;
 
-		public NetworkMessage(byte type, int? id, byte? prefabId, Transform transform){
+		public NetworkMessage(byte type, int? id, int? prefabId, Transform transform){
 			this.type = type;
 			this.id = id;
 			this.prefabId = prefabId;
