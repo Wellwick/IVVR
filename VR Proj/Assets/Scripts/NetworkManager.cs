@@ -84,10 +84,9 @@ public class NetworkManager : MonoBehaviour {
                         NetworkMessage message = new NetworkMessage(0, i, (byte)Prefabs.PID.Ball, networkedObjects[i].transform);
                         byte error2;
                         BinaryFormatter bf = new BinaryFormatter();
-                        using (MemoryStream ms = new MemoryStream()){
+                        using (MemoryStream ms = new MemoryStream()) {
                             bf.Serialize(ms, message);
                             NetworkTransport.Send(socketId, connectionId, ms.ToArray(), 1024, out error2);
-
                         }
                     }
                     break;
