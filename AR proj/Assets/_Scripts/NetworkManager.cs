@@ -15,7 +15,7 @@ public class NetworkManager : MonoBehaviour {
 	private bool networkInitialised;
 
 	#region Unity_Functions
-	
+
 	// Use this for initialization
 	void Start () {
 		//needs to host!
@@ -101,10 +101,9 @@ public class NetworkManager : MonoBehaviour {
 
 	}
 
-	public void RequestSpawn(byte prefabId){
-		Debug.Log ("Projecting ball");
+	public void RequestSpawn(int prefabId){
+		Debug.Log ("Requesting spawn of prefab: " + ((Prefabs.PID)prefabId).ToString());
 		NetworkMessage message = new NetworkMessage(2, null, prefabId, null);
-		byte[] send = new byte[1024];
 		byte error;
 		BinaryFormatter bf = new BinaryFormatter();
 		using(MemoryStream ms = new MemoryStream()){
@@ -113,16 +112,9 @@ public class NetworkManager : MonoBehaviour {
 		}
 	}
 
-	public void RequestUpdate(int id){
-		NetworkMessage message = new NetworkMessage(2, id, null, null);
-		/* 
-		BinaryFormatter bf = new BinaryFormatter();
-		using (MemoryStream ms = new MemoryStream(recBuffer))
-		{
-			data = bf.Deserialize(ms) as SerializeableTransform;
-		}
-		spawnmanager.SpawnObjectNetwork(data);
-		*/
+	public void RequestUpdate(int prefabId){
+		//NetworkMessage message = new NetworkMessage(2, id, null, null);
+
 
 	}
 
@@ -135,11 +127,11 @@ public class NetworkManager : MonoBehaviour {
         
 		public byte type;
         public int? id;
-        public byte? prefabId;
+        public int? prefabId;
 
         public SerializeableTransform transform;
 
-		public NetworkMessage(byte type, int? id, byte? prefabId, SerializeableTransform transform){
+		public NetworkMessage(byte type, int? id, int? prefabId, SerializeableTransform transform){
 			this.type = type;
 			this.id = id;
 			this.prefabId = prefabId;

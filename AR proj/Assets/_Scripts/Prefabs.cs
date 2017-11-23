@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Prefabs : MonoBehaviour {
 
-	public enum PID : byte {
+	public enum PID : int {
 		Cube,
 		Ball,
 		Brick,
