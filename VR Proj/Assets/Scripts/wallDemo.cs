@@ -31,6 +31,7 @@ public class wallDemo : MonoBehaviour {
 		wall = Instantiate(wallPrefab,transform.forward * 4,transform.rotation) as GameObject;
 		wallSpot = transform;
 		wallRot = transform.rotation;
+		// TODO need to add all children of this to gameObject, each of which are a brick
 	}
 
 	public void demolishWall(){
