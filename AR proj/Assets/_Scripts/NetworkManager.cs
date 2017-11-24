@@ -9,10 +9,15 @@ public class NetworkManager : MonoBehaviour {
 
 	public static bool serverHosted = false;
 	public SpawnManager spawnManager;
+	public int updateTimer; 
+
 	private int socketId;
 	private int connectionId;
 	private int myUnreliableChannelId;
+	private int myUpdateChannelId;
 	private bool networkInitialised;
+	private float timer = 0;
+
 
 	#region Unity_Functions
 
@@ -28,10 +33,11 @@ public class NetworkManager : MonoBehaviour {
 
 			ConnectionConfig config = new ConnectionConfig();
 			myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
+			myUpdateChannelId = config.AddChannel(QosType.Reliable);
 			HostTopology topology = new HostTopology(config, 1);
 			socketId = NetworkTransport.AddHost(topology);
 			Debug.Log(socketId);
-			networkInitialised = true;/* TODO For the time being! */
+			/* TODO For the time being! */
 		}
 		// VR device is no longer the one trying to connect
 		/* BRING THIS BACK FOR PHONE */
@@ -86,7 +92,6 @@ public class NetworkManager : MonoBehaviour {
 						break;
 
 				}
-
 				break;
 			case NetworkEventType.DisconnectEvent: //AR disconnects
 				networkInitialised = false;
@@ -94,8 +99,6 @@ public class NetworkManager : MonoBehaviour {
 				break;
 			}
 		}
-
-
 
 	}
 
@@ -105,6 +108,7 @@ public class NetworkManager : MonoBehaviour {
 
 	public void Connect(){
 		byte error;
+		networkInitialised = true;
 		connectionId = NetworkTransport.Connect (socketId, "137.205.112.42", 9090, 0, out error);
 		Debug.Log (((NetworkError)error).ToString());
 
@@ -121,6 +125,7 @@ public class NetworkManager : MonoBehaviour {
 			NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error);
 		}
 	}
+
 
 
 	#endregion

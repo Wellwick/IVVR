@@ -21,7 +21,6 @@ public class TextManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log(ARManager.getPosition());
 		txt.text = "{" + Math.Round(ARManager.getPosition().x, 2) + ", " +
 			Math.Round(ARManager.getPosition().y, 2) + ", " +
 			Math.Round(ARManager.getPosition().z, 2) + "}";
