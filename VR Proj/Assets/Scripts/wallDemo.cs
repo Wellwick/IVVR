@@ -7,6 +7,7 @@ public class wallDemo : MonoBehaviour {
 	private GameObject wall;
 	public Rigidbody ballPrefab;
 	private Rigidbody ball;
+	public GameObject cam;
 	private int x = 400;
 	private Transform wallSpot;
 	private Quaternion wallRot;
@@ -28,10 +29,11 @@ public class wallDemo : MonoBehaviour {
 
 
 	public void spawnWall() {
-		wall = Instantiate(wallPrefab,transform.forward * 4,transform.rotation) as GameObject;
-		wallSpot = transform;
-		wallRot = transform.rotation;
+		wall = Instantiate(wallPrefab,cam.transform.forward * 4,cam.transform.rotation) as GameObject;
+		wallSpot = cam.transform;
+		wallRot = cam.transform.rotation;
 		// TODO need to add all children of this to gameObject, each of which are a brick
+		x = 400;
 	}
 
 	public void demolishWall(){

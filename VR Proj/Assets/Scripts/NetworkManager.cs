@@ -23,6 +23,8 @@ public class NetworkManager : MonoBehaviour {
 	public GameObject rightController;
     public GameObject Camera;
     public GameObject spooker;
+    public GameObject throwBall;
+    public GameObject wallDemo;
 
     public List<GameObject> networkedObjects;
 
@@ -139,13 +141,13 @@ public class NetworkManager : MonoBehaviour {
                             break;
                         case 2:
                             Debug.Log("Trying to throw ball");
-                            Camera.GetComponent<shootBall>().throwBall(data.prefabId.Value); //shootBall.cs is on camera(eyes) shoots ball in direction facing.
+                            throwBall.GetComponent<shootBall>().throwBall(data.prefabId.Value); //shootBall.cs is on camera(eyes) shoots ball in direction facing.
                             break;
                         case 3:
-                            Camera.GetComponent<wallDemo>().spawnWall();
+                            wallDemo.GetComponent<wallDemo>().spawnWall();
                             break;
                         case 4:
-                            Camera.GetComponent<wallDemo>().demolishWall();
+                            wallDemo.GetComponent<wallDemo>().demolishWall();
                             break;
                         case 5:
                             spooker.GetComponent<Spook>().spookPlayer();

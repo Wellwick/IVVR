@@ -1,11 +1,16 @@
 fileFormatVersion: 2
 guid: c03eecacfc88d4de69cc5a8215a3b5f4
-timeCreated: 1511357594
+timeCreated: 1511529845
 licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - wallPrefab: {fileID: 1528922230163756, guid: ae6749c84b64e4b68acde731c056e367,
+      type: 2}
+  - ballPrefab: {fileID: 54143824338457620, guid: 3bab96c2f1ab68346920139dd9b4a7ea,
+      type: 2}
+  - cam: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
