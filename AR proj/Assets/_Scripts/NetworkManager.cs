@@ -15,8 +15,11 @@ public class NetworkManager : MonoBehaviour {
 	private int connectionId;
 	private int myUnreliableChannelId;
 	private int myUpdateChannelId;
+	private int myStateChannelId;
 	private bool networkInitialised;
 	private float timer = 0;
+
+	private UnityARCameraManager ARManager;
 
 
 	#region Unity_Functions
@@ -34,6 +37,7 @@ public class NetworkManager : MonoBehaviour {
 			ConnectionConfig config = new ConnectionConfig();
 			myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
 			myUpdateChannelId = config.AddChannel(QosType.Reliable);
+			myStateChannelId = config.AddChannel(QosType.StateUpdate);
 			HostTopology topology = new HostTopology(config, 1);
 			socketId = NetworkTransport.AddHost(topology);
 			Debug.Log(socketId);
@@ -42,6 +46,8 @@ public class NetworkManager : MonoBehaviour {
 		// VR device is no longer the one trying to connect
 		/* BRING THIS BACK FOR PHONE */
 		//connectionId = NetworkTransport.Connect(socketId, "137.205.112.42", 9090, 0, out error);
+
+		ARManager = GameObject.FindObjectOfType<UnityARCameraManager>();
 	}
 
 	// Update is called once per frame
@@ -87,6 +93,13 @@ public class NetworkManager : MonoBehaviour {
 						instance.transform.position = new Vector3(st.posX, st.posY, st.posZ);
 						instance.transform.rotation = new Quaternion(st.rotX, st.rotY, st.rotZ, st.rotW);
 						break;
+					case 6:
+						//this means we have tracker info!
+						// THIS IS ONLY A TEST!
+						Debug.Log("Recieved tracker position");
+						SerializeableTransform st2 = data.transform;
+						Camera.main.transform.position = new Vector3(st2.posX, st2.posY, st2.posZ);
+						break;						
 					default:
 						Debug.Log("invalid message type");
 						break;
