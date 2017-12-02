@@ -174,7 +174,7 @@ public class NetworkManager : MonoBehaviour {
                 //finished update, save timer val
                 timer = Time.timeSinceLevelLoad;
             }
-            if (clientConnect) {
+            if (clientConnected) {
                 //also send the transform of the tracker over the state channel
                 Debug.Log("Sending tracker info");
                 NetworkMessage message = new NetworkMessage(6, null, null, tracker.transform);
@@ -182,7 +182,7 @@ public class NetworkManager : MonoBehaviour {
                 bf = new BinaryFormatter();
                 using (MemoryStream ms = new MemoryStream()) {
                     bf.Serialize(ms, message);
-                    NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, ms.ToArray(), 1024, our error2);
+                    NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, ms.ToArray(), 1024, out error2);
                 }
             }
         }
