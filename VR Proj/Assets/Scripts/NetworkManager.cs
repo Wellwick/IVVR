@@ -25,6 +25,7 @@ public class NetworkManager : MonoBehaviour {
     public GameObject spooker;
     public GameObject throwBall;
     public GameObject wallDemo;
+    public GameObject tracker;
 
     public List<GameObject> networkedObjects;
 
@@ -44,7 +45,7 @@ public class NetworkManager : MonoBehaviour {
             ConnectionConfig config = new ConnectionConfig();
             myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
             myUpdateChannelId = config.AddChannel(QosType.Reliable);
-            // myStateChannelId = config.AddChannel(QosType.StateUpdate);
+            myStateChannelId = config.AddChannel(QosType.StateUpdate);
             HostTopology topology = new HostTopology(config, 2);
             socketId = NetworkTransport.AddHost(topology, 9090);
             Debug.Log("Socket ID: " + socketId);
@@ -172,6 +173,17 @@ public class NetworkManager : MonoBehaviour {
                 }
                 //finished update, save timer val
                 timer = Time.timeSinceLevelLoad;
+            }
+            if (clientConnect) {
+                //also send the transform of the tracker over the state channel
+                Debug.Log("Sending tracker info");
+                NetworkMessage message = new NetworkMessage(6, null, null, tracker.transform);
+                byte error2;
+                bf = new BinaryFormatter();
+                using (MemoryStream ms = new MemoryStream()) {
+                    bf.Serialize(ms, message);
+                    NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, ms.ToArray(), 1024, our error2);
+                }
             }
         }
 	}
