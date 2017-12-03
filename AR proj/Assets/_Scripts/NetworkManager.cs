@@ -120,6 +120,7 @@ public class NetworkManager : MonoBehaviour
 				break;
 			case NetworkEventType.DisconnectEvent: //AR disconnects
 				networkInitialised = false;
+				textManager.changeNetworkString ("Disconnected from" + hostIP);
 				Debug.Log ("Disconnect Received");
 				break;
 			}
@@ -133,9 +134,14 @@ public class NetworkManager : MonoBehaviour
 
 	public void Connect ()
 	{
+		InputField input = GameObject.FindObjectOfType<InputField>();
+		Text inputText = input.GetComponent<Text>();
+		if(inputText.text != ""){
+			hostIP = inputText.text;
+		}
 		byte error;
 		networkInitialised = true;
-		connectionId = NetworkTransport.Connect (socketId, hostIP, 9090, 0, out error);
+		connectionId = NetworkTransport.Connect(socketId, hostIP, 9090, 0, out error);
 
 		textManager.changeNetworkString ("Connecting to " + hostIP);
 		Debug.Log (((NetworkError)error).ToString ());
