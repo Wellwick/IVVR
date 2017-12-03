@@ -6,23 +6,32 @@ using System;
 
 public class TextManager : MonoBehaviour {
 
-	public GameObject textObject;
+	public GameObject positionTextObject;
+	public GameObject networkTextObject;
 
 	private UnityARCameraManager ARManager;
-	private Text txt;
+	private Text networkText;
+	private Text positionText;
 
 
 	// Use this for initialization
 	void Start () {
-		txt = textObject.GetComponent<Text>();
-		txt.text = "Chris smells";
+		positionText = positionTextObject.GetComponent<Text>();
+		positionText.text = "Updating position text...";
+		networkText = networkTextObject.GetComponent<Text> ();
+		networkText.text = "Updating network text...";
+
 		ARManager = GameObject.FindObjectOfType<UnityARCameraManager>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		txt.text = "{" + Math.Round(ARManager.getPosition().x, 2) + ", " +
+		positionText.text = "{" + Math.Round(ARManager.getPosition().x, 2) + ", " +
 			Math.Round(ARManager.getPosition().y, 2) + ", " +
 			Math.Round(ARManager.getPosition().z, 2) + "}";
+	}
+
+	public void changeNetworkString(String networkString) {
+		networkText.text = networkString;
 	}
 }

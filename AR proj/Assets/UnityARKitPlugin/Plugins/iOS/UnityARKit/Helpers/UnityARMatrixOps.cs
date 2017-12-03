@@ -14,6 +14,14 @@ namespace UnityEngine.XR.iOS
 
 			return position;
 		}
+		//Use this function to update the position UnityARSessionNativeInterface instance 
+		public static Matrix4x4 SetPosition(Vector3 position, Matrix4x4 matrix) {
+			// Convert from ARKit's right-handed coordinate
+			// system to Unity's left-handed
+			position.z = -position.z;
+			matrix.SetColumn (3, position);
+			return matrix;
+		}
 
 		public static Quaternion GetRotation(Matrix4x4 matrix)
 		{

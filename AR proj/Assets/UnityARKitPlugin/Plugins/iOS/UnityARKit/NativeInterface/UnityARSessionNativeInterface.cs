@@ -423,12 +423,23 @@ namespace UnityEngine.XR.iOS {
         public Matrix4x4 GetCameraPose()
         {
             Matrix4x4 matrix = new Matrix4x4();
+			//This is the pose data obtained from ARKit
+			//Possibly change this 
             matrix.SetColumn(0, s_Camera.worldTransform.column0);
             matrix.SetColumn(1, s_Camera.worldTransform.column1);
             matrix.SetColumn(2, s_Camera.worldTransform.column2);
             matrix.SetColumn(3, s_Camera.worldTransform.column3);
             return matrix; 
-        }
+		}
+
+		public void SetCameraPose(Matrix4x4 matrix)
+		{
+			s_Camera.worldTransform.column0 = matrix.GetColumn (0); 
+			s_Camera.worldTransform.column1 = matrix.GetColumn (1); 
+			s_Camera.worldTransform.column2 = matrix.GetColumn (2); 
+			s_Camera.worldTransform.column3 = matrix.GetColumn (3); 
+
+		}
 
         public Matrix4x4 GetCameraProjection()
         {

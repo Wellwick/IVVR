@@ -1,4 +1,5 @@
 iOS
+7941785f12cbcf44b710fe30611f35d2 Assembly-CSharp.dll:.TextManager
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:UnityEngine.XR.iOS.UnityARKitControl
 12096ddf91bc99172a48b0419861fd00 Assembly-CSharp.dll:.PointCloudParticleExample
 37f72ce84749c8c3f7dc26905e7d1eb5 Assembly-CSharp.dll:.ModeSwitcher
@@ -11,6 +12,7 @@ e3614d77c024e8379444f971096aaac4 Assembly-CSharp.dll:.UnityARCameraManager
 c1465577256149eb2fdaaf3754ab7da9 Assembly-CSharp.dll:.TiltWindow
 dc07d7ad69b399a46e92c483bf1c04ca UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsTracker
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.DontDestroyOnLoad
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.NetworkIdentities
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:UnityEngine.XR.iOS.ConnectToEditor
 7a1ee6c718479f4d3cf744edffe2ae7b Assembly-CSharp.dll:UnityEngine.XR.iOS.UnityRemoteVideo
 63ee4d254596e7e33706786578d0fdfc Assembly-CSharp.dll:.AR3DOFCameraManager
@@ -22,11 +24,14 @@ dd6501652c91cb163a39e051d37a965f Assembly-CSharp.dll:.Ballz
 e31ef279e8d06182f0817ebd899ff54c Assembly-CSharp.dll:.UnityARUserAnchorExample
 5511a49b5104d2e14b66af50a17125f0 Assembly-CSharp.dll:.ParticlePainter
 e353101906474689643fc3c6d0a3ba4a Assembly-CSharp.dll:.ColorPicker
+41cb1853c478e211a9542fc2d1cfeabd Assembly-CSharp.dll:.SpawnManager
 32e8fe00b63ed946490b898f6024a2f2 Facebook.Unity.Settings.dll:Facebook.Unity.Settings.FacebookSettings
 c3bbced3b920c972296954f059b11c2e Assembly-CSharp.dll:UnityEngine.UI.BoxSlider
 7317d05fdc27591726053b234b9ea5ee Assembly-CSharp.dll:.ColorSliderImage
 e7fcf7b90f47d05b0aafa98e81d856d8 Assembly-CSharp.dll:UnityEngine.XR.iOS.ARKitRemoteConnection
+dc474169e340f297880782df96c9a2eb Assembly-CSharp.dll:.NetworkManager
 9ffb7700875db16ad444cf26872589b9 Assembly-CSharp.dll:.HexColorField
+66cbad2229e1792f90f39aab51aab9e8 Assembly-CSharp.dll:.Prefabs
 16ae33ee0fbf8362ac99a6fb3e017cb6 Assembly-CSharp.dll:.FocusSquare
 3c131bc1fcd62a99173616f1006723eb Assembly-CSharp.dll:.ColorImage
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:UnityEngine.XR.iOS.UnityARUserAnchorComponent
@@ -169,5 +174,3 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInput
 463516d5b5fe8e67a0a24c48f2095b04 UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInputModule
-7941785f12cbcf44b710fe30611f35d2 Assembly-CSharp.dll:.TextManager
-05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.NetworkManager

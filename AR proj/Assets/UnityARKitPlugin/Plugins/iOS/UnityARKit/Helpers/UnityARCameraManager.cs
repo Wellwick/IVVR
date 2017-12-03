@@ -7,6 +7,7 @@ public class UnityARCameraManager : MonoBehaviour {
 
     public Camera m_camera;
     private UnityARSessionNativeInterface m_session;
+
 	private Material savedClearMaterial;
 
 	[Header("AR Config Options")]
@@ -15,10 +16,14 @@ public class UnityARCameraManager : MonoBehaviour {
 	public bool getPointCloud = true;
 	public bool enableLightEstimation = true;
 
+	private Vector3 lastNetworkPos;
+
+
 	// Use this for initialization
 	void Start () {
 
 		m_session = UnityARSessionNativeInterface.GetARSessionNativeInterface();
+		lastNetworkPos = new Vector3 (0, 0, 0);
 
 #if !UNITY_EDITOR
 		Application.targetFrameRate = 60;
@@ -40,6 +45,8 @@ public class UnityARCameraManager : MonoBehaviour {
 		scamera.projectionMatrix = new UnityARMatrix4x4 (projMat.GetColumn(0),projMat.GetColumn(1),projMat.GetColumn(2),projMat.GetColumn(3));
 
 		UnityARSessionNativeInterface.SetStaticCamera (scamera);
+
+
 
 #endif
 	}
@@ -73,13 +80,23 @@ public class UnityARCameraManager : MonoBehaviour {
 
 	// Update is called once per frame
 
+
+	public void UpdatePosition(Vector3 pos) {
+		if (m_camera != null)
+		{
+			Debug.Log ("Attempting to change unity camera position");
+			lastNetworkPos = new Vector3(pos.x, pos.y, pos.z);
+			m_session.SetCameraPose(UnityARMatrixOps.SetPosition (lastNetworkPos, m_session.GetCameraPose ()));
+		}
+	}
+
 	void Update () {
 		
         if (m_camera != null)
         {
             // JUST WORKS!
             Matrix4x4 matrix = m_session.GetCameraPose();
-			m_camera.transform.localPosition = UnityARMatrixOps.GetPosition(matrix);
+			m_camera.transform.localPosition = lastNetworkPos;
 			m_camera.transform.localRotation = UnityARMatrixOps.GetRotation (matrix);
 
             m_camera.projectionMatrix = m_session.GetCameraProjection ();
