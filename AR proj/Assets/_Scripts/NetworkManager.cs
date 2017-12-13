@@ -2,6 +2,7 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -24,8 +25,9 @@ public class NetworkManager : MonoBehaviour
 	//string hostIP = "137.205.112.43"; //DCS machine
 	string hostIP = "172.20.10.4"; //Chris computer
 
-	private UnityARCameraManager ARManager;
+	//private UnityARCameraManager ARManager;
 	private TextManager textManager;
+	//private UnityEngine.XR.iOS.UnityARSessionNativeInterface ARNativeInterface;
 
 
 	#region Unity_Functions
@@ -53,8 +55,9 @@ public class NetworkManager : MonoBehaviour
 		/* BRING THIS BACK FOR PHONE */
 		//connectionId = NetworkTransport.Connect(socketId, "137.205.112.42", 9090, 0, out error);
 
-		ARManager = GameObject.FindObjectOfType<UnityARCameraManager> ();
+		//ARManager = GameObject.FindObjectOfType<UnityARCameraManager> ();
 		textManager = GameObject.FindObjectOfType<TextManager> ();
+		//ARNativeInterface = GameObject.FindObjectOfType<UnityEngine.XR.iOS.UnityARSessionNativeInterface> ();
 	}
 
 	// Update is called once per frame
@@ -104,12 +107,17 @@ public class NetworkManager : MonoBehaviour
 				case 6:
 						//this means we have tracker info!
 						// THIS IS ONLY A TEST!
-					Debug.Log ("Recieved tracker position");
+					//Debug.Log ("Received tracker position");
 					SerializeableTransform st2 = data.transform;
-					Camera.main.transform.position = new Vector3 (st2.posX, st2.posY, st2.posZ);
 
-					Debug.Log ("Attepting to call update function of UnityARCameraManager: {" + st2.posX + ", " + st2.posY + ", " + st2.posZ + "}");
-					ARManager.UpdatePosition (new Vector3 (st2.posX, st2.posY, st2.posZ));
+					//ARManager.UpdatePosition (new Vector3 (st2.posX, st2.posY, st2.posZ));
+					//TODO: remove the changes done in ARManager. PARTLY DONE.
+
+					textManager.changeTrackerRotationString (new Quaternion(st2.rotX, st2.rotY, st2.rotZ, st2.rotW));
+
+					UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerPosition(st2.posX, st2.posY, st2.posZ);
+					UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerRotation(st2.rotX, st2.rotY, st2.rotZ, st2.rotW);
+
 
 					break;						
 				default:
@@ -132,10 +140,11 @@ public class NetworkManager : MonoBehaviour
 
 	#region Networking
 
+	//137.205.112.43
 	public void Connect ()
 	{
 		InputField input = GameObject.FindObjectOfType<InputField>();
-		Text inputText = input.GetComponent<Text>();
+		Text inputText = input.GetComponentInChildren<Text>();
 		if(inputText.text != ""){
 			hostIP = inputText.text;
 		}

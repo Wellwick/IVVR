@@ -14,13 +14,10 @@ namespace UnityEngine.XR.iOS
 
 			return position;
 		}
-		//Use this function to update the position UnityARSessionNativeInterface instance 
-		public static Matrix4x4 SetPosition(Vector3 position, Matrix4x4 matrix) {
-			// Convert from ARKit's right-handed coordinate
-			// system to Unity's left-handed
-			position.z = -position.z;
-			matrix.SetColumn (3, position);
-			return matrix;
+
+		public static Quaternion GetRotation(UnityARMatrix4x4 m)
+		{
+			return GetRotation (new Matrix4x4 (m.column0, m.column1, m.column2, m.column3));
 		}
 
 		public static Quaternion GetRotation(Matrix4x4 matrix)
@@ -33,7 +30,6 @@ namespace UnityEngine.XR.iOS
 
 			return rotation;
 		}
-
 
 		static Quaternion QuaternionFromMatrix(Matrix4x4 m) {
 			// Adapted from: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
@@ -48,6 +44,48 @@ namespace UnityEngine.XR.iOS
 			return q;
 		}
 
+		//Written by Chris 13/12/2017
+		public static UnityARMatrix4x4 InsertRotation(UnityARMatrix4x4 result, Vector4 q) {
+			//Adapted from: http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
+
+			double sqw = q.w*q.w;
+			double sqx = q.x*q.x;
+			double sqy = q.y*q.y;
+			double sqz = q.z*q.z;
+
+			// invs (inverse square length) is only required if quaternion is not already normalised
+			double invs = 1 / (sqx + sqy + sqz + sqw);
+
+			float m00 = (float)(( sqx - sqy - sqz + sqw)*invs); // since sqw + sqx + sqy + sqz =1/invs*invs
+			float m11 = (float)((-sqx + sqy - sqz + sqw)*invs);
+			float m22 = (float)((-sqx - sqy + sqz + sqw)*invs);
+
+			double tmp1 = q.x*q.y;
+			double tmp2 = q.z*q.w;
+			float m10 = (float)(2.0 * (tmp1 + tmp2)*invs);
+			float m01 = (float)(2.0 * (tmp1 - tmp2)*invs);
+
+			tmp1 = q.x*q.z;
+			tmp2 = q.y*q.w;
+			float m20 = (float)(2.0 * (tmp1 - tmp2)*invs);
+			float m02 = (float)(2.0 * (tmp1 + tmp2)*invs);
+			tmp1 = q.y*q.z;
+			tmp2 = q.x*q.w;
+			float m21 = (float)(2.0 * (tmp1 + tmp2)*invs);
+			float m12 = (float)(2.0 * (tmp1 - tmp2)*invs);      
+
+			result.column0 = new Vector4(m00, m10, m20, 0);
+			result.column1 = new Vector4(m01, m11, m21, 0);
+			result.column2 = new Vector4(m02, m12, m22, 0);
+
+			return result;
+		}
+
+		//Written by Chris
+		static Quaternion QuaternionFromMatrix(UnityARMatrix4x4 m) {
+			Matrix4x4 um = new Matrix4x4(m.column0, m.column1, m.column2, m.column3);
+			return QuaternionFromMatrix (um);
+		}
 	}
 }
 

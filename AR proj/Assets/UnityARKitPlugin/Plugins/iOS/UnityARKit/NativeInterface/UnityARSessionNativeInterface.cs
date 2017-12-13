@@ -4,7 +4,6 @@ using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
 using AOT;
-
 namespace UnityEngine.XR.iOS {
 
     /// <summary>
@@ -248,10 +247,10 @@ namespace UnityEngine.XR.iOS {
 //	    public delegate void ARFrameUpdate(UnityARMatrix4x4 cameraPos, UnityARMatrix4x4 projection);
 //        public static event ARFrameUpdate ARFrameUpdatedEvent;
 
-        // Plane Anchors
         public delegate void ARFrameUpdate(UnityARCamera camera);
         public static event ARFrameUpdate ARFrameUpdatedEvent;
-
+		
+		// Plane Anchors
 		public delegate void ARAnchorAdded(ARPlaneAnchor anchorData);
         public static event ARAnchorAdded ARAnchorAddedEvent;
 
@@ -294,6 +293,12 @@ namespace UnityEngine.XR.iOS {
 #endif
 
 	    private static UnityARCamera s_Camera;
+		private static Vector4 tracker_position = new Vector4 (0, 0, 0, 1);
+		private static Quaternion tracker_rotation = new Quaternion (0, 0, 0, 1);
+		public static UnityARMatrix4x4 lastTransform = new UnityARMatrix4x4 (new Vector4 (1, 0, 0, 0), new Vector4 (0, 1, 0, 0), new Vector4 (0, 0, 1, 0), new Vector4 (0, 0, 0, 1));
+		private static UnityARMatrix4x4 tracker_transform = new UnityARMatrix4x4(new Vector4(1,0,0,0), new Vector4(0,1,0,0), new Vector4(0,0,1,0), new Vector4(0,0,0,1));
+		private static Boolean tracker_enabled = true;
+	
 		
 	    [DllImport("__Internal")]
         private static extern IntPtr unity_CreateNativeARSession();
@@ -466,9 +471,42 @@ namespace UnityEngine.XR.iOS {
 #endif
 		}
 
+		//TODO: Figure out how to handle the event ARFrameUpdatedEvent.
+		//At the moment, this function never gets called.
+		[MonoPInvokeCallback(typeof(ARFrameUpdate))]
+		static void _frame_update2(UnityARCamera camera) {
+			Debug.Log ("External frame update " + camera.worldTransform.column3.ToString());
+			//if (ARFrameUpdatedEvent != null)
+			//{
+			//	ARFrameUpdatedEvent(s_Camera);
+			//}
+		}
+
+
+		//If TRUE is passed in, the 
+		public static void useTrackerPosition(Boolean use_tracker) {
+			tracker_enabled = use_tracker;
+		}
+
+		public static void updateTrackerPosition(float x, float y, float z) {
+			// Convert from Unity's left-handed coordinate system to ARKit's right-handed system
+			// This is done simply inverting the z axis.
+
+			tracker_position = new Vector4 (x, y, -z , 1);
+			tracker_transform.column3 = tracker_position;
+		}
+
+		public static void updateTrackerRotation(float x, float y, float z, float w) {
+			tracker_rotation = new Quaternion (x, y, z, w);
+			UnityARMatrixOps.InsertRotation (tracker_transform, new Vector4 (x, y, z, w));
+		}
+
+
+		//THIS HAS BEEN EDITED TO CHANGE THE POSITION OF THE CAMERA TO THE POSITION OF THE TRACKER
         [MonoPInvokeCallback(typeof(internal_ARFrameUpdate))]
 	    static void _frame_update(internal_UnityARCamera camera)
 	    {
+
             UnityARCamera pubCamera = new UnityARCamera();
             pubCamera.projectionMatrix = camera.projectionMatrix;
             pubCamera.worldTransform = camera.worldTransform;
@@ -477,6 +515,15 @@ namespace UnityEngine.XR.iOS {
 			pubCamera.videoParams = camera.videoParams;
 			pubCamera.lightEstimation = camera.lightEstimation;
             pubCamera.displayTransform = camera.displayTransform;
+
+			lastTransform = camera.worldTransform;
+			//Only change the position if the tracker position is being used
+			if (tracker_enabled) {
+				//pubCamera.worldTransform.column3 = tracker_position;
+				pubCamera.worldTransform = tracker_transform;
+			}
+			Debug.Log ("Internal frame update " + pubCamera.worldTransform.column3.ToString());
+
             s_Camera = pubCamera;
 
             if (camera.getPointCloudData == 1)
