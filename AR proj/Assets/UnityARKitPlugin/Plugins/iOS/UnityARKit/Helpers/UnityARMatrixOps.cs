@@ -45,7 +45,7 @@ namespace UnityEngine.XR.iOS
 		}
 
 		//Written by Chris 13/12/2017
-		public static UnityARMatrix4x4 InsertRotation(UnityARMatrix4x4 result, Vector4 q) {
+		public static UnityARMatrix4x4 InsertRotation(UnityARMatrix4x4 result, Quaternion q) {
 			//Adapted from: http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
 
 			double sqw = q.w*q.w;
@@ -77,6 +77,7 @@ namespace UnityEngine.XR.iOS
 			result.column0 = new Vector4(m00, m10, m20, 0);
 			result.column1 = new Vector4(m01, m11, m21, 0);
 			result.column2 = new Vector4(m02, m12, m22, 0);
+
 
 			return result;
 		}

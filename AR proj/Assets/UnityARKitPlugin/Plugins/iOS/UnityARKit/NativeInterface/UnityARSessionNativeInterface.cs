@@ -498,7 +498,7 @@ namespace UnityEngine.XR.iOS {
 
 		public static void updateTrackerRotation(float x, float y, float z, float w) {
 			tracker_rotation = new Quaternion (x, y, z, w);
-			UnityARMatrixOps.InsertRotation (tracker_transform, new Vector4 (x, y, z, w));
+			tracker_transform = UnityARMatrixOps.InsertRotation (tracker_transform, tracker_rotation);
 		}
 
 
@@ -522,7 +522,7 @@ namespace UnityEngine.XR.iOS {
 				//pubCamera.worldTransform.column3 = tracker_position;
 				pubCamera.worldTransform = tracker_transform;
 			}
-			Debug.Log ("Internal frame update " + pubCamera.worldTransform.column3.ToString());
+			//Debug.Log ("Internal frame update " + pubCamera.worldTransform.column3.ToString());
 
             s_Camera = pubCamera;
 

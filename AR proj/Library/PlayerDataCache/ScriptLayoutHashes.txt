@@ -1,5 +1,5 @@
 iOS
-e2cf45f57c4b49628915fba36dd9081b Assembly-CSharp.dll:.TextManager
+ab049158d557f1828c7b192d047fca7d Assembly-CSharp.dll:.TextManager
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:UnityEngine.XR.iOS.UnityARKitControl
 12096ddf91bc99172a48b0419861fd00 Assembly-CSharp.dll:.PointCloudParticleExample
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
