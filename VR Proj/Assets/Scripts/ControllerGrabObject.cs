@@ -19,7 +19,7 @@ public class ControllerGrabObject : MonoBehaviour {
 		if (Controller.GetHairTriggerDown() && !collidingObject)
 			SpawnFire();
 
-		if (Controller.GetHairTriggerUp())
+		if (Controller.GetHairTriggerUp() && !objectInHand)
 			RemoveFire();
 
 		if (Controller.GetHairTriggerUp() && objectInHand)
@@ -37,6 +37,11 @@ public class ControllerGrabObject : MonoBehaviour {
 
 	void Awake() {
 		trackedObj = GetComponent<SteamVR_TrackedObject>();
+		//initialises fire and stops it
+		fire = Instantiate(firePrefab, 
+			trackedObj.transform.position, 
+			Quaternion.identity) as GameObject;
+		fire.GetComponent<ParticleSystem>().Stop(false, ParticleSystemStopBehavior.StopEmitting);
 	}
 
 	private void SetCollidingObject(Collider col) {
@@ -92,13 +97,11 @@ public class ControllerGrabObject : MonoBehaviour {
 		//set the fire prefab to the position and orientation of the controller and spawn the fire
 		//fire.SetActive(true);
 		//fireTransform = trackedObj.transform;
-		fire = Instantiate(firePrefab, 
-			trackedObj.transform.position, 
-			Quaternion.identity) as GameObject;
+		fire.GetComponent<ParticleSystem>().Play(false);
 	}
 
 	public void RemoveFire() {
-		Destroy(fire);
+		fire.GetComponent<ParticleSystem>().Stop(false, ParticleSystemStopBehavior.StopEmitting);
 	}
 
 	//Throw a ball forwards
