@@ -12,7 +12,7 @@ public class UnityARCameraManager : MonoBehaviour {
 
 	[Header("AR Config Options")]
 	public UnityARAlignment startAlignment = UnityARAlignment.UnityARAlignmentGravity;
-	public UnityARPlaneDetection planeDetection = UnityARPlaneDetection.Horizontal;
+	public UnityARPlaneDetection planeDetection = UnityARPlaneDetection.None;
 	public bool getPointCloud = true;
 	public bool enableLightEstimation = true;
 
@@ -23,6 +23,8 @@ public class UnityARCameraManager : MonoBehaviour {
 	void Start () {
 
 		m_session = UnityARSessionNativeInterface.GetARSessionNativeInterface();
+
+
 		lastNetworkPos = new Vector3 (0, 0, 0);
 
 #if !UNITY_EDITOR
@@ -38,6 +40,9 @@ public class UnityARCameraManager : MonoBehaviour {
 			m_camera = Camera.main;
 		}
 #else
+		ARKitSessionConfiguration sessionConfig = new ARKitSessionConfiguration (startAlignment, true, true);
+		m_session.RunWithConfig(sessionConfig);
+
 		//put some defaults so that it doesnt complain
 		UnityARCamera scamera = new UnityARCamera ();
 		scamera.worldTransform = new UnityARMatrix4x4 (new Vector4 (1, 0, 0, 0), new Vector4 (0, 1, 0, 0), new Vector4 (0, 0, 1, 0), new Vector4 (0, 0, 0, 1));
@@ -81,22 +86,13 @@ public class UnityARCameraManager : MonoBehaviour {
 	// Update is called once per frame
 
 
-	public void UpdatePosition(Vector3 pos) {
-		if (m_camera != null)
-		{
-			Debug.Log ("Attempting to change unity camera position");
-			lastNetworkPos = new Vector3(pos.x, pos.y, pos.z);
-			m_session.SetCameraPose(UnityARMatrixOps.SetPosition (lastNetworkPos, m_session.GetCameraPose ()));
-		}
-	}
-
 	void Update () {
 		
         if (m_camera != null)
         {
             // JUST WORKS!
             Matrix4x4 matrix = m_session.GetCameraPose();
-			m_camera.transform.localPosition = lastNetworkPos;
+			m_camera.transform.localPosition = UnityARMatrixOps.GetPosition (matrix);
 			m_camera.transform.localRotation = UnityARMatrixOps.GetRotation (matrix);
 
             m_camera.projectionMatrix = m_session.GetCameraProjection ();
@@ -111,6 +107,13 @@ public class UnityARCameraManager : MonoBehaviour {
 			return m_camera.transform.localPosition = UnityARMatrixOps.GetPosition (matrix);
 		}
 		return new Vector3 ();
+	}
+	public Quaternion getRotation(){
+		if (m_camera != null) {
+			Matrix4x4 matrix = m_session.GetCameraPose ();
+			return m_camera.transform.localRotation = UnityARMatrixOps.GetRotation (matrix);
+		}
+		return new Quaternion ();
 	}
 
 }
