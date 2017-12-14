@@ -240,6 +240,7 @@ public class NetworkManager : MonoBehaviour {
             rotX = transform.rotation.x;
             rotY = transform.rotation.y;
             rotZ = transform.rotation.z;
+            rotW = transform.rotation.w;
         }
 
         public override string ToString(){
