@@ -13,19 +13,20 @@ public class ControllerGrabObject : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Controller.GetHairTriggerDown() && collidingObject)
-			GrabObject();
+		if (Controller.GetHairTriggerDown()) {
+			if (collidingObject)
+				GrabObject();
+			else
+				SpawnFire();
+		}
+		if (Controller.GetHairTriggerUp()) {
+			if (objectInHand)
+				ReleaseObject();
+			else
+				RemoveFire();
+		}
 
-		if (Controller.GetHairTriggerDown() && !collidingObject)
-			SpawnFire();
-
-		if (Controller.GetHairTriggerUp() && !objectInHand)
-			RemoveFire();
-
-		if (Controller.GetHairTriggerUp() && objectInHand)
-			ReleaseObject();
-
-		if (fire) {
+		if (fire.GetComponent<ParticleSystem>().isPlaying) {
 			fire.transform.position = trackedObj.transform.position;
 			fire.transform.rotation = trackedObj.transform.rotation;
 		}
