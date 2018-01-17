@@ -224,7 +224,20 @@ public class NetworkManager : MonoBehaviour {
             count = buff[0];
         }
 
+        public byte[] getArray() {
+            buff[0] = count;
+            return buff;
+        }
+
+        public bool isFull() {
+            return ((((count+1)*49)+1)>size);
+        }
+
         public void addSerial(byte type, int id, int prefabId, Transform transform){
+            if (isFull()) {
+                Debug.Error("Coder array is already full, can't add type " + type + " object id " + id);
+                return;
+            }
             int index = 1 + (count++*49);
             buff[index] = type;
             writeIn(id, index+1);
@@ -251,23 +264,101 @@ public class NetworkManager : MonoBehaviour {
             
         }
 
-        public void writeIn(int value, int pos) {
+        private void writeIn(int value, int pos) {
             byte[] writeIn = BitConverter.GetBytes(value);
             for (int i = 0; i < writeIn.Length; i++) {
                 buff[i+pos] = writeIn[i];
             }
         }
 
-        public void writeIn(float value, int pos) {
+        private void writeIn(float value, int pos) {
             byte[] writeIn = BitConverter.GetBytes(value);
             for (int i = 0; i < writeIn.Length; i++) {
                 buff[i+pos] = writeIn[i];
             }
+        }
+
+        public int readOutInt(int pos) {
+            byte[] readOut = new byte[4];
+            for (int i = 0; i < readOut.Length; i++) {
+                readOut[i] = buff[i+pos];
+            }
+            return BitConverter.GetInt32(readOut);
+        }
+
+        public float readOutFloat(int pos) {
+            byte[] readOut = new byte[4];
+            for (int i = 0; i < readOut.Length; i++) {
+                readOut[i] = buff[i+pos];
+            }
+            return BitConverter.GetFloat(readOut);
+        }
+
+        public byte GetType(int index) {
+            if illegalVal(index) return;
+            //move the index to correct position
+            index = 1 + (index*49);
+
+            return buff[index];
+        }
+
+        public int GetID(int index) {
+            if illegalVal(index) return;
+            //move the index to correct position
+            index = 1 + (index*49);
+
+            return readOutInt(index+1);
+        }
+
+        public int GetPrefabID(int index) {
+            if illegalVal(index) return;
+            //move the index to correct position
+            index = 1 + (index*49);
+
+            return readOutInt(index+5);
         }
 
         public Transform GetTransform(int index) {
+            if illegalVal(index) return;
+            //move the index to correct position
+            index = 1 + (index*49);
+            
             //we already have the array
             Transform transform;
+
+            float posX = readOutFloat(index+9);
+            float posY = readOutFloat(index+13);
+            float posZ = readOutFloat(index+17);
+            transform.position = new Vector3(posX, posY, posZ);
+
+            float rotX = readOutFloat(index+21);
+            float rotY = readOutFloat(index+25);
+            float rotZ = readOutFloat(index+29);
+            float rotW = readOutFloat(index+33);
+            transform.rotation = new Quaternion(rotX, rotY, rotZ, rotW);
+            
+            return transform;
+        }
+
+        public Vector3 GetVelocity(int index) {
+            if illegalVal(index) return;
+            //move the index to correct position
+            index = 1 + (index*49);
+
+            //once again, already have the array
+            float velX = readOutFloat(index+37);
+            float velY = readOutFloat(index+41);
+            float velZ = readOutFloat(index+45);
+
+            return new Vector3(velX, velY, velZ);
+        }
+
+        private bool illegalVal(int index) {
+            if (index > buff[0]) {
+                Debug.LogError("Coded message count does not reach value " + index);
+                return true;
+            }
+            return false;
         }
 
     }
