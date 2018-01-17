@@ -43,6 +43,14 @@ The Unity script editor default has been set to VSCode. Double clicking on any `
 
 The IP you will be using most will start as `137.205.112.XX`. XX tends to align with the viglab-## machine that you are at, displayed on the bash terminal. You can also use `ifconfig` to get information on what your current IP is. Keep in mind the ports that are opened on the DCS machines are in the range 9090-9099, both on TCP and UDP (Unity uses UDP).
 
+# Recording and viewing video
+
+The `record <FILENAME>` can be used to record the screen to the designated fileplacement. It's recommended that you save videos to /var/tmp/ as writing to the disk will be faster than writing to the network.
+
+To view the video after, make use of `mplayer <FILENAME>` to view the video. The file recording is set to be 720p, however this can be edited by looking at the documentation for ffmpeg.
+
+If you need to export the video at all, you can make use of mencoder to convert the video to a more usable format. Have a look at `mencoder -ovc help` for the list of available codecs.
+
 # Current Problems
 
 The audio jack for the Vive does not seem to be working. For now, will need a long cable to attach to the tower in order to hear audio.
