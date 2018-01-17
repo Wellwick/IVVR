@@ -69,8 +69,8 @@ public class NetworkManager : MonoBehaviour
 			int recHostId;
 			int connectionId;
 			int channelId;
-			byte[] recBuffer = new byte[1024]; //Info for actions to occur
-			int bufferSize = 1024;
+			byte[] recBuffer = new byte[530]; //Info for actions to occur
+			int bufferSize = 530;
 			int dataSize;
 			byte error;
 			NetworkEventType recData = NetworkTransport.Receive (out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
@@ -166,7 +166,7 @@ public class NetworkManager : MonoBehaviour
 		using (MemoryStream ms = new MemoryStream ()) {
 			bf.Serialize (ms, message);
 			Debug.Log (ms.ToArray ().Length);
-			NetworkTransport.Send (socketId, connectionId, myUnreliableChannelId, ms.ToArray (), 1024, out error);
+			NetworkTransport.Send (socketId, connectionId, myUnreliableChannelId, ms.ToArray (), 530, out error);
 		}
 	}
 
