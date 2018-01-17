@@ -26,8 +26,10 @@ public class NetworkManager : MonoBehaviour {
     public GameObject throwBall;
     public GameObject wallDemo;
     public GameObject tracker;
-
-    public List<GameObject> networkedObjects;
+    //dictionary to identify individual objects, may not be super necessary eventually
+    public Dictionary<int, GameObject> networkedObjects;
+    //message queue to help ease load off of the send buffer.
+    public Queue messageQueue = new Queue();
 
     //value to check when we should send a new batch of updates
     private float timer;
@@ -54,10 +56,12 @@ public class NetworkManager : MonoBehaviour {
         //get the list of networked objects saved in a list
         GameObject[] netObjects = GameObject.FindGameObjectsWithTag("NetworkedObject");
         //put them in a list
-        networkedObjects = new List<GameObject>();
+        networkedObjects = new Dictionary<int, GameObject>();
         for (int i = 0; i < netObjects.Length; i++) {
             //assume they are all balls to start!
-            networkedObjects.Add(netObjects[i]);
+            GameObject gameObject = netObjects[i];
+            int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+            networkedObjects.Add(id, gameObject);
         }
         //initialise timer
         timer = Time.timeSinceLevelLoad;
@@ -82,8 +86,8 @@ public class NetworkManager : MonoBehaviour {
             int recHostId;
             int connectionId;
             int channelId;
-            byte[] recBuffer = new byte[1024]; //Info for actions to occur
-            int bufferSize = 1024;
+            byte[] recBuffer = new byte[530]; //Info for actions to occur
+            int bufferSize = 530;
             int dataSize;
             byte error;
             BinaryFormatter bf; //in case it is needed in the switch
@@ -119,7 +123,7 @@ public class NetworkManager : MonoBehaviour {
                         bf = new BinaryFormatter();
                         using (MemoryStream ms = new MemoryStream()) {
                             bf.Serialize(ms, message);
-                            NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error2);
+                            NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 530, out error2);
                         }
                     }
                     clientConnected = true;
@@ -161,14 +165,16 @@ public class NetworkManager : MonoBehaviour {
                     break;
             }
             if (clientConnected && Input.GetKeyDown(KeyCode.U)) {
-                Debug.Log("Trying to update client on " + networkedObjects.Count + " objects");
-                for (int i = 0; i < networkedObjects.Count; i++) {
-                    NetworkMessage message = new NetworkMessage(3, i, null, networkedObjects[i].transform);
+                Debug.Log("Trying to update client on " + messageQueue.Count + " objects");
+                for (int i = 0; i < messageQueue.Count; i++) {
+                    GameObject gameObject = messageQueue.Dequeue() as GameObject;
+                    int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+                    NetworkMessage message = new NetworkMessage(3, id, null, gameObject.transform);
                     byte error2;
                     bf = new BinaryFormatter();
                     using (MemoryStream ms = new MemoryStream()) {
                         bf.Serialize(ms, message);
-                        NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, ms.ToArray(), 1024, out error2);
+                        NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, ms.ToArray(), 530, out error2);
                     }
                 }
                 //finished update, save timer val
@@ -182,7 +188,7 @@ public class NetworkManager : MonoBehaviour {
                 bf = new BinaryFormatter();
                 using (MemoryStream ms = new MemoryStream()) {
                     bf.Serialize(ms, message);
-                    NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, ms.ToArray(), 1024, out error2);
+                    NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, ms.ToArray(), 530, out error2);
                 }
             }
         }
@@ -190,13 +196,14 @@ public class NetworkManager : MonoBehaviour {
 
     //Add object to the list
     public void addObject(GameObject gameObject, Prefabs.PID objectType) {
-        networkedObjects.Add(gameObject);
-        NetworkMessage message = new NetworkMessage(1, networkedObjects.Count - 1, (int)objectType, gameObject.transform);
+        int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+        networkedObjects.Add(id, gameObject);
+        NetworkMessage message = new NetworkMessage(1, id, (int)objectType, gameObject.transform);
         byte error2;
         BinaryFormatter bf = new BinaryFormatter();
         using (MemoryStream ms = new MemoryStream()) {
             bf.Serialize(ms, message);
-            NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 1024, out error2);
+            NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 530, out error2);
         }
         
     }
