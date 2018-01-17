@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -164,7 +165,7 @@ public class NetworkManager : MonoBehaviour {
 					Debug.Log("Disconnect Received");
                     break;
             }
-            if (clientConnected/* && Input.GetKeyDown(KeyCode.U)*/) {
+            if (clientConnected && Input.GetKeyDown(KeyCode.U)) {
                 Debug.Log("Trying to update client on " + messageQueue.Count + " objects");
                 for (int i = 0; i < messageQueue.Count; i++) {
                     GameObject gameObject = messageQueue.Dequeue() as GameObject;
@@ -176,14 +177,12 @@ public class NetworkManager : MonoBehaviour {
                         bf.Serialize(ms, message);
                         NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, ms.ToArray(), 530, out error2);
                     }
-                    gameObject.GetComponent<NetworkIdentity>().setUpdateWaiting();
                 }
                 //finished update, save timer val
                 timer = Time.timeSinceLevelLoad;
             }
             if (clientConnected) {
                 //also send the transform of the tracker over the state channel
-                /* ADD THIS BACK IN AGAIN LATER TODO
                 Debug.Log("Sending tracker info");
                 NetworkMessage message = new NetworkMessage(6, null, null, tracker.transform);
                 byte error2;
@@ -192,7 +191,6 @@ public class NetworkManager : MonoBehaviour {
                     bf.Serialize(ms, message);
                     NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, ms.ToArray(), 530, out error2);
                 }
-                */
             }
         }
 	}
@@ -200,7 +198,6 @@ public class NetworkManager : MonoBehaviour {
     //Add object to the list
     public void addObject(GameObject gameObject, Prefabs.PID objectType) {
         int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
-        Debug.Log("Adding object of id " + id);
         networkedObjects.Add(id, gameObject);
         NetworkMessage message = new NetworkMessage(1, id, (int)objectType, gameObject.transform);
         byte error2;
@@ -212,7 +209,68 @@ public class NetworkManager : MonoBehaviour {
         
     }
 
+    public class Coder{
+        
+        private byte[] buff;
+        private int count;
+        
+        public Coder(int size){
+            buff = new byte[size];
+            count = 0;
+        }
 
+        public Coder(byte[] array) {
+            buff = array;
+            count = buff[0];
+        }
+
+        public void addSerial(byte type, int id, int prefabId, Transform transform){
+            int index = 1 + (count++*49);
+            buff[index] = type;
+            writeIn(id, index+1);
+            writeIn(prefabId, index+5);
+            
+            //setup for position
+            Vector3 pos = transform.position;
+            writeIn(pos.x, index+9);
+            writeIn(pos.y, index+13);
+            writeIn(pos.z, index+17);
+
+            //setup for rotation
+            Quaternion rot = transform.rotation;
+            writeIn(rot.x, index+21);
+            writeIn(rot.y, index+25);
+            writeIn(rot.z, index+29);
+            writeIn(rot.w, index+33);
+            
+            //setup for velocity
+            Vector3 vel = transform.GetComponent<Rigidbody>().velocity;
+            writeIn(vel.x, index+37);
+            writeIn(vel.y, index+41);
+            writeIn(vel.z, index+45);
+            
+        }
+
+        public void writeIn(int value, int pos) {
+            byte[] writeIn = BitConverter.GetBytes(value);
+            for (int i = 0; i < writeIn.Length; i++) {
+                buff[i+pos] = writeIn[i];
+            }
+        }
+
+        public void writeIn(float value, int pos) {
+            byte[] writeIn = BitConverter.GetBytes(value);
+            for (int i = 0; i < writeIn.Length; i++) {
+                buff[i+pos] = writeIn[i];
+            }
+        }
+
+        public Transform GetTransform(int index) {
+            //we already have the array
+            Transform transform;
+        }
+
+    }
 
     [System.Serializable]
     public class NetworkMessage{
