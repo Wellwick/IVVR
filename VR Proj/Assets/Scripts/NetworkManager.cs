@@ -164,7 +164,7 @@ public class NetworkManager : MonoBehaviour {
 					Debug.Log("Disconnect Received");
                     break;
             }
-            if (clientConnected && Input.GetKeyDown(KeyCode.U)) {
+            if (clientConnected/* && Input.GetKeyDown(KeyCode.U)*/) {
                 Debug.Log("Trying to update client on " + messageQueue.Count + " objects");
                 for (int i = 0; i < messageQueue.Count; i++) {
                     GameObject gameObject = messageQueue.Dequeue() as GameObject;
@@ -176,12 +176,14 @@ public class NetworkManager : MonoBehaviour {
                         bf.Serialize(ms, message);
                         NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, ms.ToArray(), 530, out error2);
                     }
+                    gameObject.GetComponent<NetworkIdentity>().setUpdateWaiting();
                 }
                 //finished update, save timer val
                 timer = Time.timeSinceLevelLoad;
             }
             if (clientConnected) {
                 //also send the transform of the tracker over the state channel
+                /* ADD THIS BACK IN AGAIN LATER TODO
                 Debug.Log("Sending tracker info");
                 NetworkMessage message = new NetworkMessage(6, null, null, tracker.transform);
                 byte error2;
@@ -190,6 +192,7 @@ public class NetworkManager : MonoBehaviour {
                     bf.Serialize(ms, message);
                     NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, ms.ToArray(), 530, out error2);
                 }
+                */
             }
         }
 	}
@@ -197,6 +200,7 @@ public class NetworkManager : MonoBehaviour {
     //Add object to the list
     public void addObject(GameObject gameObject, Prefabs.PID objectType) {
         int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+        Debug.Log("Adding object of id " + id);
         networkedObjects.Add(id, gameObject);
         NetworkMessage message = new NetworkMessage(1, id, (int)objectType, gameObject.transform);
         byte error2;
