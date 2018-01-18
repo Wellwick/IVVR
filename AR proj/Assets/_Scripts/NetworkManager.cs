@@ -164,7 +164,7 @@ public class NetworkManager : MonoBehaviour
 		Coder encoder = new Coder(1024);
 		encoder.addSerial(2, -1, prefabId, null);
 		byte error;
-		NetworkTransport.Send (socketId, connectionId, myUnreliableChannelId, encoder.getArray(), 1024, out error);
+		NetworkTransport.Send (socketId, connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error);
 	}
 
 
