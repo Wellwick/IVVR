@@ -55,6 +55,7 @@ public class NetworkManager : MonoBehaviour {
             NetworkTransport.Init();
             Debug.Log("Host Started");
             ConnectionConfig config = new ConnectionConfig();
+            config.SendDelay = 0;
             myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
             myUpdateChannelId = config.AddChannel(QosType.Reliable);
             myStateChannelId = config.AddChannel(QosType.StateUpdate);

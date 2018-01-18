@@ -23,8 +23,8 @@ public class NetworkManager : MonoBehaviour
 	private bool networkInitialised;
 	private float timer = 0;
 
-	//string hostIP = "137.205.112.43"; //DCS machine
-	string hostIP = "172.20.10.4"; //Chris computer
+	string hostIP = "137.205.112.43"; //DCS machine
+	//string hostIP = "172.20.10.4"; //Chris computer
 
 	//private UnityARCameraManager ARManager;
 	private TextManager textManager;
@@ -43,7 +43,8 @@ public class NetworkManager : MonoBehaviour
 			NetworkTransport.Init ();
 			Debug.Log ("Host Started");
 
-			ConnectionConfig config = new ConnectionConfig ();
+			ConnectionConfig config = new ConnectionConfig();
+			config.SendDelay = 0;
 			myUnreliableChannelId = config.AddChannel (QosType.Unreliable);
 			myUpdateChannelId = config.AddChannel (QosType.Reliable);
 			myStateChannelId = config.AddChannel (QosType.StateUpdate);
