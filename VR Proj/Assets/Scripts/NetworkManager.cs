@@ -31,6 +31,7 @@ public class NetworkManager : MonoBehaviour {
     public Dictionary<int, GameObject> networkedObjects;
     //message queue to help ease load off of the send buffer.
     public Queue messageQueue = new Queue();
+    public Coder encoder = new Coder(1024);
 
     //value to check when we should send a new batch of updates
     private float timer;
@@ -87,11 +88,10 @@ public class NetworkManager : MonoBehaviour {
             int recHostId;
             int connectionId;
             int channelId;
-            byte[] recBuffer = new byte[530]; //Info for actions to occur
-            int bufferSize = 530;
+            byte[] recBuffer = new byte[1024]; //Info for actions to occur
+            int bufferSize = 1024;
             int dataSize;
             byte error;
-            BinaryFormatter bf; //in case it is needed in the switch
             NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
             switch (recData)
             {
@@ -119,45 +119,39 @@ public class NetworkManager : MonoBehaviour {
                     Debug.Log("Connection request from id: " + connectionId + " Received");
                     this.connectionId = connectionId;
                     for (int i = 0; i<networkedObjects.Count; i++) {
-                        NetworkMessage message = new NetworkMessage(0, i, (int)Prefabs.PID.Ball, networkedObjects[i].transform);
-                        byte error2;
-                        bf = new BinaryFormatter();
-                        using (MemoryStream ms = new MemoryStream()) {
-                            bf.Serialize(ms, message);
-                            NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 530, out error2);
-                        }
+                        encoder.addSerial(0, i, (int)Prefabs.PID.Ball, networkedObjects[i].transform);
                     }
+                    byte error2;
+                    NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, encoder.getArray(), 1024, out error2);
                     clientConnected = true;
                     break;
                 case NetworkEventType.DataEvent:
                     Debug.Log("Data Received");
-                    NetworkMessage data;
-                    bf = new BinaryFormatter();
-                    using (MemoryStream ms = new MemoryStream(recBuffer)){
-                        data = bf.Deserialize(ms) as NetworkMessage;
-                    }
-                    switch (data.type){
-                        case 0:
-                            //leftController.GetComponent<ControllerGrabObject>().RemoveFire();
-						    //rightController.GetComponent<ControllerGrabObject>().RemoveFire();
-                            break;
-                        case 1:
-                            //leftController.GetComponent<ControllerGrabObject>().SpawnFire();
-						    //rightController.GetComponent<ControllerGrabObject>().SpawnFire();
-                            break;
-                        case 2:
-                            Debug.Log("Trying to throw ball");
-                            throwBall.GetComponent<shootBall>().throwBall(data.prefabId.Value); //shootBall.cs is on camera(eyes) shoots ball in direction facing.
-                            break;
-                        case 3:
-                            wallDemo.GetComponent<wallDemo>().spawnWall();
-                            break;
-                        case 4:
-                            wallDemo.GetComponent<wallDemo>().demolishWall();
-                            break;
-                        case 5:
-                            spooker.GetComponent<Spook>().spookPlayer();
-                            break;
+                    Coder decoder = new Coder(recBuffer);
+                    for(int i = 0; i < decoder.getCount(); i++){
+                        switch (decoder.GetType(i)){
+                            case 0:
+                                //leftController.GetComponent<ControllerGrabObject>().RemoveFire();
+                                //rightController.GetComponent<ControllerGrabObject>().RemoveFire();
+                                break;
+                            case 1:
+                                //leftController.GetComponent<ControllerGrabObject>().SpawnFire();
+                                //rightController.GetComponent<ControllerGrabObject>().SpawnFire();
+                                break;
+                            case 2:
+                                Debug.Log("Trying to throw ball");
+                                throwBall.GetComponent<shootBall>().throwBall(decoder.GetPrefabID(i)); //shootBall.cs is on camera(eyes) shoots ball in direction facing.
+                                break;
+                            case 3:
+                                wallDemo.GetComponent<wallDemo>().spawnWall();
+                                break;
+                            case 4:
+                                wallDemo.GetComponent<wallDemo>().demolishWall();
+                                break;
+                            case 5:
+                                spooker.GetComponent<Spook>().spookPlayer();
+                                break;
+                        }
                     }
                     break;
                 case NetworkEventType.DisconnectEvent: //AR disconnects
@@ -212,21 +206,27 @@ public class NetworkManager : MonoBehaviour {
     public class Coder{
         
         private byte[] buff;
-        private int count;
-        
+        private byte count;
+        private int size;
         public Coder(int size){
             buff = new byte[size];
             count = 0;
+            this.size = size;
         }
 
         public Coder(byte[] array) {
             buff = array;
             count = buff[0];
+            size = array.Length;
         }
 
         public byte[] getArray() {
             buff[0] = count;
             return buff;
+        }
+
+        public byte getCount(){
+            return count;
         }
 
         public bool isFull() {
@@ -235,14 +235,16 @@ public class NetworkManager : MonoBehaviour {
 
         public void addSerial(byte type, int id, int prefabId, Transform transform){
             if (isFull()) {
-                Debug.Error("Coder array is already full, can't add type " + type + " object id " + id);
+                Debug.LogError("Coder array is already full, can't add type " + type + " object id " + id);
                 return;
             }
             int index = 1 + (count++*49);
             buff[index] = type;
             writeIn(id, index+1);
             writeIn(prefabId, index+5);
-            
+            if(transform = null){
+                return;
+            }
             //setup for position
             Vector3 pos = transform.position;
             writeIn(pos.x, index+9);
@@ -279,23 +281,17 @@ public class NetworkManager : MonoBehaviour {
         }
 
         public int readOutInt(int pos) {
-            byte[] readOut = new byte[4];
-            for (int i = 0; i < readOut.Length; i++) {
-                readOut[i] = buff[i+pos];
-            }
-            return BitConverter.GetInt32(readOut);
+            return BitConverter.ToInt32(buff, pos);
         }
 
         public float readOutFloat(int pos) {
-            byte[] readOut = new byte[4];
-            for (int i = 0; i < readOut.Length; i++) {
-                readOut[i] = buff[i+pos];
-            }
-            return BitConverter.GetFloat(readOut);
+            return BitConverter.ToSingle(buff,pos);
         }
 
         public byte GetType(int index) {
-            if illegalVal(index) return;
+            if(illegalVal(index)){
+                return 255;
+            } 
             //move the index to correct position
             index = 1 + (index*49);
 
@@ -303,7 +299,9 @@ public class NetworkManager : MonoBehaviour {
         }
 
         public int GetID(int index) {
-            if illegalVal(index) return;
+            if(illegalVal(index)){
+                return -2;
+            } 
             //move the index to correct position
             index = 1 + (index*49);
 
@@ -311,37 +309,44 @@ public class NetworkManager : MonoBehaviour {
         }
 
         public int GetPrefabID(int index) {
-            if illegalVal(index) return;
+            if(illegalVal(index)){
+                return -2;
+            } 
             //move the index to correct position
             index = 1 + (index*49);
 
             return readOutInt(index+5);
         }
 
-        public Transform GetTransform(int index) {
-            if illegalVal(index) return;
+        public Vector3 GetPosition(int index) {
+            if(illegalVal(index)){
+                return new Vector3(0,0,0);
+            }
             //move the index to correct position
             index = 1 + (index*49);
             
             //we already have the array
-            Transform transform;
-
+            //sort out in a sec
             float posX = readOutFloat(index+9);
             float posY = readOutFloat(index+13);
             float posZ = readOutFloat(index+17);
-            transform.position = new Vector3(posX, posY, posZ);
+            return new Vector3(posX, posY, posZ);
+        }
 
+        public Quaternion GetRotation(int index) {
+            index = 1 + (index*49);
             float rotX = readOutFloat(index+21);
             float rotY = readOutFloat(index+25);
             float rotZ = readOutFloat(index+29);
             float rotW = readOutFloat(index+33);
-            transform.rotation = new Quaternion(rotX, rotY, rotZ, rotW);
+            return new Quaternion(rotX, rotY, rotZ, rotW);
             
-            return transform;
         }
 
         public Vector3 GetVelocity(int index) {
-            if illegalVal(index) return;
+            if(illegalVal(index)){
+                return new Vector3(0,0,0);
+            }
             //move the index to correct position
             index = 1 + (index*49);
 
