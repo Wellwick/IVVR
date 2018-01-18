@@ -1,4 +1,12 @@
-﻿using System.Collections;
+﻿/*
+ * known issues to be solved: encoder being full on object add
+ * sort out how we're going to track the tracker
+ *
+ *
+ *
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -121,8 +129,6 @@ public class NetworkManager : MonoBehaviour {
                     for (int i = 0; i<networkedObjects.Count; i++) {
                         encoder.addSerial(0, i, (int)Prefabs.PID.Ball, networkedObjects[i].transform);
                     }
-                    byte error2;
-                    NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, encoder.getArray(), 1024, out error2);
                     clientConnected = true;
                     break;
                 case NetworkEventType.DataEvent:
@@ -162,29 +168,23 @@ public class NetworkManager : MonoBehaviour {
             if (clientConnected && Input.GetKeyDown(KeyCode.U)) {
                 Debug.Log("Trying to update client on " + messageQueue.Count + " objects");
                 for (int i = 0; i < messageQueue.Count; i++) {
+                    if (encoder.isFull()){
+                        break;
+                    }
                     GameObject gameObject = messageQueue.Dequeue() as GameObject;
                     int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
-                    NetworkMessage message = new NetworkMessage(3, id, null, gameObject.transform);
-                    byte error2;
-                    bf = new BinaryFormatter();
-                    using (MemoryStream ms = new MemoryStream()) {
-                        bf.Serialize(ms, message);
-                        NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, ms.ToArray(), 530, out error2);
-                    }
+                    encoder.addSerial(3, id, -1, gameObject.transform);
                 }
+                byte error2;
+                NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error2);
+                encoder = new Coder(1024);
                 //finished update, save timer val
                 timer = Time.timeSinceLevelLoad;
             }
             if (clientConnected) {
                 //also send the transform of the tracker over the state channel
                 Debug.Log("Sending tracker info");
-                NetworkMessage message = new NetworkMessage(6, null, null, tracker.transform);
-                byte error2;
-                bf = new BinaryFormatter();
-                using (MemoryStream ms = new MemoryStream()) {
-                    bf.Serialize(ms, message);
-                    NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, ms.ToArray(), 530, out error2);
-                }
+                encoder.addSerial(6, -1, -1, tracker.transform);
             }
         }
 	}
@@ -193,14 +193,7 @@ public class NetworkManager : MonoBehaviour {
     public void addObject(GameObject gameObject, Prefabs.PID objectType) {
         int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
         networkedObjects.Add(id, gameObject);
-        NetworkMessage message = new NetworkMessage(1, id, (int)objectType, gameObject.transform);
-        byte error2;
-        BinaryFormatter bf = new BinaryFormatter();
-        using (MemoryStream ms = new MemoryStream()) {
-            bf.Serialize(ms, message);
-            NetworkTransport.Send(socketId, connectionId, myUnreliableChannelId, ms.ToArray(), 530, out error2);
-        }
-        
+        encoder.addSerial(1, id, (int)objectType, gameObject.transform);
     }
 
     public class Coder{
