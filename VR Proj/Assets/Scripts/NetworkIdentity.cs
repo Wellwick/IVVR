@@ -16,13 +16,15 @@ public class NetworkIdentity : MonoBehaviour {
 
 	public static int objectCount;
 	private int objectId;
-	private bool updateWaiting = false;
+	private bool watched = false;
 	private Vector3 previousPos;
 	private Quaternion previousRot;
+	private NetworkManager networkManager;
 
 
 	// Use this for initialization
 	void Awake () {
+		networkManager = GameObject.FindObjectOfType<NetworkManager>();
 		objectId = objectCount;
 		objectCount++;
 		previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
@@ -32,11 +34,18 @@ public class NetworkIdentity : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if((!previousPos.Equals(this.transform.position) || !previousRot.Equals(this.transform.rotation)) & !updateWaiting){
-			Debug.Log("Adding to the queue");
-			GameObject.FindObjectOfType<NetworkManager>().messageQueue.Enqueue(gameObject); //add object to queue to be sent 
-			updateWaiting = true;
+		if((!previousPos.Equals(this.transform.position) || !previousRot.Equals(this.transform.rotation))){
+			if(!networkManager.watchList.ContainsKey(objectId)){
+				Debug.Log("Adding to the watchlist");
+				networkManager.watchList.Add(objectId, gameObject);
+				watched = true;
+			}
 
+		}else{
+			if(watched){
+				networkManager.watchList.Remove(objectId);
+				watched = false; 
+			}
 		}
 		previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 		previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
@@ -44,9 +53,5 @@ public class NetworkIdentity : MonoBehaviour {
 
 	public int getObjectId(){
 		return objectId;
-	}
-
-	public void setUpdateWaiting(){
-		updateWaiting = false;
 	}
 }

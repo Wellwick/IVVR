@@ -38,13 +38,13 @@ public class NetworkManager : MonoBehaviour {
     //dictionary to identify individual objects, may not be super necessary eventually
     public Dictionary<int, GameObject> networkedObjects;
     //message queue to help ease load off of the send buffer.
-    public Queue messageQueue = new Queue();
+    //public Queue messageQueue = new Queue();
     public Coder encoder = new Coder(1024);
+    public Dictionary<int, GameObject> watchList;
 
     //value to check when we should send a new batch of updates
     private float timer;
     public int updateRatePerSec = 20;
-
 	// Use this for initialization
 	void Start () {
         //needs to host!
@@ -167,24 +167,23 @@ public class NetworkManager : MonoBehaviour {
                     break;
             }
             if (clientConnected /* && Input.GetKeyDown(KeyCode.U)*/) {
-                Debug.Log("Trying to update client on " + messageQueue.Count + " objects");
-                //temporary queue to make sure objects are allowed to be updated again after being sent
-                Queue tempQueue = new Queue();
-                for (int i = 0; i < messageQueue.Count; i++) {
+                Debug.Log("Trying to update client on " + watchList.Count + " objects");
+                
+                //we have switched to a watch list instead of a queue
+                //since this is a dictionary element we need to iterate through
+                //using foreach and then referring to the id and Gameobject as
+                //kvp.Key and kvp.Value
+                foreach(KeyValuePair<int, GameObject> kvp in watchList){
+                    //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
                     if (encoder.isFull()){
                         break;
                     }
-                    GameObject gameObject = messageQueue.Dequeue() as GameObject;
                     int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
-                    encoder.addSerial(3, id, -1, gameObject.transform);
-                    tempQueue.Enqueue(gameObject);
+                    encoder.addSerial(3, kvp.Key, -1, kvp.Value.transform);
                 }
+                    
                 byte error2;
                 NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error2);
-                for (int i = 0; i < tempQueue.Count; i++) {
-                    GameObject gameObject = tempQueue.Dequeue() as GameObject;
-                    gameObject.GetComponent<NetworkIdentity>().setUpdateWaiting();
-                }
                 encoder = new Coder(1024);
                 //finished update, save timer val
                 timer = Time.timeSinceLevelLoad;
