@@ -2,6 +2,7 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -69,8 +70,8 @@ public class NetworkManager : MonoBehaviour
 			int recHostId;
 			int connectionId;
 			int channelId;
-			byte[] recBuffer = new byte[530]; //Info for actions to occur
-			int bufferSize = 530;
+			byte[] recBuffer = new byte[1024]; //Info for actions to occur
+			int bufferSize = 1024;
 			int dataSize;
 			byte error;
 			NetworkEventType recData = NetworkTransport.Receive (out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
@@ -84,46 +85,46 @@ public class NetworkManager : MonoBehaviour
 				this.connectionId = connectionId;
 				break;
 			case NetworkEventType.DataEvent:
-				NetworkMessage data;
+				Coder decoder = new Coder(recBuffer);
 				GameObject instance;
 				Debug.Log ("Data Received");
-				BinaryFormatter bf = new BinaryFormatter ();
-				using (MemoryStream ms = new MemoryStream (recBuffer)) {
-					data = bf.Deserialize (ms) as NetworkMessage;
-				}
-				switch (data.type) { 
-				case 0: //start
-				case 1: //adding request from VR
-					instance = spawnManager.SpawnObject (data.prefabId.Value, data.transform);
-					NetworkIdentities.networkedObjects.Add (data.id.Value, instance);
-					break;
-				case 3: //receiving updates
-					Debug.Log ("Trying to update");
-					NetworkIdentities.networkedObjects.TryGetValue (data.id.Value, out instance);
-					SerializeableTransform st = data.transform;
-					instance.transform.position = new Vector3 (st.posX, st.posY, st.posZ);
-					instance.transform.rotation = new Quaternion (st.rotX, st.rotY, st.rotZ, st.rotW);
-					break;
-				case 6:
-						//this means we have tracker info!
-						// THIS IS ONLY A TEST!
-					//Debug.Log ("Received tracker position");
-					SerializeableTransform st2 = data.transform;
+				for (int i = 0; i < decoder.getCount(); i++) {
+					switch (decoder.GetType(i)) { 
+					case 0: //start
+					case 1: //adding request from VR
+						instance = spawnManager.SpawnObject (decoder.GetPrefabID(i), decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
+						NetworkIdentities.networkedObjects.Add (decoder.GetID(i), instance);
+						break;
+					case 3: //receiving updates
+						Debug.Log ("Trying to update");
+						NetworkIdentities.networkedObjects.TryGetValue (decoder.GetID(i), out instance);
+						instance.transform.position = decoder.GetPosition(i);
+						instance.transform.rotation = decoder.GetRotation(i);
+						//TODO set velocity if there is a rigidbody
+						break;
+					case 6:
+							//this means we have tracker info!
+							// THIS IS ONLY A TEST!
+						//Debug.Log ("Received tracker position");
 
-					//ARManager.UpdatePosition (new Vector3 (st2.posX, st2.posY, st2.posZ));
-					//TODO: remove the changes done in ARManager. PARTLY DONE.
+						//ARManager.UpdatePosition (new Vector3 (st2.posX, st2.posY, st2.posZ));
+						//TODO: remove the changes done in ARManager. PARTLY DONE.
 
-					textManager.changeTrackerRotationString (new Quaternion(st2.rotX, st2.rotY, st2.rotZ, st2.rotW));
+						textManager.changeTrackerRotationString (decoder.GetRotation(i));
 
-					UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerPosition(st2.posX, st2.posY, st2.posZ);
-					UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerRotation(st2.rotX, st2.rotY, st2.rotZ, st2.rotW);
+						Vector3 pos = decoder.GetPosition(i);
+						Quaternion rot = decoder.GetRotation(i);
+
+						UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerPosition(pos.x, pos.y, pos.z);
+						UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerRotation(rot.x, rot.y, rot.z, rot.w);
 
 
-					break;						
-				default:
-					Debug.Log ("invalid message type");
-					break;
+						break;						
+					default:
+						Debug.Log ("invalid message type");
+						break;
 
+					}
 				}
 				break;
 			case NetworkEventType.DisconnectEvent: //AR disconnects
@@ -160,14 +161,10 @@ public class NetworkManager : MonoBehaviour
 	public void RequestSpawn (int prefabId)
 	{
 		Debug.Log ("Requesting spawn of prefab: " + ((Prefabs.PID)prefabId).ToString ());
-		NetworkMessage message = new NetworkMessage (2, null, prefabId, null);
+		Coder encoder = new Coder(1024);
+		encoder.addSerial(2, -1, prefabId, null);
 		byte error;
-		BinaryFormatter bf = new BinaryFormatter ();
-		using (MemoryStream ms = new MemoryStream ()) {
-			bf.Serialize (ms, message);
-			Debug.Log (ms.ToArray ().Length);
-			NetworkTransport.Send (socketId, connectionId, myUnreliableChannelId, ms.ToArray (), 530, out error);
-		}
+		NetworkTransport.Send (socketId, connectionId, myUnreliableChannelId, encoder.getArray(), 1024, out error);
 	}
 
 
@@ -175,6 +172,171 @@ public class NetworkManager : MonoBehaviour
 	#endregion
 
 	#region Classes
+
+    public class Coder{
+        
+        private byte[] buff;
+        private byte count;
+        private int size;
+        public Coder(int size){
+            buff = new byte[size];
+            count = 0;
+            this.size = size;
+        }
+
+        public Coder(byte[] array) {
+            buff = array;
+            count = buff[0];
+            size = array.Length;
+        }
+
+        public byte[] getArray() {
+            buff[0] = count;
+            return buff;
+        }
+
+        public byte getCount(){
+            return count;
+        }
+
+        public bool isFull() {
+            return ((((count+1)*49)+1)>size);
+        }
+
+        public void addSerial(byte type, int id, int prefabId, Transform transform){
+            if (isFull()) {
+                Debug.LogError("Coder array is already full, can't add type " + type + " object id " + id);
+                return;
+            }
+            int index = 1 + (count++*49);
+            buff[index] = type;
+            writeIn(id, index+1);
+            writeIn(prefabId, index+5);
+            if(transform = null){
+                return;
+            }
+            //setup for position
+            Vector3 pos = transform.position;
+            writeIn(pos.x, index+9);
+            writeIn(pos.y, index+13);
+            writeIn(pos.z, index+17);
+
+            //setup for rotation
+            Quaternion rot = transform.rotation;
+            writeIn(rot.x, index+21);
+            writeIn(rot.y, index+25);
+            writeIn(rot.z, index+29);
+            writeIn(rot.w, index+33);
+            
+            //setup for velocity
+            Vector3 vel = transform.GetComponent<Rigidbody>().velocity;
+            writeIn(vel.x, index+37);
+            writeIn(vel.y, index+41);
+            writeIn(vel.z, index+45);
+            
+        }
+
+        private void writeIn(int value, int pos) {
+            byte[] writeIn = BitConverter.GetBytes(value);
+            for (int i = 0; i < writeIn.Length; i++) {
+                buff[i+pos] = writeIn[i];
+            }
+        }
+
+        private void writeIn(float value, int pos) {
+            byte[] writeIn = BitConverter.GetBytes(value);
+            for (int i = 0; i < writeIn.Length; i++) {
+                buff[i+pos] = writeIn[i];
+            }
+        }
+
+        public int readOutInt(int pos) {
+            return BitConverter.ToInt32(buff, pos);
+        }
+
+        public float readOutFloat(int pos) {
+            return BitConverter.ToSingle(buff,pos);
+        }
+
+        public byte GetType(int index) {
+            if(illegalVal(index)){
+                return 255;
+            } 
+            //move the index to correct position
+            index = 1 + (index*49);
+
+            return buff[index];
+        }
+
+        public int GetID(int index) {
+            if(illegalVal(index)){
+                return -2;
+            } 
+            //move the index to correct position
+            index = 1 + (index*49);
+
+            return readOutInt(index+1);
+        }
+
+        public int GetPrefabID(int index) {
+            if(illegalVal(index)){
+                return -2;
+            } 
+            //move the index to correct position
+            index = 1 + (index*49);
+
+            return readOutInt(index+5);
+        }
+
+        public Vector3 GetPosition(int index) {
+            if(illegalVal(index)){
+                return new Vector3(0,0,0);
+            }
+            //move the index to correct position
+            index = 1 + (index*49);
+            
+            //we already have the array
+            //sort out in a sec
+            float posX = readOutFloat(index+9);
+            float posY = readOutFloat(index+13);
+            float posZ = readOutFloat(index+17);
+            return new Vector3(posX, posY, posZ);
+        }
+
+        public Quaternion GetRotation(int index) {
+            index = 1 + (index*49);
+            float rotX = readOutFloat(index+21);
+            float rotY = readOutFloat(index+25);
+            float rotZ = readOutFloat(index+29);
+            float rotW = readOutFloat(index+33);
+            return new Quaternion(rotX, rotY, rotZ, rotW);
+            
+        }
+
+        public Vector3 GetVelocity(int index) {
+            if(illegalVal(index)){
+                return new Vector3(0,0,0);
+            }
+            //move the index to correct position
+            index = 1 + (index*49);
+
+            //once again, already have the array
+            float velX = readOutFloat(index+37);
+            float velY = readOutFloat(index+41);
+            float velZ = readOutFloat(index+45);
+
+            return new Vector3(velX, velY, velZ);
+        }
+
+        private bool illegalVal(int index) {
+            if (index > buff[0]) {
+                Debug.LogError("Coded message count does not reach value " + index);
+                return true;
+            }
+            return false;
+        }
+
+    }
 
 	[System.Serializable]
 	public class NetworkMessage
