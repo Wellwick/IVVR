@@ -165,8 +165,10 @@ public class NetworkManager : MonoBehaviour {
 					Debug.Log("Disconnect Received");
                     break;
             }
-            if (clientConnected && Input.GetKeyDown(KeyCode.U)) {
+            if (clientConnected /* && Input.GetKeyDown(KeyCode.U)*/) {
                 Debug.Log("Trying to update client on " + messageQueue.Count + " objects");
+                //temporary queue to make sure objects are allowed to be updated again after being sent
+                Queue tempQueue = new Queue();
                 for (int i = 0; i < messageQueue.Count; i++) {
                     if (encoder.isFull()){
                         break;
@@ -174,9 +176,14 @@ public class NetworkManager : MonoBehaviour {
                     GameObject gameObject = messageQueue.Dequeue() as GameObject;
                     int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
                     encoder.addSerial(3, id, -1, gameObject.transform);
+                    tempQueue.Enqueue(gameObject);
                 }
                 byte error2;
                 NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error2);
+                for (int i = 0; i < tempQueue.Count; i++) {
+                    GameObject gameObject = tempQueue.Dequeue() as GameObject;
+                    gameObject.GetComponent<NetworkIdentity>().setUpdateWaiting();
+                }
                 encoder = new Coder(1024);
                 //finished update, save timer val
                 timer = Time.timeSinceLevelLoad;
@@ -184,7 +191,10 @@ public class NetworkManager : MonoBehaviour {
             if (clientConnected) {
                 //also send the transform of the tracker over the state channel
                 Debug.Log("Sending tracker info");
-                encoder.addSerial(6, -1, -1, tracker.transform);
+                Coder trackerEncode = new Coder(1024);
+                trackerEncode.addSerial(6, -1, -1, tracker.transform);
+                byte error2;
+                NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, trackerEncode.getArray(), 1024, out error2);
             }
         }
 	}
@@ -235,7 +245,7 @@ public class NetworkManager : MonoBehaviour {
             buff[index] = type;
             writeIn(id, index+1);
             writeIn(prefabId, index+5);
-            if(transform = null){
+            if(transform == null){
                 return;
             }
             //setup for position
@@ -252,7 +262,11 @@ public class NetworkManager : MonoBehaviour {
             writeIn(rot.w, index+33);
             
             //setup for velocity
-            Vector3 vel = transform.GetComponent<Rigidbody>().velocity;
+            Rigidbody rb = transform.GetComponent<Rigidbody>();
+            if (rb == null) {
+                return;
+            }
+            Vector3 vel = rb.velocity;
             writeIn(vel.x, index+37);
             writeIn(vel.y, index+41);
             writeIn(vel.z, index+45);
