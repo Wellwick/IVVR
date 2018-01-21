@@ -40,7 +40,7 @@ public class NetworkManager : MonoBehaviour {
     //message queue to help ease load off of the send buffer.
     //public Queue messageQueue = new Queue();
     public Coder encoder = new Coder(1024);
-    public Dictionary<int, GameObject> watchList;
+    public Dictionary<int, GameObject> watchList = new Dictionary<int, GameObject>();
 
     //value to check when we should send a new batch of updates
     private float timer;
@@ -49,7 +49,7 @@ public class NetworkManager : MonoBehaviour {
 	void Start () {
         //needs to host!
         networkInitialised = false;
-        watchList = new Dictionary<int, GameObject>();
+
 
         if (!networkInitialised)
         {
@@ -58,7 +58,7 @@ public class NetworkManager : MonoBehaviour {
             ConnectionConfig config = new ConnectionConfig();
             config.SendDelay = 0;
             myUnreliableChannelId = config.AddChannel(QosType.Unreliable);
-            myUpdateChannelId = config.AddChannel(QosType.Reliable);
+            myUpdateChannelId = config.AddChannel(QosType.StateUpdate);
             myStateChannelId = config.AddChannel(QosType.StateUpdate);
             HostTopology topology = new HostTopology(config, 2);
             socketId = NetworkTransport.AddHost(topology, 9090);
@@ -167,25 +167,29 @@ public class NetworkManager : MonoBehaviour {
 					Debug.Log("Disconnect Received");
                     break;
             }
-            if (clientConnected /* && Input.GetKeyDown(KeyCode.U)*/) {
+            if (clientConnected/* && Input.GetKeyDown(KeyCode.U)*/) {
                 Debug.Log("Trying to update client on " + watchList.Count + " objects");
                 
                 //we have switched to a watch list instead of a queue
                 //since this is a dictionary element we need to iterate through
                 //using foreach and then referring to the id and Gameobject as
                 //kvp.Key and kvp.Value
+                bool empty = true;
                 foreach(KeyValuePair<int, GameObject> kvp in watchList){
                     //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                    empty = false;
                     if (encoder.isFull()){
                         break;
                     }
                     //int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
                     encoder.addSerial(3, kvp.Key, -1, kvp.Value.transform);
                 }
-                    
-                byte error2;
-                NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error2);
-                encoder = new Coder(1024);
+                if(!empty){
+                    byte error2;
+                    NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error2);
+                    encoder = new Coder(1024);
+                }
+
                 //finished update, save timer val
                 timer = Time.timeSinceLevelLoad;
             }
@@ -196,6 +200,9 @@ public class NetworkManager : MonoBehaviour {
                 trackerEncode.addSerial(6, -1, -1, tracker.transform);
                 byte error2;
                 NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, trackerEncode.getArray(), 1024, out error2);
+            }
+            if(Input.GetKeyDown(KeyCode.P)){
+                Debug.Log(watchList.ToString());
             }
         }
 	}
