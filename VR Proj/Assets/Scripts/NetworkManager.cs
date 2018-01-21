@@ -49,6 +49,7 @@ public class NetworkManager : MonoBehaviour {
 	void Start () {
         //needs to host!
         networkInitialised = false;
+        watchList = new Dictionary<int, GameObject>();
 
         if (!networkInitialised)
         {
@@ -178,7 +179,7 @@ public class NetworkManager : MonoBehaviour {
                     if (encoder.isFull()){
                         break;
                     }
-                    int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+                    //int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
                     encoder.addSerial(3, kvp.Key, -1, kvp.Value.transform);
                 }
                     
