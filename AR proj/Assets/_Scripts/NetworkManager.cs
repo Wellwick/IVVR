@@ -45,7 +45,7 @@ public class NetworkManager : MonoBehaviour
 			ConnectionConfig config = new ConnectionConfig();
 			config.SendDelay = 0;
 			myUnreliableChannelId = config.AddChannel (QosType.Unreliable);
-			myUpdateChannelId = config.AddChannel (QosType.Reliable);
+			myUpdateChannelId = config.AddChannel (QosType.StateUpdate);
 			myStateChannelId = config.AddChannel (QosType.StateUpdate);
 			HostTopology topology = new HostTopology (config, 1);
 			socketId = NetworkTransport.AddHost (topology);
