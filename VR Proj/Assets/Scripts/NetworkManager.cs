@@ -39,7 +39,6 @@ public class NetworkManager : MonoBehaviour {
     public Dictionary<int, GameObject> networkedObjects;
     //message queue to help ease load off of the send buffer.
     //public Queue messageQueue = new Queue();
-    public Coder encoder = new Coder(1024);
     public Dictionary<int, GameObject> watchList = new Dictionary<int, GameObject>();
 
     //value to check when we should send a new batch of updates
@@ -128,9 +127,16 @@ public class NetworkManager : MonoBehaviour {
                 case NetworkEventType.ConnectEvent: //AR connects
                     Debug.Log("Connection request from id: " + connectionId + " Received");
                     this.connectionId = connectionId;
+                    byte error2;
+                    Coder encoder = new Coder(1024);
                     for (int i = 0; i<networkedObjects.Count; i++) {
                         encoder.addSerial(0, i, (int)Prefabs.PID.Ball, networkedObjects[i].transform);
+                        if(encoder.isFull()){
+                            NetworkTransport.Send(socketId, this.connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
+                            encoder = new Coder(1024);
+                        }
                     }
+                    NetworkTransport.Send(socketId, this.connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
                     clientConnected = true;
                     break;
                 case NetworkEventType.DataEvent:
@@ -174,6 +180,7 @@ public class NetworkManager : MonoBehaviour {
                 //since this is a dictionary element we need to iterate through
                 //using foreach and then referring to the id and Gameobject as
                 //kvp.Key and kvp.Value
+                Coder encoder = new Coder(1024); 
                 bool empty = true;
                 foreach(KeyValuePair<int, GameObject> kvp in watchList){
                     //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
@@ -209,9 +216,12 @@ public class NetworkManager : MonoBehaviour {
 
     //Add object to the list
     public void addObject(GameObject gameObject, Prefabs.PID objectType) {
+        byte error2;
+        Coder encoder = new Coder(50);
         int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
         networkedObjects.Add(id, gameObject);
         encoder.addSerial(1, id, (int)objectType, gameObject.transform);
+        NetworkTransport.Send(socketId, this.connectionId, myReliableChannelId, encoder.getArray(), 50, out error2);
     }
 
     public class Coder{

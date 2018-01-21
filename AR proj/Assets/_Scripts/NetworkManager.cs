@@ -17,7 +17,7 @@ public class NetworkManager : MonoBehaviour
 
 	private int socketId;
 	private int connectionId;
-	private int myUnreliableChannelId;
+	private int myReliableChannelId;
 	private int myUpdateChannelId;
 	private int myStateChannelId;
 	private bool networkInitialised;
@@ -44,7 +44,7 @@ public class NetworkManager : MonoBehaviour
 
 			ConnectionConfig config = new ConnectionConfig();
 			config.SendDelay = 0;
-			myUnreliableChannelId = config.AddChannel (QosType.Unreliable);
+			myReliableChannelId = config.AddChannel (QosType.Reliable);
 			myUpdateChannelId = config.AddChannel (QosType.StateUpdate);
 			myStateChannelId = config.AddChannel (QosType.StateUpdate);
 			HostTopology topology = new HostTopology (config, 1);
