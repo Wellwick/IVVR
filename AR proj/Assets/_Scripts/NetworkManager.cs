@@ -24,9 +24,8 @@ public class NetworkManager : MonoBehaviour
 	private float timer = 0;
 
 	string hostIP = "137.205.112.43"; //DCS machine
-	//string hostIP = "172.20.10.4"; //Chris computer
 
-	//private UnityARCameraManager ARManager;
+	private UnityARCameraManager ARManager;
 	private TextManager textManager;
 	//private UnityEngine.XR.iOS.UnityARSessionNativeInterface ARNativeInterface;
 
@@ -57,7 +56,7 @@ public class NetworkManager : MonoBehaviour
 		/* BRING THIS BACK FOR PHONE */
 		//connectionId = NetworkTransport.Connect(socketId, "137.205.112.42", 9090, 0, out error);
 
-		//ARManager = GameObject.FindObjectOfType<UnityARCameraManager> ();
+		ARManager = GameObject.FindObjectOfType<UnityARCameraManager> ();
 		textManager = GameObject.FindObjectOfType<TextManager> ();
 		//ARNativeInterface = GameObject.FindObjectOfType<UnityEngine.XR.iOS.UnityARSessionNativeInterface> ();
 	}
@@ -104,21 +103,34 @@ public class NetworkManager : MonoBehaviour
 						//TODO set velocity if there is a rigidbody
 						break;
 					case 6:
-							//this means we have tracker info!
-							// THIS IS ONLY A TEST!
-						//Debug.Log ("Received tracker position");
+						//this means we have tracker info!
 
-						//ARManager.UpdatePosition (new Vector3 (st2.posX, st2.posY, st2.posZ));
-						//TODO: remove the changes done in ARManager. PARTLY DONE.
+						//Decode position and rotation of the tracker
+						Vector3 pos = decoder.GetPosition (i);
+						Quaternion rot = decoder.GetRotation (i);
 
-						textManager.changeTrackerRotationString (decoder.GetRotation(i));
+						//Update the UI to display the correct information
+						//This will be all the more useful now that there is an option to switch between using the Tracker's position and rotation
+						//as opposed to ARKits internal tracking.
+						textManager.changeTrackerPositionString (pos);
+						textManager.changeTrackerRotationString (rot);
 
-						Vector3 pos = decoder.GetPosition(i);
-						Quaternion rot = decoder.GetRotation(i);
+						//Update the values in the engine itself.
+						//At first, this should only have been done if the 'constant tracking' option had been selected through the UI.
+						//Later, this was changed. The tracker values are always stored in the engine, but a boolean was used to
+						//Choose which process should have been used for determining position and rotation of the AR user.
 
-						UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerPosition(pos.x, pos.y, pos.z);
-						UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerRotation(rot.x, rot.y, rot.z, rot.w);
+						//if (ARManager.getHtcTracker()) {
+						//If the ARCameraManager has specified that the htc Tracker should be used as the constant source of position and rotation
 
+						//It is possible to update tracker position and rotation through UnityARSessionNativeInterface, however I am attempting
+						//to manage this functionality through the higher level UnityARCameraManager instead.
+
+						ARManager.updateTrackerPosition (new Vector4(pos.x, pos.y, pos.z, 1));
+						ARManager.updateTrackerRotation (rot);
+						//UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerPosition(pos.x, pos.y, pos.z);
+						//UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerRotation(rot.x, rot.y, rot.z, rot.w);
+						//}
 
 						break;						
 					default:
@@ -137,6 +149,12 @@ public class NetworkManager : MonoBehaviour
 		}
 
 	}
+
+	//Phone should request tracker position and rotation
+	public void calibrate() {
+
+	}
+
 
 	#endregion
 
@@ -213,7 +231,7 @@ public class NetworkManager : MonoBehaviour
             buff[index] = type;
             writeIn(id, index+1);
             writeIn(prefabId, index+5);
-            if(transform = null){
+            if(transform == null){
                 return;
             }
             //setup for position

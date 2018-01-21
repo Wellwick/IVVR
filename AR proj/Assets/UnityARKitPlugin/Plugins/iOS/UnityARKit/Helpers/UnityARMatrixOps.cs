@@ -7,8 +7,7 @@ namespace UnityEngine.XR.iOS
 
 		public static Vector3 GetPosition(Matrix4x4 matrix)
 		{
-			// Convert from ARKit's right-handed coordinate
-			// system to Unity's left-handed
+			// Convert from ARKit's right-handed coordinate system to Unity's left-handed
 			Vector3 position = matrix.GetColumn(3);
 			position.z = -position.z;
 
@@ -22,8 +21,7 @@ namespace UnityEngine.XR.iOS
 
 		public static Quaternion GetRotation(Matrix4x4 matrix)
 		{
-			// Convert from ARKit's right-handed coordinate
-			// system to Unity's left-handed
+			// Convert from ARKit's right-handed coordinate system to Unity's left-handed
 			Quaternion rotation = QuaternionFromMatrix(matrix);
 			rotation.z = -rotation.z;
 			rotation.w = -rotation.w;
@@ -83,10 +81,22 @@ namespace UnityEngine.XR.iOS
 		}
 
 		//Written by Chris
+		//This method is required because of the lack of implicit conversion support between UnityARMatrix4x4 and Matrix4x4
 		static Quaternion QuaternionFromMatrix(UnityARMatrix4x4 m) {
 			Matrix4x4 um = new Matrix4x4(m.column0, m.column1, m.column2, m.column3);
 			return QuaternionFromMatrix (um);
 		}
+
+
+		//TODO: finish implementing this.
+		//Use this to contrsuct a world transform matrix (from old matrix, with offset values for position and rotation)
+		public static UnityARMatrix4x4 offset(UnityARMatrix4x4 m, Vector4 position, Quaternion rotation) {
+
+
+			return new UnityARMatrix4x4();
+		}
+
+
 	}
 }
 

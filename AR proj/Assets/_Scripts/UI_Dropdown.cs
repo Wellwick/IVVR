@@ -41,8 +41,8 @@ public class UI_Dropdown : MonoBehaviour {
     }
     void PopulateList()
     {
-        actionDropdown.AddOptions(actions);
-        objectDropdown.AddOptions(objects);
+        //actionDropdown.AddOptions(actions);
+        //objectDropdown.AddOptions(objects);
     }
 
     public void DoAction()
@@ -59,7 +59,7 @@ public class UI_Dropdown : MonoBehaviour {
     void Start () 
     {
         PopulateList();
-        infoCanvas.enabled = false; 
+        //infoCanvas.enabled = false; 
     }
 
 

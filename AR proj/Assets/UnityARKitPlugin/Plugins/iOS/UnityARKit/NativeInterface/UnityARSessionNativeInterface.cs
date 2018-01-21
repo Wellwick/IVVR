@@ -292,13 +292,24 @@ namespace UnityEngine.XR.iOS {
 	    private IntPtr m_NativeARSession;
 #endif
 
-	    private static UnityARCamera s_Camera;
+		//Store the last known tracker position and rotation.
+		//If tracker_enabled is true, the last known tracker position and rotation will be used as the position and rotation of the Unity camera.
+		//If false, these values will not be used, but the calibrate function can be called to calculate the offset which is ALWAYS added.
+		//Later a third state could be added, in which the offsets will not be added to the ARKit position.
+		//This option however, would only be needed if the user needed to remove the offset after calibration using the tracker.
+		private static Boolean tracker_enabled = false;
 		private static Vector4 tracker_position = new Vector4 (0, 0, 0, 1);
 		private static Quaternion tracker_rotation = new Quaternion (0, 0, 0, 1);
-		public static UnityARMatrix4x4 lastTransform = new UnityARMatrix4x4 (new Vector4 (1, 0, 0, 0), new Vector4 (0, 1, 0, 0), new Vector4 (0, 0, 1, 0), new Vector4 (0, 0, 0, 1));
-		private static UnityARMatrix4x4 tracker_transform = new UnityARMatrix4x4(new Vector4(1,0,0,0), new Vector4(0,1,0,0), new Vector4(0,0,1,0), new Vector4(0,0,0,1));
-		private static Boolean tracker_enabled = true;
-	
+		private static Vector4 offset_position = new Vector4 (0, 0, 0, 1);
+		private static Quaternion offset_rotation = new Quaternion (0, 0, 0, 0);
+
+		//Possibly will need to initialise these matrices.
+		//Is there a quicker way of initialising to an identity matrix?
+		private static UnityARMatrix4x4 lastARKitWorldTransform; // = new UnityARMatrix4x4 (new Vector4 (1, 0, 0, 0), new Vector4 (0, 1, 0, 0), new Vector4 (0, 0, 1, 0), new Vector4 (0, 0, 0, 1));
+		private static UnityARMatrix4x4 customWorldTransform; // = new UnityARMatrix4x4(new Vector4(1,0,0,0), new Vector4(0,1,0,0), new Vector4(0,0,1,0), new Vector4(0,0,0,1));
+		
+
+		private static UnityARCamera s_Camera;
 		
 	    [DllImport("__Internal")]
         private static extern IntPtr unity_CreateNativeARSession();
@@ -493,46 +504,49 @@ namespace UnityEngine.XR.iOS {
 			// This is done simply inverting the z axis.
 
 			tracker_position = new Vector4 (x, y, -z , 1);
-			tracker_transform.column3 = tracker_position;
+			customWorldTransform.column3 = tracker_position;
 		}
 
 		public static void updateTrackerRotation(float x, float y, float z, float w) {
 			tracker_rotation = new Quaternion (x, y, z, w);
-			tracker_transform = UnityARMatrixOps.InsertRotation (tracker_transform, tracker_rotation);
+			customWorldTransform = UnityARMatrixOps.InsertRotation (customWorldTransform, tracker_rotation);
 		}
 
 
 		//THIS HAS BEEN EDITED TO CHANGE THE POSITION OF THE CAMERA TO THE POSITION OF THE TRACKER
         [MonoPInvokeCallback(typeof(internal_ARFrameUpdate))]
 	    static void _frame_update(internal_UnityARCamera camera)
-	    {
+		{
 
-            UnityARCamera pubCamera = new UnityARCamera();
-            pubCamera.projectionMatrix = camera.projectionMatrix;
-            pubCamera.worldTransform = camera.worldTransform;
-            pubCamera.trackingState = camera.trackingState;
-            pubCamera.trackingReason = camera.trackingReason;
+			UnityARCamera pubCamera = new UnityARCamera ();
+			pubCamera.projectionMatrix = camera.projectionMatrix;
+			pubCamera.worldTransform = camera.worldTransform;
+			pubCamera.trackingState = camera.trackingState;
+			pubCamera.trackingReason = camera.trackingReason;
 			pubCamera.videoParams = camera.videoParams;
 			pubCamera.lightEstimation = camera.lightEstimation;
-            pubCamera.displayTransform = camera.displayTransform;
+			pubCamera.displayTransform = camera.displayTransform;
 
-			lastTransform = camera.worldTransform;
-			//Only change the position if the tracker position is being used
+			/*
+			//Store the ARKit transform; this will be used to calculate the offset between Tracker and ARKit upon calibration
+			lastARKitWorldTransform = camera.worldTransform;
+
 			if (tracker_enabled) {
-				//pubCamera.worldTransform.column3 = tracker_position;
-				pubCamera.worldTransform = tracker_transform;
+				//If the HTC Tracker is attached to the phone, use its position and rotation directly
+				pubCamera.worldTransform = customWorldTransform;
+			} else {
+				//Otherwise offset the world transform by the offset calculated at calibration
+				pubCamera.worldTransform = UnityARMatrixOps.offset(camera.worldTransform, offset_position, offset_rotation);
 			}
-			//Debug.Log ("Internal frame update " + pubCamera.worldTransform.column3.ToString());
+			*/
 
             s_Camera = pubCamera;
 
-            if (camera.getPointCloudData == 1)
-            {
+            if (camera.getPointCloudData == 1) {
                 UpdatePointCloudData (ref s_Camera);
             }      
 
-            if (ARFrameUpdatedEvent != null)
-            {
+            if (ARFrameUpdatedEvent != null) {
                 ARFrameUpdatedEvent(s_Camera);
             }
 	    }

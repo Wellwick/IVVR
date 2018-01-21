@@ -11,22 +11,34 @@ public class UnityARCameraManager : MonoBehaviour {
 	private Material savedClearMaterial;
 
 	[Header("AR Config Options")]
+
 	public UnityARAlignment startAlignment = UnityARAlignment.UnityARAlignmentGravity;
 	public UnityARPlaneDetection planeDetection = UnityARPlaneDetection.None;
+
+	//htcTrackerRelayEnabled = true => Unity camera pose will be set to tracker pose every frame
+	public bool htcTrackerRelayEnabled = false;
+	//htcTrackerOffsetEnabled = true => Unity camera pose will be set to ARKit pose + offset
+	//This offset will be calculated upon calibration whenever the user chooses to calibrate.
+	public bool htcTrackerOffsetEnabled = true;
+
 	public bool getPointCloud = true;
 	public bool enableLightEstimation = true;
 
-	private Vector3 lastNetworkPos;
+	//These may be used later if camera control (setting position and rotation equal to the tracker infromation) is done through this class
+	public Vector4 tracker_position = new Vector4 (5, 0, 0, 1);
+	public Quaternion tracker_rotation = new Quaternion (0, 1, 0, 0); // 0,1,0,0 is equal to pi rotation around X axis
+	public Vector4 arkit_position;
+	public Quaternion arkit_rotation;
+	private Vector4 offset_position = new Vector4 (0, 0, 0, 0);
+	private Quaternion offset_rotation = new Quaternion (1, 0, 0, 0);
+
 
 
 	// Use this for initialization
 	void Start () {
 
 		m_session = UnityARSessionNativeInterface.GetARSessionNativeInterface();
-
-
-		lastNetworkPos = new Vector3 (0, 0, 0);
-
+	
 #if !UNITY_EDITOR
 		Application.targetFrameRate = 60;
         ARKitWorldTrackingSessionConfiguration config = new ARKitWorldTrackingSessionConfiguration();
@@ -50,8 +62,6 @@ public class UnityARCameraManager : MonoBehaviour {
 		scamera.projectionMatrix = new UnityARMatrix4x4 (projMat.GetColumn(0),projMat.GetColumn(1),projMat.GetColumn(2),projMat.GetColumn(3));
 
 		UnityARSessionNativeInterface.SetStaticCamera (scamera);
-
-
 
 #endif
 	}
@@ -86,34 +96,129 @@ public class UnityARCameraManager : MonoBehaviour {
 	// Update is called once per frame
 
 
+	//Edited by Chris 21/01/2018
 	void Update () {
 		
         if (m_camera != null)
         {
-            // JUST WORKS!
-            Matrix4x4 matrix = m_session.GetCameraPose();
-			m_camera.transform.localPosition = UnityARMatrixOps.GetPosition (matrix);
-			m_camera.transform.localRotation = UnityARMatrixOps.GetRotation (matrix);
+			//This is the original way of retrieving position and rotation from UnityARSessionNativeInterface
+			//m_session.GetCameraPose(); retrieves the unaltered pose as estimated by ARKit.
+			//Altering the pose here, in UnityARCameraManager, is simpler than attempting to do so in
+			//UnityARSessionNativeInterface, as it does not require the position and rotation information to
+			//be injected into the world transform matrix. 
 
-            m_camera.projectionMatrix = m_session.GetCameraProjection ();
+            Matrix4x4 matrix = m_session.GetCameraPose();
+			arkit_position = UnityARMatrixOps.GetPosition (matrix);
+			arkit_rotation = UnityARMatrixOps.GetRotation (matrix);
+
+			//It is instead possible to attempt to perform all camera adjustments below:
+
+			Vector4 unityCameraPosition;
+			Quaternion unityCameraRotation;
+
+			if (htcTrackerRelayEnabled) {
+				unityCameraPosition = tracker_position;
+				unityCameraRotation = tracker_rotation;
+			} else if (htcTrackerOffsetEnabled) {
+				//Take care to multiply offset_rotation * tracker_rotation, and not other way around
+				//This is because quaternion multiplication is not commutative.
+				unityCameraPosition = offset_position + arkit_position;
+				unityCameraRotation = offset_rotation * arkit_rotation;
+			} else {
+				////Setting the Unity camera pose to purely ARKit's pose estimation
+				unityCameraPosition = arkit_position;
+				unityCameraRotation = arkit_rotation;
+			}
+
+			m_camera.transform.localPosition = unityCameraPosition;
+			m_camera.transform.localRotation = unityCameraRotation;
+
+			//TODO: Check whether the projectionMatrix is influenced by localposition and rotation
+			//(But it shouldn't be, and we should not need to alter it)
+			m_camera.projectionMatrix = m_session.GetCameraProjection ();
         }
 
 	}
 
+	//calls the appropriate UnityARSessionNativeInterface method which attempts 
+	//to calibrate the camera using the last known tracker position and rotation.
+	//It would make sense to update tracker position before performing the offset calculations.
+	//Therefore when the user presses the calibrate button, tracker pose should be sent to the AR device,
+	//Followed by this routine being called. Otherwise outdated tracker pose may be used.
+	public void calibrate() {
+		//First retrieve ARKit's last world transform's position and rotation.
+		Matrix4x4 matrix = m_session.GetCameraPose();
 
-	public Vector3 getPosition(){
+		Vector4 lastPosARKit = UnityARMatrixOps.GetPosition (matrix);
+		Quaternion lastRotARKit = UnityARMatrixOps.GetRotation (matrix);
+
+		//The offsets for position and rotation are trivially calculated.
+		//Make sure tracker_position and lastPosARKit both have w set to 1.
+		offset_position = tracker_position - lastPosARKit;
+		offset_rotation = tracker_rotation * Quaternion.Inverse(lastRotARKit);
+
+
+	}
+
+	public void updateTrackerPosition(Vector4 pos) {
+		tracker_position = pos;
+	}
+
+	public void updateTrackerRotation(Quaternion rot) {
+		tracker_rotation = rot;
+	}
+	public Vector4 getARKitPosition(){
+		return arkit_position;
+	}
+
+	public Quaternion getARKitRotation(){
+		return arkit_rotation;
+	}
+
+
+	public Vector3 getUnityCameraPosition() {
+		if (m_camera != null) {
+			return m_camera.transform.localPosition;
+		}
+		return new Vector3();
+	}
+	public Quaternion getUnityCameraRotation() {
+		if (m_camera != null) {
+			return m_camera.transform.localRotation;
+		}
+		return new Quaternion();
+	}
+	/*
+	//This returns the actual position that the unity camera is set to,
+	//As opposed to the position and rotation known to ARKit.
+	//This will be equal to the position and rotation known to ARKit if tracker/offset
+	//position and rotation are injected in ARCameraManager as opposed to ARNativeSessionInterface
+	public Vector3 getEnginePosition(){
 		if (m_camera != null) {
 			Matrix4x4 matrix = m_session.GetCameraPose ();
 			return m_camera.transform.localPosition = UnityARMatrixOps.GetPosition (matrix);
 		}
 		return new Vector3 ();
 	}
-	public Quaternion getRotation(){
+
+	//See getEnginePosition()
+	public Quaternion getEngineRotation(){
 		if (m_camera != null) {
 			Matrix4x4 matrix = m_session.GetCameraPose ();
 			return m_camera.transform.localRotation = UnityARMatrixOps.GetRotation (matrix);
 		}
 		return new Quaternion ();
 	}
+	*/
 
+	/*
+	// Getters and setters in case htcTrackerEnabled is changed to be a private variable.
+
+	public void setHtcTracker(bool htcTrackerEnabled) {
+		this.htcTrackerEnabled = htcTrackerEnabled;
+	}
+	public bool getHtcTracker() {
+		return htcTrackerEnabled;
+	}
+	*/
 }
