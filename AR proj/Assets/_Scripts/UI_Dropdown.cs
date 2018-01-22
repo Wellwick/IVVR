@@ -5,19 +5,13 @@ using UnityEngine.UI;
 
 public class UI_Dropdown : MonoBehaviour {
 
-    public Canvas infoCanvas;
-    public void InfoToggle()
-    {
-        infoCanvas.enabled = !infoCanvas.isActiveAndEnabled;
-    }
-
-
     List<string> actions = new List<string>() { "Select Action","Spawn", "Explode", "Fire", "Remove","Throw" };
     List<string> objects = new List<string>() { "Select Object", "Brick", "Wall", "Cube","Ball" };
 
 
-    //public Dropdown positioningDropdown;
-    public Text selectedObject;
+    public Dropdown poseEstimationDropDown;
+    
+	public Text selectedObject;
     /*
 
     public void positioningDropdown(int index)
@@ -35,33 +29,9 @@ public class UI_Dropdown : MonoBehaviour {
     }
     */
 
-    public void ObjectDropdownIndexChange(int index)
+    public void poseEstimationDropdownIndexChange(int index)
     {
         selectedObject.text = objects[index];
     }
-    void PopulateList()
-    {
-        //actionDropdown.AddOptions(actions);
-        //objectDropdown.AddOptions(objects);
-    }
-
-    public void DoAction()
-    {
-
-    }
-
-    public void UIConnect()
-    {
-
-    }
-
-
-    void Start ()
-    {
-        PopulateList();
-        //infoCanvas.enabled = false;
-    }
-
-
 
 }
