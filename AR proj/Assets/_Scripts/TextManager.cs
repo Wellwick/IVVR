@@ -17,6 +17,7 @@ public class TextManager : MonoBehaviour {
 	public GameObject rotationEngineObject;
 
 	private UnityARCameraManager ARManager;
+	
 	private Text networkText;
 	private Text positionARKitText;
 	private Text rotationARKitText;
@@ -29,7 +30,7 @@ public class TextManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		networkText = networkTextObject.GetComponent<Text> ();
-		
+
 		positionARKitText = positionARKitObject.GetComponent<Text>();
 		rotationARKitText = rotationARKitObject.GetComponent<Text> ();
 		positionTrackerText = positionTrackerObject.GetComponent<Text> ();
@@ -52,7 +53,7 @@ public class TextManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector3 enginePosition = ARManager.getUnityCameraPosition ();
-		Quaternion engineRotation = ARManager.getUnityCameraRotation (); //UnityARMatrixOps.GetRotation (UnityARSessionNativeInterface.lastTransform); 
+		Quaternion engineRotation = ARManager.getUnityCameraRotation (); //UnityARMatrixOps.GetRotation (UnityARSessionNativeInterface.lastTransform);
 		Vector4 ARKitPosition = ARManager.getARKitPosition ();
 		Quaternion ARKitRotation = ARManager.getARKitRotation ();
 
@@ -68,7 +69,7 @@ public class TextManager : MonoBehaviour {
 		networkText.text = networkString;
 	}
 	public void changeTrackerRotationString(Quaternion rot) {
-		
+
 		rotationTrackerText.text = "rot: {" + Math.Round (rot.x, 2) + ", " + Math.Round (rot.y, 2) + ", " + Math.Round (rot.z, 2) + ", " + Math.Round (rot.w, 2) + "}";
 	}
 	public void changeTrackerPositionString(Vector3 pos) {

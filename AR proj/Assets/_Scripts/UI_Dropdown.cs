@@ -15,13 +15,12 @@ public class UI_Dropdown : MonoBehaviour {
     List<string> actions = new List<string>() { "Select Action","Spawn", "Explode", "Fire", "Remove","Throw" };
     List<string> objects = new List<string>() { "Select Object", "Brick", "Wall", "Cube","Ball" };
 
-    public Dropdown actionDropdown;
-    public Text selectedAction;
 
-    public Dropdown objectDropdown;
+    //public Dropdown positioningDropdown;
     public Text selectedObject;
-    
-    public void ActionDropdownIndexChange(int index)
+    /*
+
+    public void positioningDropdown(int index)
     {
         selectedAction.text = actions[index];
 
@@ -34,6 +33,7 @@ public class UI_Dropdown : MonoBehaviour {
         objectDropdown.ClearOptions();
         objectDropdown.AddOptions(objects);
     }
+    */
 
     public void ObjectDropdownIndexChange(int index)
     {
@@ -47,7 +47,7 @@ public class UI_Dropdown : MonoBehaviour {
 
     public void DoAction()
     {
-        
+
     }
 
     public void UIConnect()
@@ -56,10 +56,10 @@ public class UI_Dropdown : MonoBehaviour {
     }
 
 
-    void Start () 
+    void Start ()
     {
         PopulateList();
-        //infoCanvas.enabled = false; 
+        //infoCanvas.enabled = false;
     }
 
 
