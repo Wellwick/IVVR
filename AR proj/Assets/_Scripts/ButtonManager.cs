@@ -27,7 +27,7 @@ public class ButtonManager : MonoBehaviour {
 		//selectedObjectText = poseEstimationDropdownObject.GetComponentInChildren<Text>();
 	}
 
-	public void ToggleOptions(){
+	public void ToggleOptions() {
 
 		showingOptions = !showingOptions;
 		optionsPanelObject.SetActive (showingOptions);

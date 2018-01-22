@@ -25,12 +25,12 @@ public class UnityARCameraManager : MonoBehaviour {
 	public bool enableLightEstimation = true;
 
 	//These may be used later if camera control (setting position and rotation equal to the tracker infromation) is done through this class
-	public Vector4 tracker_position = new Vector4 (5, 0, 0, 1);
-	public Quaternion tracker_rotation = new Quaternion (0, 1, 0, 0); // 0,1,0,0 is equal to pi rotation around X axis
+	public Vector4 tracker_position = new Vector4 (0, 0, 0, 1);
+	public Quaternion tracker_rotation = new Quaternion (1, 0, 0, 0); // 0,1,0,0 is equal to pi rotation around X axis
 	public Vector4 arkit_position;
 	public Quaternion arkit_rotation;
 	private Vector4 offset_position = new Vector4 (0, 0, 0, 0);
-	private Quaternion offset_rotation = new Quaternion (1, 0, 0, 0);
+	private Quaternion offset_rotation = new Quaternion (0, 0, 0, 0);
 
 
 
