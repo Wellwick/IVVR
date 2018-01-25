@@ -20,14 +20,16 @@ public class NetworkManager : MonoBehaviour {
 
 	private int socketId;
 	private int hostId;
-	private int connectionId;
 	private int myReliableChannelId;
 	private int myUnreliableChannelId;
 	private int myUpdateChannelId;
     private int myStateChannelId;
 	private bool networkInitialised;
     private bool clientConnected;
+    private int clientsConnected = 0;
+    private int[] clientIds;
 
+    public int MAX_CONNECTIONS;
 	public GameObject leftController;
 	public GameObject rightController;
     public GameObject Camera;
@@ -41,11 +43,13 @@ public class NetworkManager : MonoBehaviour {
     //public Queue messageQueue = new Queue();
     public Dictionary<int, GameObject> watchList = new Dictionary<int, GameObject>();
 
+
     //value to check when we should send a new batch of updates
     private float timer;
     public int updateRatePerSec = 20;
 	// Use this for initialization
 	void Start () {
+        clientIds = new int[MAX_CONNECTIONS];
         //needs to host!
         networkInitialised = false;
 
@@ -73,6 +77,7 @@ public class NetworkManager : MonoBehaviour {
             GameObject gameObject = netObjects[i];
             int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
             networkedObjects.Add(id, gameObject);
+
         }
         //initialise timer
         timer = Time.timeSinceLevelLoad;
@@ -80,7 +85,7 @@ public class NetworkManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		//test for buttons to do stuff!
+		//test
         //Debug.Log("Coordinates for Left Controller: " + leftController.transform.position.ToString());
         /* GET RID OF THIS FOR PHONE */
         if (Input.GetKeyDown(KeyCode.A))
@@ -106,37 +111,49 @@ public class NetworkManager : MonoBehaviour {
             {
                 case NetworkEventType.Nothing:
                     //because nothing is happening, let's try and update the AR on positions
-                    break;
-                    /* IGNORING THIS STUFF FOR NOW!
-                    if (clientConnected && (Time.timeSinceLevelLoad - timer > (1.0/updateRatePerSec))) {
-                        Debug.Log("Trying to update client on " + networkedObjects.Count + " objects");
-                        for (int i = 0; i < networkedObjects.Count; i++) {
-                            NetworkMessage message = new NetworkMessage(3, i, null, networkedObjects[i].transform);
-                            byte error2;
-                            bf = new BinaryFormatter();
-                            using (MemoryStream ms = new MemoryStream()) {
-                                bf.Serialize(ms, message);
-                                NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, ms.ToArray(), 1024, out error2);
+                    if (clientConnected/* && Input.GetKeyDown(KeyCode.U)*/) {
+                        Debug.Log("Trying to update client on " + watchList.Count + " objects");
+
+                        //we have switched to a watch list instead of a queue
+                        //since this is a dictionary element we need to iterate through
+                        //using foreach and then referring to the id and Gameobject as
+                        //kvp.Key and kvp.Value
+                        Coder encoder = new Coder(1024);
+                        bool empty = true;
+                        foreach(KeyValuePair<int, GameObject> kvp in watchList){
+                            //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                            empty = false;
+                            if (encoder.isFull()){
+                                break;
                             }
+                            //int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+                            encoder.addSerial(3, kvp.Key, -1, kvp.Value.transform);
                         }
+         
+                        if(!empty){
+                            byte error3;
+                            NetworkTransport.Send(socketId, connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error3);
+                            encoder = new Coder(1024);
+                        }
+
                         //finished update, save timer val
                         timer = Time.timeSinceLevelLoad;
                     }
                     break;
-                    */
                 case NetworkEventType.ConnectEvent: //AR connects
                     Debug.Log("Connection request from id: " + connectionId + " Received");
-                    this.connectionId = connectionId;
+                    clientIds[clientsConnected] = connectionId;
+                    clientsConnected++;
                     byte error2;
-                    Coder encoder = new Coder(1024);
+                    Coder initEncoder = new Coder(1024);
                     for (int i = 0; i<networkedObjects.Count; i++) {
-                        encoder.addSerial(0, i, (int)Prefabs.PID.Ball, networkedObjects[i].transform);
-                        if(encoder.isFull()){
-                            NetworkTransport.Send(socketId, this.connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
-                            encoder = new Coder(1024);
+                        initEncoder.addSerial(0, i, (int)Prefabs.PID.Ball, networkedObjects[i].transform);
+                        if(initEncoder.isFull()){
+                            NetworkTransport.Send(socketId, connectionId, myReliableChannelId, initEncoder.getArray(), 1024, out error2);
+                            initEncoder = new Coder(1024);
+                            break;
                         }
                     }
-                    NetworkTransport.Send(socketId, this.connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
                     clientConnected = true;
                     break;
                 case NetworkEventType.DataEvent:
@@ -169,44 +186,21 @@ public class NetworkManager : MonoBehaviour {
                     }
                     break;
                 case NetworkEventType.DisconnectEvent: //AR disconnects
+                    clientsConnected--;
                     networkInitialised = false;
 					Debug.Log("Disconnect Received");
                     break;
             }
-            if (clientConnected/* && Input.GetKeyDown(KeyCode.U)*/) {
-                Debug.Log("Trying to update client on " + watchList.Count + " objects");
-
-                //we have switched to a watch list instead of a queue
-                //since this is a dictionary element we need to iterate through
-                //using foreach and then referring to the id and Gameobject as
-                //kvp.Key and kvp.Value
-                Coder encoder = new Coder(1024);
-                bool empty = true;
-                foreach(KeyValuePair<int, GameObject> kvp in watchList){
-                    //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-                    empty = false;
-                    if (encoder.isFull()){
-                        break;
-                    }
-                    //int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
-                    encoder.addSerial(3, kvp.Key, -1, kvp.Value.transform);
-                }
-                if(!empty){
-                    byte error2;
-                    NetworkTransport.Send(socketId, this.connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error2);
-                    encoder = new Coder(1024);
-                }
-
-                //finished update, save timer val
-                timer = Time.timeSinceLevelLoad;
-            }
             if (clientConnected) {
                 //also send the transform of the tracker over the state channel
+
                 Debug.Log("Sending tracker info");
                 Coder trackerEncode = new Coder(1024);
                 trackerEncode.addSerial(6, -1, -1, tracker.transform);
                 byte error2;
-                NetworkTransport.Send(socketId, this.connectionId, myStateChannelId, trackerEncode.getArray(), 1024, out error2);
+                foreach(int id in clientIds){
+                    NetworkTransport.Send(socketId, id, myStateChannelId, trackerEncode.getArray(), 1024, out error2);
+                }
             }
             if(Input.GetKeyDown(KeyCode.P)){
                 Debug.Log(watchList.ToString());
@@ -218,10 +212,12 @@ public class NetworkManager : MonoBehaviour {
     public void addObject(GameObject gameObject, Prefabs.PID objectType) {
         byte error2;
         Coder encoder = new Coder(50);
-        int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
-        networkedObjects.Add(id, gameObject);
-        encoder.addSerial(1, id, (int)objectType, gameObject.transform);
-        NetworkTransport.Send(socketId, this.connectionId, myReliableChannelId, encoder.getArray(), 50, out error2);
+        int objectId = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+        networkedObjects.Add(objectId, gameObject);
+        encoder.addSerial((byte)MessageIdentity.Type.Spawn, objectId, (int)objectType, gameObject.transform);
+        foreach(int id in clientIds){
+            NetworkTransport.Send(socketId, id, myReliableChannelId, encoder.getArray(), 50, out error2);
+        }
     }
 
     public class Coder{
