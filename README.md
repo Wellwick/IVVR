@@ -62,3 +62,5 @@ If you are having trouble running code in relation to objects in Unity, make sur
 If there is ever a problem with viewing anything in the Vive headset, you can close everything or just the VR programs with `endAll` and `endVR` respectively. Should the problem persist, or the computer is running slowly, it is likely a good idea to log out and back in again or restart the computer.
 
 Occassionally, a new driver update comes out for the 1050ti's which are used in 0.01. After the department's technical team push this update through, each machine needs to be restarted to install the new driver. If you are encountering problems (particularly Compositor ones) this may well be caused by a required driver update, but check with others if need be. Computers which are regularly used (ie viglab-41 through to viglab-43) tend to be up to date.
+
+It is currently possible for enemy capes to get trapped inside their body colliders or have them trapped on the wrong side of the collider.
