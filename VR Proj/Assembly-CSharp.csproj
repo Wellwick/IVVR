@@ -173,6 +173,7 @@
      <None Include="Assets\SteamVR\InteractionSystem\Core\Shaders\Silhouette.shader" />
      <None Include="Assets\SteamVR\Resources\SteamVR_ColorOut.shader" />
      <None Include="Assets\SteamVR\InteractionSystem\Core\Shaders\SeeThru.shader" />
+     <None Include="Assets\SampleScenes\Shaders\Skybox-Procedural.shader" />
      <None Include="Assets\SteamVR\InteractionSystem\Readme_InteractionSystem.txt" />
  <Reference Include="Facebook.Unity.Settings">
  <HintPath>/dcs/project/ivvrgrp/IVVR/VR Proj/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
