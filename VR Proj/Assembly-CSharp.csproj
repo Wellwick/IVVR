@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\LaserPointer.cs" />
      <Compile Include="Assets\Scripts\manSpawn.cs" />
      <Compile Include="Assets\Scripts\MessageIdentity.cs" />
+     <Compile Include="Assets\Scripts\MoveTo.cs" />
      <Compile Include="Assets\Scripts\NetworkIdentity.cs" />
      <Compile Include="Assets\Scripts\NetworkManager.cs" />
      <Compile Include="Assets\Scripts\Prefabs.cs" />
