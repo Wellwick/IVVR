@@ -23,15 +23,16 @@ public class EnemyManager : MonoBehaviour
 		Quaternion rot = new Quaternion(0f, 0f, 0f, 0f);
 
 		// Spawning not too close
-		int section = Random.Range(1,2);
+		//This is inclusive so never gonna get two!
+		int section = Random.Range(0,2);
 		float xLoc = 238.0f;
 		float zLoc = Random.Range(275.0f, 300.0f);
 		Debug.Log (section);
 		switch (section) {
-		case 1:
+		case 0:
 			xLoc = Random.Range (254.0f, 264.0f);
 			break;
-		case 2:
+		case 1:
 			xLoc = Random.Range (210.0f, 220.0f);
 			break;
 		}
