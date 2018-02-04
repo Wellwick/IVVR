@@ -10,4 +10,9 @@ public class MoveTo : MonoBehaviour {
 		NavMeshAgent agent = GetComponent<NavMeshAgent>();
 		agent.destination = goal.position; 
 	}
+
+	void Update() {
+		
+		GetComponent<Transform>().LookAt(goal);
+	}
 }

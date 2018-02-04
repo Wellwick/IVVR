@@ -57,6 +57,8 @@ GameObject:
   - component: {fileID: 4477855351979370}
   - component: {fileID: 33764626195854822}
   - component: {fileID: 23464302928885032}
+  - component: {fileID: 114890293596778868}
+  - component: {fileID: 195273530613368138}
   m_Layer: 0
   m_Name: EnemyFinal
   m_TagString: Untagged
@@ -70,7 +72,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1631003411916836}
-  m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
@@ -194,6 +196,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1315508432406650}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114890293596778868
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1631003411916836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46b0d44e0bb464a82b85667be2d7ecbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goal: {fileID: 4351466298737386, guid: 0a74bfc28e520436da7f500934ac35ca, type: 2}
 --- !u!136 &136416982218556200
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -17047,3 +17061,24 @@ Cloth:
   m_CapsuleColliders:
   - {fileID: 136416982218556200}
   m_SphereColliders: []
+--- !u!195 &195273530613368138
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1631003411916836}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.003876404
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.0064901104
+  m_BaseOffset: 0.03
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
