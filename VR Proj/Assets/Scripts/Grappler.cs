@@ -13,8 +13,10 @@ public class Grappler : MonoBehaviour {
 	private bool shouldPull;
 
 	private GameObject pullObject;
+	private bool pull = false;
+	private bool holding = false;
 
-	public float speed = 1.0f;
+	public float speed = 8.0f;
 	
 	// Use this for initialization
 	void Start () {
@@ -40,9 +42,22 @@ public class Grappler : MonoBehaviour {
 		}
 		
 		if (Controller.GetHairTriggerDown() && shouldPull) {
+			pull = true;
+		}
+		if (pull) {
 			float step = speed * Time.deltaTime;
 			pullObject.transform.position = Vector3.MoveTowards(pullObject.transform.position, 
-												transform.position, step);
+												trackedObj.transform.position, step);
+			if (Vector3.Distance(pullObject.transform.position,trackedObj.transform.position)<0.3f) {
+				//treat this as a grab
+				GrabObject();
+				pull = false;
+				shouldPull = false;
+			}
+		}
+		if (Controller.GetHairTriggerUp()) {
+			pull = false;
+			if (holding) ReleaseObject();
 		}
 	}
 
@@ -62,5 +77,31 @@ public class Grappler : MonoBehaviour {
 		grappleTransform.localScale = new Vector3(grappleTransform.localScale.x, grappleTransform.localScale.y,
 			hit.distance);
 
+	}
+
+	private void GrabObject() {
+		var joint = AddFixedJoint();
+		joint.connectedBody = pullObject.GetComponent<Rigidbody>();
+		holding = true;
+	}
+
+	private FixedJoint AddFixedJoint() {
+		FixedJoint fx = gameObject.AddComponent<FixedJoint>();
+		fx.breakForce = 20000;
+		fx.breakTorque = 20000;
+		return fx;
+	}
+
+	private void ReleaseObject() {
+		if (GetComponent<FixedJoint>()) {
+			GetComponent<FixedJoint>().connectedBody = null;
+			Destroy(GetComponent<FixedJoint>());
+
+			pullObject.GetComponent<Rigidbody>().velocity = Controller.velocity;
+			pullObject.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
+		}
+
+		pullObject = null;
+		holding = false;
 	}
 }
