@@ -46,7 +46,8 @@ public class NetworkManager : MonoBehaviour {
     #region Global_vars
     private int socketId;
     public static bool serverHosted = false;
-	private bool networkInitialised;
+    public bool isHost = true;
+	private bool networkInitialised = false;
     private int clientsConnected = 0;
     private int[] clientIds;
 
@@ -73,10 +74,9 @@ public class NetworkManager : MonoBehaviour {
     #region Start
 
 	void Start () {
-        clientIds = new int[MAX_CONNECTIONS];
-        //needs to host!
-        networkInitialised = false;
-
+        if(isHost){
+            clientIds = new int[MAX_CONNECTIONS];
+        }
 
         if (!networkInitialised){
             NetworkTransport.Init();
@@ -100,18 +100,6 @@ public class NetworkManager : MonoBehaviour {
 	
     #region Update
 	void Update () {
-		//test
-        //Debug.Log("Coordinates for Left Controller: " + leftController.transform.position.ToString());
-        /* GET RID OF THIS FOR PHONE */
-        /* PROBABLY WANT TO MOVE THIS ELSEWHERE, LIKE A USER CREATED SPAWN MANAGER */
-        if (Input.GetKeyDown(KeyCode.A))
-            Camera.GetComponent<shootBall>().throwBall(1);
-        else if (Input.GetKeyDown(KeyCode.S))
-            Camera.GetComponent<wallDemo>().spawnWall();
-        else if (Input.GetKeyDown(KeyCode.D))
-            Camera.GetComponent<wallDemo>().demolishWall();
-        else if (Input.GetKeyDown(KeyCode.F))
-            spooker.GetComponent<Spook>().spookPlayer();
 
         if (networkInitialised)
         {
@@ -136,26 +124,29 @@ public class NetworkManager : MonoBehaviour {
                     break;
                 case NetworkEventType.DataEvent:
                     Debug.Log("Data Received");
-                    Coder decoder = new Coder(recBuffer);
+                    DemoCoder decoder = new Coder(recBuffer);
                     for(int i = 0; i < decoder.getCount(); i++){
                         switch (decoder.GetType(i)){
-                            case 0:
-                                HandleSpawn(decoder.GetAssetID(i),decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
+                            case (byte)MessageIdentity.Type.Initialise:
+                                HandleClientSpawn(decoder.GetAssetID(i),decoder.GetID(i),decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
                                 break;
-                            case 1:
+                            case (byte)MessageIdentity.Type.Update:
                                 HandleUpdate(decoder.GetID(i), decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
-                            case 2:
-                                HandleSpawn(decoder.GetAssetID(i), decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
+                            case (byte)MessageIdentity.Type.Spawn:
+                                HandleClientSpawn(decoder.GetAssetID(i), decoder.GetID(i), decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
                                 break;
-                            case 3:
+                            case (byte)MessageIdentity.Type.Remove:
                                 HandleRemove(decoder.GetID(i));
                                 break;
-                            case 4:
-                                //fix later
+                            case (byte)MessageIdentity.Type.Request:
+                                HandleSpawnRequest(decoder.GetAssetID(i), decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
                                 break;
-                            case 5:
-                                spooker.GetComponent<Spook>().spookPlayer();
+                            case (byte)MessageIdentity.Type.DamageEnemy:
+                                break;
+                            case (byte)MessageIdentity.Type.EnemyUpdate:
+                                break;
+                            case (byte)MessageIdentity.Type.ARUpdate:
                                 break;
                         }
                     }
@@ -170,7 +161,7 @@ public class NetworkManager : MonoBehaviour {
                 //also send the transform of the tracker over a state channel
                 if(tracker){
                     Debug.Log("Sending tracker info");
-                    Coder trackerEncode = new Coder(1024);
+                    DemoCoder trackerEncode = new DemoCoder(1024);
                     trackerEncode.addSerial(6, -1, -1, tracker.transform);
                     byte error2;
                     foreach(int id in clientIds){
@@ -191,7 +182,7 @@ public class NetworkManager : MonoBehaviour {
     #region Request Functions
     public bool RequestSpawn(int assetId, Transform transform, int hostId){
         byte error;
-        Coder encoder = new Coder(50);
+        DemoCoder encoder = new DemoCoder(50);
         encoder.addSerial((Byte)MessageIdentity.Type.Request, -1, assetId, transform);
         NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
         return true;
@@ -208,7 +199,7 @@ public class NetworkManager : MonoBehaviour {
             //since this is a dictionary element we need to iterate through
             //using foreach and then referring to the id and Gameobject as
             //kvp.Key and kvp.Value
-            Coder encoder = new Coder(1024);
+            DemoCoder encoder = new DemoCoder(1024);
             bool empty = true;
             foreach(KeyValuePair<int, GameObject> kvp in watchList){
                 //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
@@ -223,7 +214,7 @@ public class NetworkManager : MonoBehaviour {
             if(!empty){
                 byte error3;
                 NetworkTransport.Send(socketId, connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error3);
-                encoder = new Coder(1024);
+                encoder = new DemoCoder(1024);
             }
         }
 
@@ -232,7 +223,7 @@ public class NetworkManager : MonoBehaviour {
 
     public void SendSpawn(GameObject gameObject) {
         byte error2;
-        Coder encoder = new Coder(50);
+        DemoCoder encoder = new DemoCoder(50);
         int objectId = gameObject.GetComponent<NetworkIdentity>().getObjectId();
         String assetId = NetworkTransport.GetAssetId(gameObject);
         int assetIdNum;
@@ -245,7 +236,7 @@ public class NetworkManager : MonoBehaviour {
 
     public void SendRemove(int objectId){
         byte error2;
-        Coder encoder = new Coder(50);
+        DemoCoder encoder = new DemoCoder(50);
         encoder.addSerial((byte)MessageIdentity.Type.Remove, objectId, -2, null);
         foreach(int id in clientIds){
             NetworkTransport.Send(socketId, id, myReliableChannelId, encoder.getArray(), 50, out error2);
@@ -268,23 +259,31 @@ public class NetworkManager : MonoBehaviour {
         clientIds[clientsConnected] = connectionId;
         clientsConnected++;
         byte error2;
-        Coder encoder = new Coder(1024);
+        DemoCoder encoder = new DemoCoder(1024);
         NetworkIdentity[] networkIdentities = getNetworkIdentities();
         foreach(NetworkIdentity identity in networkIdentities){ 
             encoder.addSerial((Byte)MessageIdentity.Type.Initialise, identity.getObjectId(), (int)Prefabs.PID.Ball, identity.gameObject.transform);
             if(encoder.isFull()){
                 NetworkTransport.Send(socketId, connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
-                encoder = new Coder(1024);
+                encoder = new DemoCoder(1024);
             }
         }
         NetworkTransport.Send(socketId, connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
         return true;
     }
 
-    private void HandleSpawn(int assetId, Vector3 pos, Quaternion rot, Vector3 vel){
+    private void HandleClientSpawn(int assetId, int objectId, Vector3 pos, Quaternion rot, Vector3 vel){
         GameObject instance = Instantiate(spawnables[assetId], pos, rot);
+        if(!isHost){
+            instance.GetComponent<NetworkIdentity>().setObjectId(objectId);
+        }
 
     }
+
+    private void HandleSpawnRequest(int assetId, Vector3 pos, Quaternion rot, Vector3 vel){
+        GameObject instance = Instantiate(spawnables[assetId], pos, rot);
+    }
+
 
     private void HandleRemove(int id){
         GameObject instance;
