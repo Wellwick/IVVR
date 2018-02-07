@@ -115,8 +115,9 @@ public class NetworkManager : MonoBehaviour {
             {
                 case NetworkEventType.Nothing:
                     //because nothing is happening, let's try and update the AR on positions
-                    SendUpdate(connectionId);
-                    //finished update, save timer val
+                    if(isHost){
+                        SendEnemyUpdate();
+                    }
                     break;
                 case NetworkEventType.ConnectEvent: //AR connects
                     Debug.Log("Connection request from id: " + connectionId + " Received");
@@ -124,7 +125,7 @@ public class NetworkManager : MonoBehaviour {
                     break;
                 case NetworkEventType.DataEvent:
                     Debug.Log("Data Received");
-                    DemoCoder decoder = new Coder(recBuffer);
+                    DemoCoder decoder = new DemoCoder(recBuffer);
                     for(int i = 0; i < decoder.getCount(); i++){
                         switch (decoder.GetType(i)){
                             case (byte)MessageIdentity.Type.Initialise:
@@ -143,10 +144,15 @@ public class NetworkManager : MonoBehaviour {
                                 HandleSpawnRequest(decoder.GetAssetID(i), decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
                                 break;
                             case (byte)MessageIdentity.Type.DamageEnemy:
+                                HandleDamageEnemy(decoder.GetID(i), decoder.GetEnemyDamage(i));
                                 break;
                             case (byte)MessageIdentity.Type.EnemyUpdate:
+                                HandleEnemyUpdate(decoder.GetID(i), decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
                             case (byte)MessageIdentity.Type.ARUpdate:
+                                //update position of AR mans
+                                break;
+                            case (byte)MessageIdentity.Type.PortalUpdate:
                                 break;
                         }
                     }
@@ -243,6 +249,35 @@ public class NetworkManager : MonoBehaviour {
         }
     }
 
+    public void SendEnemyUpdate(){
+        if (isConnection()/* && Input.GetKeyDown(KeyCode.U)*/) {
+            Debug.Log("Trying to update client on " + watchList.Count + " objects");
+
+            //we have switched to a watch list instead of a queue
+            //since this is a dictionary element we need to iterate through
+            //using foreach and then referring to the id and Gameobject as
+            //kvp.Key and kvp.Value
+            DemoCoder encoder = new DemoCoder(1024);
+            bool empty = true;
+            foreach(KeyValuePair<int, GameObject> kvp in watchList){
+                //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                empty = false;
+                if (encoder.isFull()){
+                    break;
+                }
+                //int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+                encoder.addSerial((Byte)MessageIdentity.Type.Update, kvp.Key, -1, kvp.Value.transform);
+            }
+
+            if(!empty){
+                byte error3;
+                foreach(int clientId in clientIds){
+                    NetworkTransport.Send(socketId, clientId, myUpdateChannelId, encoder.getArray(), 1024, out error3);
+                }
+            }
+        }
+    }
+
     #endregion
 
     #region Handler Functions
@@ -291,6 +326,19 @@ public class NetworkManager : MonoBehaviour {
         Destroy(instance);
     }
 
+    private void HandleDamageEnemy(int id, int damage){
+        GameObject gameObject;
+        networkedObjects.TryGetValue(id, out gameObject);
+        //ALTER HEALTH OF ENEMY MAN
+    }
+
+    private void HandleEnemyUpdate(int id, Vector3 pos, Quaternion rot){
+        GameObject instance;
+        networkedObjects.TryGetValue (id, out instance);
+        instance.transform.position = pos;
+        instance.transform.rotation = rot;
+    }
+
     #endregion
     
     #region Utility Functions
@@ -320,7 +368,8 @@ public class NetworkManager : MonoBehaviour {
             Request = 4,
             EnemyUpdate = 5,
             DamageEnemy = 6,
-            ARUpdate = 7
+            ARUpdate = 7,
+            PortalUpdate = 8
         }
     }
 

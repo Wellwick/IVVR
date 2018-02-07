@@ -35,12 +35,13 @@ public class NetworkIdentity : MonoBehaviour {
 			if(networkManager.isConnection()){
 				networkManager.SendSpawn(gameObject);
 			}
-		}else{
-
 		}
 		
 	}
 	
+	void Start(){
+		networkManager.networkedObjects.Add(objectId, gameObject);
+	}
 	// Update is called once per frame
 	void Update () {
 		if(networkManager.isHost){
