@@ -1,417 +1,378 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+/*
+ * known issues to be solved: encoder being full on object add
+ * sort out how we're going to track the tracker
+ *
+ *
+ *
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using System;
-
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
-public class NetworkManager : MonoBehaviour
-{
+public class NetworkManager : MonoBehaviour {
 
-	public static bool serverHosted = false;
-	public SpawnManager spawnManager;
-	public int updateTimer;
+    #region Inspector_vars
+    [Header("Server Setttings")]
+    public int MAX_CONNECTIONS = 1;
+    public string connection_ip = "127.0.0.1";
+    public int connection_port = 7777;
 
-	private int socketId;
-	private int connectionId;
+    [Header("Spawning")]
+    public GameObject[] spawnables = new GameObject[0];
+
+    //todo
+    [Header("Channels")]
 	private int myReliableChannelId;
+	private int myUnreliableChannelId;
 	private int myUpdateChannelId;
-	private int myStateChannelId;
-	private bool networkInitialised;
-	private float timer = 0;
+    private int myStateChannelId;
 
-	string hostIP = "137.205.112.43"; //DCS machine
+    [Header("VR")]
+	public GameObject leftController;
+	public GameObject rightController;
+    public GameObject Camera;
+    public GameObject spooker;
+    public GameObject throwBall;
+    public GameObject wallDemo;
+    public GameObject tracker;
 
-	private UnityARCameraManager ARManager;
-	private TextManager textManager;
-	//private UnityEngine.XR.iOS.UnityARSessionNativeInterface ARNativeInterface;
+    #endregion
 
+    #region Global_vars
+    private int socketId;
+    public static bool serverHosted = false;
+    public bool isHost = true;
+	private bool networkInitialised = false;
+    private int clientsConnected = 0;
+    private int[] clientIds;
 
-	#region Unity_Functions
+    #endregion
 
-	// Use this for initialization
-	void Start ()
-	{
-		//needs to host!
-		networkInitialised = false;
+    #region Global_structures
+    //dictionary to identify individual objects, may not be super necessary eventually
+    public Dictionary<int, GameObject> watchList = new Dictionary<int, GameObject>();
+    public Dictionary<String, int> spawnAssets = new Dictionary<String, int>(); 
+    public Dictionary<int, GameObject> networkedObjects = new Dictionary<int, GameObject>();
+    
 
-		if (!networkInitialised) {
-			NetworkTransport.Init ();
-			Debug.Log ("Host Started");
+    #endregion
 
-			ConnectionConfig config = new ConnectionConfig();
-			config.SendDelay = 0;
-			myReliableChannelId = config.AddChannel (QosType.Reliable);
-			myUpdateChannelId = config.AddChannel (QosType.StateUpdate);
-			myStateChannelId = config.AddChannel (QosType.StateUpdate);
-			HostTopology topology = new HostTopology (config, 1);
-			socketId = NetworkTransport.AddHost (topology);
-			Debug.Log (socketId);
-			/* TODO For the time being! */
-		}
-		// VR device is no longer the one trying to connect
-		/* BRING THIS BACK FOR PHONE */
-		//connectionId = NetworkTransport.Connect(socketId, "137.205.112.42", 9090, 0, out error);
+    #region Unity Functions
+    //value to check when we should send a new batch of updates
+    void Awake(){
+        for(int i = 0; i < spawnables.Length; i++){
+            String assetId = NetworkTransport.GetAssetId(spawnables[i]);
+            spawnAssets.Add(assetId, i);
+        }
+    }
 
-		ARManager = GameObject.FindObjectOfType<UnityARCameraManager> ();
-		textManager = GameObject.FindObjectOfType<TextManager> ();
-		//ARNativeInterface = GameObject.FindObjectOfType<UnityEngine.XR.iOS.UnityARSessionNativeInterface> ();
+    #region Start
+
+	void Start () {
+        if(isHost){
+            clientIds = new int[MAX_CONNECTIONS];
+        }
+
+        if (!networkInitialised){
+            NetworkTransport.Init();
+            Debug.Log("Host Started");
+            ConnectionConfig config = new ConnectionConfig();
+            config.SendDelay = 0;
+            myReliableChannelId = config.AddChannel(QosType.Reliable);
+            myUpdateChannelId = config.AddChannel(QosType.StateUpdate);
+            myStateChannelId = config.AddChannel(QosType.StateUpdate);
+            HostTopology topology = new HostTopology(config, MAX_CONNECTIONS);
+            socketId = NetworkTransport.AddHost(topology, 9090);
+            Debug.Log("Socket ID: " + socketId);
+            networkInitialised = true;/* TODO For the time being! */
+        }
+
+        //initialise timer
 	}
 
-	// Update is called once per frame
-	void Update ()
-	{
-		//test for buttons to do stuff! 
+    #endregion 
 
-		if (networkInitialised) {
-			int recHostId;
-			int connectionId;
-			int channelId;
-			byte[] recBuffer = new byte[1024]; //Info for actions to occur
-			int bufferSize = 1024;
-			int dataSize;
-			byte error;
-			NetworkEventType recData = NetworkTransport.Receive (out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
-			switch (recData) {
-			case NetworkEventType.Nothing:
-				break;
-			case NetworkEventType.ConnectEvent: //AR connects
-				Debug.Log ("Connection request from id: " + connectionId + " Received");
+	
+    #region Update
+	void Update () {
 
-				textManager.changeNetworkString ("Connected to " + hostIP);
-				this.connectionId = connectionId;
-				break;
-			case NetworkEventType.DataEvent:
-				Coder decoder = new Coder(recBuffer);
-				GameObject instance;
-				Debug.Log ("Data Received");
-				for (int i = 0; i < decoder.getCount(); i++) {
-					switch (decoder.GetType(i)) { 
-					case 0: //start
-					case 1: //adding request from VR
-						instance = spawnManager.SpawnObject (decoder.GetPrefabID(i), decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
-						NetworkIdentities.networkedObjects.Add (decoder.GetID(i), instance);
-						break;
-					case 3: //receiving updates
-						Debug.Log ("Trying to update");
-						NetworkIdentities.networkedObjects.TryGetValue (decoder.GetID(i), out instance);
-						instance.transform.position = decoder.GetPosition(i);
-						instance.transform.rotation = decoder.GetRotation(i);
-						//TODO set velocity if there is a rigidbody
-						break;
-					case 6:
-						//this means we have tracker info!
+        if (networkInitialised)
+        {
+            int recHostId;
+            int connectionId;
+            int channelId;
+            byte[] recBuffer = new byte[1024]; //Info for actions to occur
+            int bufferSize = 1024;
+            int dataSize;
+            byte error;
+            NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
+            switch (recData)
+            {
+                case NetworkEventType.Nothing:
+                    //because nothing is happening, let's try and update the AR on positions
+                    if(isHost){
+                        SendEnemyUpdate();
+                    }
+                    break;
+                case NetworkEventType.ConnectEvent: //AR connects
+                    Debug.Log("Connection request from id: " + connectionId + " Received");
+                    HandleConnect(connectionId);
+                    break;
+                case NetworkEventType.DataEvent:
+                    Debug.Log("Data Received");
+                    DemoCoder decoder = new DemoCoder(recBuffer);
+                    for(int i = 0; i < decoder.getCount(); i++){
+                        switch (decoder.GetType(i)){
+                            case (byte)MessageIdentity.Type.Initialise:
+                                HandleClientSpawn(decoder.GetAssetID(i),decoder.GetID(i),decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
+                                break;
+                            case (byte)MessageIdentity.Type.Update:
+                                HandleUpdate(decoder.GetID(i), decoder.GetPosition(i), decoder.GetRotation(i));
+                                break;
+                            case (byte)MessageIdentity.Type.Spawn:
+                                HandleClientSpawn(decoder.GetAssetID(i), decoder.GetID(i), decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
+                                break;
+                            case (byte)MessageIdentity.Type.Remove:
+                                HandleRemove(decoder.GetID(i));
+                                break;
+                            case (byte)MessageIdentity.Type.Request:
+                                HandleSpawnRequest(decoder.GetAssetID(i), decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
+                                break;
+                            case (byte)MessageIdentity.Type.DamageEnemy:
+                                HandleDamageEnemy(decoder.GetID(i), decoder.GetEnemyDamage(i));
+                                break;
+                            case (byte)MessageIdentity.Type.EnemyUpdate:
+                                HandleEnemyUpdate(decoder.GetID(i), decoder.GetPosition(i), decoder.GetRotation(i));
+                                break;
+                            case (byte)MessageIdentity.Type.ARUpdate:
+                                //update position of AR mans
+                                break;
+                            case (byte)MessageIdentity.Type.PortalUpdate:
+                                break;
+                        }
+                    }
+                    break;
+                case NetworkEventType.DisconnectEvent: //AR disconnects
+                    clientsConnected--;
+                    networkInitialised = false;
+					Debug.Log("Disconnect Received");
+                    break;
+            }
+            if (isConnection()) {
+                //also send the transform of the tracker over a state channel
+                if(tracker){
+                    Debug.Log("Sending tracker info");
+                    DemoCoder trackerEncode = new DemoCoder(1024);
+                    trackerEncode.addSerial(6, -1, -1, tracker.transform);
+                    byte error2;
+                    foreach(int id in clientIds){
+                        NetworkTransport.Send(socketId, id, myStateChannelId, trackerEncode.getArray(), 1024, out error2);
+                    }
+                }
 
-						//Decode position and rotation of the tracker
-						Vector3 pos = decoder.GetPosition (i);
-						Quaternion rot = decoder.GetRotation (i);
-
-						//Update the UI to display the correct information
-						//This will be all the more useful now that there is an option to switch between using the Tracker's position and rotation
-						//as opposed to ARKits internal tracking.
-						textManager.changeTrackerPositionString (pos);
-						textManager.changeTrackerRotationString (rot);
-
-						//Update the values in the engine itself.
-						//At first, this should only have been done if the 'constant tracking' option had been selected through the UI.
-						//Later, this was changed. The tracker values are always stored in the engine, but a boolean was used to
-						//Choose which process should have been used for determining position and rotation of the AR user.
-
-						//if (ARManager.getHtcTracker()) {
-						//If the ARCameraManager has specified that the htc Tracker should be used as the constant source of position and rotation
-
-						//It is possible to update tracker position and rotation through UnityARSessionNativeInterface, however I am attempting
-						//to manage this functionality through the higher level UnityARCameraManager instead.
-
-						ARManager.updateTrackerPosition (new Vector4(pos.x, pos.y, pos.z, 1));
-						ARManager.updateTrackerRotation (rot);
-						//UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerPosition(pos.x, pos.y, pos.z);
-						//UnityEngine.XR.iOS.UnityARSessionNativeInterface.updateTrackerRotation(rot.x, rot.y, rot.z, rot.w);
-						//}
-
-						break;						
-					default:
-						Debug.Log ("invalid message type");
-						break;
-
-					}
-				}
-				break;
-			case NetworkEventType.DisconnectEvent: //AR disconnects
-				networkInitialised = false;
-				textManager.changeNetworkString ("Disconnected from" + hostIP);
-				Debug.Log ("Disconnect Received");
-				break;
-			}
-		}
-
+               
+            }
+        }
 	}
+    
+    #endregion
 
-	//Phone should request tracker position and rotation
-	public void calibrate() {
+    #endregion
 
-	}
+    /* So, I figure that this might be necessary for this network manager, if it wants to work for AR as well */
+    #region Request Functions
+    public bool RequestSpawn(int assetId, Transform transform, int hostId){
+        byte error;
+        DemoCoder encoder = new DemoCoder(50);
+        encoder.addSerial((Byte)MessageIdentity.Type.Request, -1, assetId, transform);
+        NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
+        return true;
+    }
 
+    #endregion 
 
-	#endregion
+    #region Send Functions
+    public bool SendUpdate(int connectionId){
+        if (isConnection()/* && Input.GetKeyDown(KeyCode.U)*/) {
+        Debug.Log("Trying to update client on " + watchList.Count + " objects");
 
-	#region Networking
-
-	//137.205.112.43
-	public void Connect ()
-	{
-		InputField input = GameObject.FindObjectOfType<InputField>();
-		Text inputText = input.GetComponentInChildren<Text>();
-		if(inputText.text != ""){
-			hostIP = inputText.text;
-		}
-		byte error;
-		networkInitialised = true;
-		connectionId = NetworkTransport.Connect(socketId, hostIP, 9090, 0, out error);
-
-		textManager.changeNetworkString ("Connecting to " + hostIP);
-		Debug.Log (((NetworkError)error).ToString ());
-
-	}
-
-	public void RequestSpawn (int prefabId)
-	{
-		Debug.Log ("Requesting spawn of prefab: " + ((Prefabs.PID)prefabId).ToString ());
-		Coder encoder = new Coder(1024);
-		encoder.addSerial(2, -1, prefabId, null);
-		byte error;
-		NetworkTransport.Send (socketId, connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error);
-	}
-
-
-
-	#endregion
-
-	#region Classes
-
-    public class Coder{
-        
-        private byte[] buff;
-        private byte count;
-        private int size;
-        public Coder(int size){
-            buff = new byte[size];
-            count = 0;
-            this.size = size;
-        }
-
-        public Coder(byte[] array) {
-            buff = array;
-            count = buff[0];
-            size = array.Length;
-        }
-
-        public byte[] getArray() {
-            buff[0] = count;
-            return buff;
-        }
-
-        public byte getCount(){
-            return count;
-        }
-
-        public bool isFull() {
-            return ((((count+1)*49)+1)>size);
-        }
-
-        public void addSerial(byte type, int id, int prefabId, Transform transform){
-            if (isFull()) {
-                Debug.LogError("Coder array is already full, can't add type " + type + " object id " + id);
-                return;
+            //we have switched to a watch list instead of a queue
+            //since this is a dictionary element we need to iterate through
+            //using foreach and then referring to the id and Gameobject as
+            //kvp.Key and kvp.Value
+            DemoCoder encoder = new DemoCoder(1024);
+            bool empty = true;
+            foreach(KeyValuePair<int, GameObject> kvp in watchList){
+                //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                empty = false;
+                if (encoder.isFull()){
+                    break;
+                }
+                //int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+                encoder.addSerial((Byte)MessageIdentity.Type.Update, kvp.Key, -1, kvp.Value.transform);
             }
-            int index = 1 + (count++*49);
-            buff[index] = type;
-            writeIn(id, index+1);
-            writeIn(prefabId, index+5);
-            if(transform == null){
-                return;
-            }
-            //setup for position
-            Vector3 pos = transform.position;
-            writeIn(pos.x, index+9);
-            writeIn(pos.y, index+13);
-            writeIn(pos.z, index+17);
 
-            //setup for rotation
-            Quaternion rot = transform.rotation;
-            writeIn(rot.x, index+21);
-            writeIn(rot.y, index+25);
-            writeIn(rot.z, index+29);
-            writeIn(rot.w, index+33);
-            
-            //setup for velocity
-            Vector3 vel = transform.GetComponent<Rigidbody>().velocity;
-            writeIn(vel.x, index+37);
-            writeIn(vel.y, index+41);
-            writeIn(vel.z, index+45);
-            
-        }
-
-        private void writeIn(int value, int pos) {
-            byte[] writeIn = BitConverter.GetBytes(value);
-            for (int i = 0; i < writeIn.Length; i++) {
-                buff[i+pos] = writeIn[i];
+            if(!empty){
+                byte error3;
+                NetworkTransport.Send(socketId, connectionId, myUpdateChannelId, encoder.getArray(), 1024, out error3);
+                encoder = new DemoCoder(1024);
             }
         }
 
-        private void writeIn(float value, int pos) {
-            byte[] writeIn = BitConverter.GetBytes(value);
-            for (int i = 0; i < writeIn.Length; i++) {
-                buff[i+pos] = writeIn[i];
+        return true;
+    }
+
+    public void SendSpawn(GameObject gameObject) {
+        byte error2;
+        DemoCoder encoder = new DemoCoder(50);
+        int objectId = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+        String assetId = NetworkTransport.GetAssetId(gameObject);
+        int assetIdNum;
+        spawnAssets.TryGetValue(assetId, out assetIdNum);
+        encoder.addSerial((byte)MessageIdentity.Type.Spawn, objectId, assetIdNum, gameObject.transform);
+        foreach(int id in clientIds){
+            NetworkTransport.Send(socketId, id, myReliableChannelId, encoder.getArray(), 50, out error2);
+        }
+    }
+
+    public void SendRemove(int objectId){
+        byte error2;
+        DemoCoder encoder = new DemoCoder(50);
+        encoder.addSerial((byte)MessageIdentity.Type.Remove, objectId, -2, null);
+        foreach(int id in clientIds){
+            NetworkTransport.Send(socketId, id, myReliableChannelId, encoder.getArray(), 50, out error2);
+        }
+    }
+
+    public void SendEnemyUpdate(){
+        if (isConnection()/* && Input.GetKeyDown(KeyCode.U)*/) {
+            Debug.Log("Trying to update client on " + watchList.Count + " objects");
+
+            //we have switched to a watch list instead of a queue
+            //since this is a dictionary element we need to iterate through
+            //using foreach and then referring to the id and Gameobject as
+            //kvp.Key and kvp.Value
+            DemoCoder encoder = new DemoCoder(1024);
+            bool empty = true;
+            foreach(KeyValuePair<int, GameObject> kvp in watchList){
+                //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                empty = false;
+                if (encoder.isFull()){
+                    break;
+                }
+                //int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
+                encoder.addSerial((Byte)MessageIdentity.Type.Update, kvp.Key, -1, kvp.Value.transform);
+            }
+
+            if(!empty){
+                byte error3;
+                foreach(int clientId in clientIds){
+                    NetworkTransport.Send(socketId, clientId, myUpdateChannelId, encoder.getArray(), 1024, out error3);
+                }
             }
         }
+    }
 
-        public int readOutInt(int pos) {
-            return BitConverter.ToInt32(buff, pos);
-        }
+    #endregion
 
-        public float readOutFloat(int pos) {
-            return BitConverter.ToSingle(buff,pos);
-        }
+    #region Handler Functions
 
-        public byte GetType(int index) {
-            if(illegalVal(index)){
-                return 255;
-            } 
-            //move the index to correct position
-            index = 1 + (index*49);
-
-            return buff[index];
-        }
-
-        public int GetID(int index) {
-            if(illegalVal(index)){
-                return -2;
-            } 
-            //move the index to correct position
-            index = 1 + (index*49);
-
-            return readOutInt(index+1);
-        }
-
-        public int GetPrefabID(int index) {
-            if(illegalVal(index)){
-                return -2;
-            } 
-            //move the index to correct position
-            index = 1 + (index*49);
-
-            return readOutInt(index+5);
-        }
-
-        public Vector3 GetPosition(int index) {
-            if(illegalVal(index)){
-                return new Vector3(0,0,0);
+    public bool HandleUpdate(int id, Vector3 pos, Quaternion rot){
+        GameObject instance;
+        networkedObjects.TryGetValue (id, out instance);
+        instance.transform.position = pos;
+        instance.transform.rotation = rot;
+        return true;
+    }
+    public bool HandleConnect(int connectionId){
+        //these first 2 lines need rectifying due to obvious errors
+        clientIds[clientsConnected] = connectionId;
+        clientsConnected++;
+        byte error2;
+        DemoCoder encoder = new DemoCoder(1024);
+        NetworkIdentity[] networkIdentities = getNetworkIdentities();
+        foreach(NetworkIdentity identity in networkIdentities){ 
+            encoder.addSerial((Byte)MessageIdentity.Type.Initialise, identity.getObjectId(), (int)Prefabs.PID.Ball, identity.gameObject.transform);
+            if(encoder.isFull()){
+                NetworkTransport.Send(socketId, connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
+                encoder = new DemoCoder(1024);
             }
-            //move the index to correct position
-            index = 1 + (index*49);
-            
-            //we already have the array
-            //sort out in a sec
-            float posX = readOutFloat(index+9);
-            float posY = readOutFloat(index+13);
-            float posZ = readOutFloat(index+17);
-            return new Vector3(posX, posY, posZ);
         }
+        NetworkTransport.Send(socketId, connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
+        return true;
+    }
 
-        public Quaternion GetRotation(int index) {
-            index = 1 + (index*49);
-            float rotX = readOutFloat(index+21);
-            float rotY = readOutFloat(index+25);
-            float rotZ = readOutFloat(index+29);
-            float rotW = readOutFloat(index+33);
-            return new Quaternion(rotX, rotY, rotZ, rotW);
-            
-        }
-
-        public Vector3 GetVelocity(int index) {
-            if(illegalVal(index)){
-                return new Vector3(0,0,0);
-            }
-            //move the index to correct position
-            index = 1 + (index*49);
-
-            //once again, already have the array
-            float velX = readOutFloat(index+37);
-            float velY = readOutFloat(index+41);
-            float velZ = readOutFloat(index+45);
-
-            return new Vector3(velX, velY, velZ);
-        }
-
-        private bool illegalVal(int index) {
-            if (index > buff[0]) {
-                Debug.LogError("Coded message count does not reach value " + index);
-                return true;
-            }
-            return false;
+    private void HandleClientSpawn(int assetId, int objectId, Vector3 pos, Quaternion rot, Vector3 vel){
+        GameObject instance = Instantiate(spawnables[assetId], pos, rot);
+        if(!isHost){
+            instance.GetComponent<NetworkIdentity>().setObjectId(objectId);
         }
 
     }
 
-	[System.Serializable]
-	public class NetworkMessage
-	{
-        
-		public byte type;
-		public int? id;
-		public int? prefabId;
-
-		public SerializeableTransform transform;
-
-		public NetworkMessage (byte type, int? id, int? prefabId, SerializeableTransform transform)
-		{
-			this.type = type;
-			this.id = id;
-			this.prefabId = prefabId;
-			this.transform = transform; 
-
-		}
-
-		public override string ToString ()
-		{
-			return "Message type: " + type + "\n Object Id: " + id + "\nPrefab Id: " + prefabId + "\n" + transform.ToString ();
-		}
-
-	}
-
-	[System.Serializable]
-	public class SerializeableTransform
-	{
-		public float posX;
-		public float posY;
-		public float posZ;
-		public float rotX;
-		public float rotY;
-		public float rotZ;
-		public float rotW;
+    private void HandleSpawnRequest(int assetId, Vector3 pos, Quaternion rot, Vector3 vel){
+        GameObject instance = Instantiate(spawnables[assetId], pos, rot);
+    }
 
 
-		public SerializeableTransform (Transform transform)
-		{
-			posX = transform.position.x;
-			posY = transform.position.y;
-			posZ = transform.position.z;
-			rotX = transform.rotation.x;
-			rotY = transform.rotation.y;
-			rotZ = transform.rotation.z;
-			rotW = transform.rotation.w;
-		}
+    private void HandleRemove(int id){
+        GameObject instance;
+        networkedObjects.TryGetValue(id, out instance);
+        Destroy(instance);
+    }
 
-		public override string ToString ()
-		{
-			return "x = " + posX + "\ny = " + posY + "\nz = " + posZ;
-		}
+    private void HandleDamageEnemy(int id, int damage){
+        GameObject gameObject;
+        networkedObjects.TryGetValue(id, out gameObject);
+        //ALTER HEALTH OF ENEMY MAN
+    }
 
-	}
+    private void HandleEnemyUpdate(int id, Vector3 pos, Quaternion rot){
+        GameObject instance;
+        networkedObjects.TryGetValue (id, out instance);
+        instance.transform.position = pos;
+        instance.transform.rotation = rot;
+    }
 
-	#endregion
+    #endregion
+    
+    #region Utility Functions
+
+    private NetworkIdentity[] getNetworkIdentities(){ 
+        return GameObject.FindObjectsOfType<NetworkIdentity>();
+    }
+
+    public bool isConnection(){
+        return clientsConnected > 0;
+    }
+
+    #endregion
+
+    #region Custom Structures
+
+    
+
+    //class for defining message ID's
+    public class MessageIdentity : MonoBehaviour {
+
+        public enum Type : byte{
+            Initialise = 0,
+            Update = 1,
+            Spawn = 2,
+            Remove = 3,
+            Request = 4,
+            EnemyUpdate = 5,
+            DamageEnemy = 6,
+            ARUpdate = 7,
+            PortalUpdate = 8
+        }
+    }
+
+    #endregion
+
 }
