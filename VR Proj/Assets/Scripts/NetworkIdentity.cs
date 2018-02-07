@@ -30,6 +30,10 @@ public class NetworkIdentity : MonoBehaviour {
 		previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 		previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
 		Debug.Log("This objects id is " + objectId);
+		networkManager.networkedObjects.Add(objectId, gameObject);
+		if(networkManager.isConnection()){
+			networkManager.SendSpawn(gameObject);
+		}
 	}
 	
 	// Update is called once per frame
@@ -51,7 +55,16 @@ public class NetworkIdentity : MonoBehaviour {
 		previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
 	}
 
+	void OnDestroy(){
+		networkManager.SendRemove(objectId);
+		networkManager.networkedObjects.Remove(objectId);
+		if(watched){
+			networkManager.watchList.Remove(objectId);
+		}
+	}
+
 	public int getObjectId(){
 		return objectId;
 	}
+	
 }
