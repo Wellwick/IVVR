@@ -4,17 +4,19 @@ using System;
 public class DemoCoder : Coder {
     // Acts the same way as coder for the most part, apart from a few differences with prefabID and special
     // types of messages
+    public DemoCoder(int size) : base(size) { }
+    public DemoCoder(byte[] array) : base(array) { }
 
     //adds an update on an ARs position and what type of shooting it is doing
     public void addARUpdate(int id, int shootEnum, Transform transform) {
-        byte type = NetworkManager.MessageIndentity.Type.ARUpdate;
+        byte type = (byte)NetworkManager.MessageIdentity.Type.ARUpdate;
         //replace the assetId with the shoot enumeration
         addSerial(type, id, shootEnum, transform);
     }
 
     //updates on the enemy health
     public void addEnemyUpdate(int id, int health, Transform transform) {
-        byte type = NetworkManager.MessageIndentity.Type.EnemyUpdate;
+        byte type = (byte)NetworkManager.MessageIdentity.Type.EnemyUpdate;
         //replace assetId again with current health
         addSerial(type, id, health, transform);
     }
@@ -22,7 +24,7 @@ public class DemoCoder : Coder {
     //updates the VR on how much damage has been to an enemy by a given AR player since the last reliable
     //update
     public void addEnemyDamge(int id, int damage) {
-        byte type = NetworkManager.MessageIndentity.Type.DamageEnemy;
+        byte type = (byte)NetworkManager.MessageIdentity.Type.DamageEnemy;
         //replace assetId with how much damage has been done
         addSerial(type, id, damage, null); //doesn't need a transform
     }
