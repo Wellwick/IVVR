@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections.Generic;
+
 public class DemoCoder : Coder {
     // Acts the same way as coder for the most part, apart from a few differences with prefabID and special
     // types of messages
