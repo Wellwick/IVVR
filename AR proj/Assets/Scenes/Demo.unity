@@ -572,6 +572,46 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 180269903}
+--- !u!1 &198327858
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 198327860}
+  - component: {fileID: 198327859}
+  m_Layer: 0
+  m_Name: GameLogic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &198327859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 198327858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: defd081af66c54f7ab21508e0096b2de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &198327860
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 198327858}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 733, y: 304.12067, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &199695129
 GameObject:
   m_ObjectHideFlags: 0
@@ -1491,9 +1531,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2135483411}
-        m_MethodName: RequestSpawn
-        m_Mode: 3
+      - m_Target: {fileID: 198327859}
+        m_MethodName: heal
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3530,9 +3570,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2135483411}
-        m_MethodName: RequestSpawn
-        m_Mode: 3
+      - m_Target: {fileID: 198327859}
+        m_MethodName: damage
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4828,7 +4868,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2128302862}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 194.73, y: -76.29004, z: 0}
+  m_LocalPosition: {x: 194.73, y: -76.29005, z: 0}
   m_LocalScale: {x: 1.0000015, y: 1.0000015, z: 1.0000015}
   m_Children:
   - {fileID: 720336554}
@@ -4993,8 +5033,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5cdbfad9d1743bea2d4dbc8c04155a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnManager: {fileID: 1274746813}
-  updateTimer: 0
+  MAX_CONNECTIONS: 1
+  connection_ip: 127.0.0.1
+  connection_port: 7777
+  spawnables: []
+  leftController: {fileID: 0}
+  rightController: {fileID: 0}
+  Camera: {fileID: 0}
+  spooker: {fileID: 0}
+  throwBall: {fileID: 0}
+  wallDemo: {fileID: 0}
+  tracker: {fileID: 0}
+  isHost: 1
 --- !u!4 &2135483412
 Transform:
   m_ObjectHideFlags: 0

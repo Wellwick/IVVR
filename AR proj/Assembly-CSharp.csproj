@@ -52,9 +52,13 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\_Scripts\ButtonManager.cs" />
+     <Compile Include="Assets\_Scripts\Coder.cs" />
+     <Compile Include="Assets\_Scripts\DemoCoder.cs" />
      <Compile Include="Assets\_Scripts\NetworkIdentities.cs" />
+     <Compile Include="Assets\_Scripts\NetworkIdentity.cs" />
      <Compile Include="Assets\_Scripts\NetworkManager.cs" />
      <Compile Include="Assets\_Scripts\Prefabs.cs" />
+     <Compile Include="Assets\_Scripts\Shooting.cs" />
      <Compile Include="Assets\_Scripts\SpawnManager.cs" />
      <Compile Include="Assets\_Scripts\TextManager.cs" />
      <Compile Include="Assets\_Scripts\UI_Dropdown.cs" />
