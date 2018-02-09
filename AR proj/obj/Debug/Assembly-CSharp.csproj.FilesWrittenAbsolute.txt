@@ -80,3 +80,5 @@
 /Users/chris/IVVR/AR proj/Temp/bin/Debug/Unity.CecilTools.dll
 /Users/chris/IVVR/AR proj/Temp/bin/Debug/Unity.Cecil.Pdb.dll
 /Users/chris/IVVR/AR proj/Temp/bin/Debug/Unity.Cecil.Mdb.dll
+/Users/chris/IVVR/AR proj/Temp/bin/Debug/Assembly-CSharp.dll.mdb
+/Users/chris/IVVR/AR proj/Temp/bin/Debug/Assembly-CSharp.dll

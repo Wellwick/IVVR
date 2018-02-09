@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour {
 
-	public GameObject beamPrefab;
-	private GameObject beam;
+	//public GameObject beamPrefab;
+	public GameObject beamDamage;
+	public GameObject beamHealing;
 
 	private Camera m_camera;
 	private Vector3 rayOffset;
@@ -16,6 +17,9 @@ public class Shooting : MonoBehaviour {
 	void Start () {
 		rayOffset = new Vector3 (0.0f, -0.1f, 0.0f);
 		m_camera = Camera.main;
+
+		//beamDamage.setSource (m_camera);
+		//beamDamage.setOffset (rayOffset);
 	}
 	
 	// Update is called once per frame
@@ -48,38 +52,33 @@ public class Shooting : MonoBehaviour {
 
 		Transform t = m_camera.transform;
 
-		Vector3 origin = t.position + rayOffset; //Offset the ray so that it does not come out from the camera, but rather from below it
+		GameObject target = null;
 
-		Vector3 direction = t.forward;
+		target = raycast (t);
+
+		if ((target = raycast (t)) != null) {
+			Handheld.Vibrate ();
+			//ENEMY HIT???
+		} 
 
 
-		GameObject collision;
-
-		Debug.Log ("Shooting damage from " );
-		if ((collision = raycast (t)) != null) {
-			Debug.Log (t.position.x + " " + t.position.y + " " + t.position.z);
-			Vector3 end = collision.transform.position;
-
-			float length = Vector3.Distance (end, origin);
-
-			//lock beam onto enemy origin
-			beam = Instantiate (beamPrefab, origin + 0.5f * (end - origin), Quaternion.Euler(end - origin));
-
-			//beam = Instantiate (beamPrefab, origin, direction);
-
-			beam.transform.localScale = new Vector3 (0.01f, 0.01f, length);
-
-		}
+		beamDamage.GetComponent<Beam>().Shoot(m_camera.gameObject, target, rayOffset);
 	}
 
 	public void heal() {
 		
 		Transform t = m_camera.transform;
-		t.position = t.position + rayOffset; //Offset the ray so that it does not come out from the camera, but rather from below it
 
-		Instantiate (beamPrefab,t);
-		Debug.Log ("Shooting healing...");
-		raycast (t);
+		GameObject target = null;
+	
+		target = raycast (t);
+
+		if ((target = raycast (t)) != null) {
+			Handheld.Vibrate ();
+			//ENEMY HIT???
+		} 
+
+		beamHealing.GetComponent<Beam>().Shoot(m_camera.gameObject, target, rayOffset);
 
 	}
 }
