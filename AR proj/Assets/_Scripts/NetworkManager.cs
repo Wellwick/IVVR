@@ -1,4 +1,4 @@
-/*
+﻿/*
  * known issues to be solved: encoder being full on object add
  * sort out how we're going to track the tracker
  *
@@ -50,6 +50,8 @@ public class NetworkManager : MonoBehaviour {
 	private bool networkInitialised = false;
     private int clientsConnected = 0;
     private int[] clientIds;
+
+    private int hostId;
 
     #endregion
 
@@ -121,7 +123,12 @@ public class NetworkManager : MonoBehaviour {
                     break;
                 case NetworkEventType.ConnectEvent: //AR connects
                     Debug.Log("Connection request from id: " + connectionId + " Received");
-                    HandleConnect(connectionId);
+                    if(isHost){
+                        HandleConnect(connectionId);
+                    }else{
+                        InvokeRepeating("SendEnemyDamage", 0.0f, 0.1f);
+                    }
+                    
                     break;
                 case NetworkEventType.DataEvent:
                     Debug.Log("Data Received");
@@ -192,6 +199,17 @@ public class NetworkManager : MonoBehaviour {
         encoder.addSerial((Byte)MessageIdentity.Type.Request, -1, assetId, transform);
         NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
         return true;
+    }
+
+    public bool RequestConnect(){
+        if(!isHost){
+            byte error;
+            int hostId = NetworkTransport.Connect(socketId, connection_ip, connection_port, 0, out error);
+            if(error == (byte)NetworkError.Ok){
+                return true;
+            } 
+        }
+        return false;
     }
 
     #endregion 
@@ -266,7 +284,14 @@ public class NetworkManager : MonoBehaviour {
                     break;
                 }
                 //int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
-                encoder.addSerial((Byte)MessageIdentity.Type.Update, kvp.Key, -1, kvp.Value.transform);
+                EnemyHealth eh = kvp.Value.GetComponent<EnemyHealth>();
+                if (eh != null) {
+                    encoder.addEnemyUpdate(kvp.Key, eh.GetHealth(), kvp.Value.transform);
+                } else {
+                    Debug.LogError("Failed to get the Enemy Health for id " + kvp.Key);
+                    encoder.addEnemyUpdate(kvp.Key, -1, kvp.Value.transform);
+                }
+                
             }
 
             if(!empty){
@@ -276,6 +301,18 @@ public class NetworkManager : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void SendEnemyDamage(){
+        DemoCoder encoder = new DemoCoder(1024);
+        foreach(EnemyHealth enemy in GameObject.FindObjectsOfType<EnemyHealth>()){
+            if(enemy.transientHealthLoss > 0){
+                int id = enemy.GetComponent<NetworkIdentity>().getObjectId();
+                encoder.addEnemyDamge(id, enemy.transientHealthLoss);
+            }
+        }
+        byte error;
+        NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
     }
 
     #endregion
@@ -297,7 +334,9 @@ public class NetworkManager : MonoBehaviour {
         DemoCoder encoder = new DemoCoder(1024);
         NetworkIdentity[] networkIdentities = getNetworkIdentities();
         foreach(NetworkIdentity identity in networkIdentities){ 
-            encoder.addSerial((Byte)MessageIdentity.Type.Initialise, identity.getObjectId(), (int)Prefabs.PID.Ball, identity.gameObject.transform);
+            int assetid;
+            spawnAssets.TryGetValue(NetworkTransport.GetAssetId(identity.gameObject), out assetid);
+            encoder.addSerial((Byte)MessageIdentity.Type.Initialise, identity.getObjectId(), assetid, identity.gameObject.transform);
             if(encoder.isFull()){
                 NetworkTransport.Send(socketId, connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
                 encoder = new DemoCoder(1024);
