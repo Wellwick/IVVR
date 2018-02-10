@@ -1,4 +1,4 @@
-/*
+﻿/*
  * known issues to be solved: encoder being full on object add
  * sort out how we're going to track the tracker
  *
@@ -50,6 +50,8 @@ public class NetworkManager : MonoBehaviour {
 	private bool networkInitialised = false;
     private int clientsConnected = 0;
     private int[] clientIds;
+
+    private int hostId;
 
     #endregion
 
@@ -121,7 +123,12 @@ public class NetworkManager : MonoBehaviour {
                     break;
                 case NetworkEventType.ConnectEvent: //AR connects
                     Debug.Log("Connection request from id: " + connectionId + " Received");
-                    HandleConnect(connectionId);
+                    if(isHost){
+                        HandleConnect(connectionId);
+                    }else{
+                        InvokeRepeating("SendEnemyDamage", 0.0f, 0.1f);
+                    }
+                    
                     break;
                 case NetworkEventType.DataEvent:
                     Debug.Log("Data Received");
@@ -147,7 +154,7 @@ public class NetworkManager : MonoBehaviour {
                                 HandleDamageEnemy(decoder.GetID(i), decoder.GetEnemyDamage(i));
                                 break;
                             case (byte)MessageIdentity.Type.EnemyUpdate:
-                                HandleEnemyUpdate(decoder.GetID(i), decoder.GetPosition(i), decoder.GetRotation(i));
+                                HandleEnemyUpdate(decoder.GetID(i), decoder.GetEnemyHealth(i), decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
                             case (byte)MessageIdentity.Type.ARUpdate:
                                 //update position of AR mans
@@ -192,6 +199,17 @@ public class NetworkManager : MonoBehaviour {
         encoder.addSerial((Byte)MessageIdentity.Type.Request, -1, assetId, transform);
         NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
         return true;
+    }
+
+    public bool RequestConnect(){
+        if(!isHost){
+            byte error;
+            int hostId = NetworkTransport.Connect(socketId, connection_ip, connection_port, 0, out error);
+            if(error == (byte)NetworkError.Ok){
+                return true;
+            } 
+        }
+        return false;
     }
 
     #endregion 
@@ -285,6 +303,18 @@ public class NetworkManager : MonoBehaviour {
         }
     }
 
+    public void SendEnemyDamage(){
+        DemoCoder encoder = new DemoCoder(1024);
+        foreach(EnemyHealth enemy in GameObject.FindObjectsOfType<EnemyHealth>()){
+            if(enemy.transientHealthLoss > 0){
+                int id = enemy.GetComponent<NetworkIdentity>().getObjectId();
+                encoder.addEnemyDamge(id, enemy.transientHealthLoss);
+            }
+        }
+        byte error;
+        NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
+    }
+
     #endregion
 
     #region Handler Functions
@@ -304,7 +334,9 @@ public class NetworkManager : MonoBehaviour {
         DemoCoder encoder = new DemoCoder(1024);
         NetworkIdentity[] networkIdentities = getNetworkIdentities();
         foreach(NetworkIdentity identity in networkIdentities){ 
-            encoder.addSerial((Byte)MessageIdentity.Type.Initialise, identity.getObjectId(), (int)Prefabs.PID.Ball, identity.gameObject.transform);
+            int assetid;
+            spawnAssets.TryGetValue(NetworkTransport.GetAssetId(identity.gameObject), out assetid);
+            encoder.addSerial((Byte)MessageIdentity.Type.Initialise, identity.getObjectId(), assetid, identity.gameObject.transform);
             if(encoder.isFull()){
                 NetworkTransport.Send(socketId, connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
                 encoder = new DemoCoder(1024);
@@ -346,9 +378,19 @@ public class NetworkManager : MonoBehaviour {
         }
     }
 
-    private void HandleEnemyUpdate(int id, Vector3 pos, Quaternion rot){
+    private void HandleEnemyUpdate(int id, int health, Vector3 pos, Quaternion rot){
         GameObject instance;
         networkedObjects.TryGetValue (id, out instance);
+        EnemyHealth eh = instance.GetComponent<EnemyHealth>();
+        if (eh != null) {
+            //keeps track of networked and local at the same time
+            int currentHealth = eh.GetHealth();
+            int networkedHealth = health - eh.transientHealthLoss;
+            //don't reset transient, since this may still need to be transmitted
+            eh.SetHealth(Math.Min(currentHealth, networkedHealth));
+        } else {
+            Debug.LogError("Couldn't find enemy health tracking from network id" + id);
+        }
         instance.transform.position = pos;
         instance.transform.rotation = rot;
     }
