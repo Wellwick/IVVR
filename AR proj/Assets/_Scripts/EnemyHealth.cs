@@ -8,6 +8,8 @@ public class EnemyHealth : MonoBehaviour {
     // Use this for initialization
     public int maxHealth = 100;
     public int currentHealth;
+    //need to keep track of health since the last time that we updated the host
+    public int transientHealthLoss = 0;
     //public Color color;
     private float alpha;
     public GameObject cloak;
@@ -38,6 +40,7 @@ public class EnemyHealth : MonoBehaviour {
     {
         //colour will change on update anyway
         currentHealth -= damage;
+        transientHealthLoss += damage;
     }
 
     void Start()

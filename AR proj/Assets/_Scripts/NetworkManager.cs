@@ -147,7 +147,7 @@ public class NetworkManager : MonoBehaviour {
                                 HandleDamageEnemy(decoder.GetID(i), decoder.GetEnemyDamage(i));
                                 break;
                             case (byte)MessageIdentity.Type.EnemyUpdate:
-                                HandleEnemyUpdate(decoder.GetID(i), decoder.GetPosition(i), decoder.GetRotation(i));
+                                HandleEnemyUpdate(decoder.GetID(i), decoder.GetEnemyHealth(i), decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
                             case (byte)MessageIdentity.Type.ARUpdate:
                                 //update position of AR mans
@@ -330,11 +330,28 @@ public class NetworkManager : MonoBehaviour {
         GameObject gameObject;
         networkedObjects.TryGetValue(id, out gameObject);
         //ALTER HEALTH OF ENEMY MAN
+        EnemyHealth eh = gameObject.GetComponent<EnemyHealth>();
+        if (eh != null) {
+            //just use damage, that's fine
+            eh.Damage(damage);
+        } else {
+            Debug.LogError("Couldn't find enemy health tracking from network id" + id);
+        }
     }
 
-    private void HandleEnemyUpdate(int id, Vector3 pos, Quaternion rot){
+    private void HandleEnemyUpdate(int id, int health, Vector3 pos, Quaternion rot){
         GameObject instance;
         networkedObjects.TryGetValue (id, out instance);
+        EnemyHealth eh = instance.GetComponent<EnemyHealth>();
+        if (eh != null) {
+            //keeps track of networked and local at the same time
+            int currentHealth = eh.GetHealth();
+            int networkedHealth = health - eh.transientHealthLoss;
+            //don't reset transient, since this may still need to be transmitted
+            eh.SetHealth(Math.Min(currentHealth, networkedHealth));
+        } else {
+            Debug.LogError("Couldn't find enemy health tracking from network id" + id);
+        }
         instance.transform.position = pos;
         instance.transform.rotation = rot;
     }
