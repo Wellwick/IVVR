@@ -19,8 +19,8 @@ public class NetworkManager : MonoBehaviour {
     #region Inspector_vars
     [Header("Server Setttings")]
     public int MAX_CONNECTIONS = 1;
-    public string connection_ip = "127.0.0.1";
-    public int connection_port = 7777;
+    public string connection_ip = "137.205.112.42";
+    public int connection_port = 9090;
 
     [Header("Spawning")]
     public GameObject[] spawnables = new GameObject[0];
@@ -58,9 +58,9 @@ public class NetworkManager : MonoBehaviour {
     #region Global_structures
     //dictionary to identify individual objects, may not be super necessary eventually
     public Dictionary<int, GameObject> watchList = new Dictionary<int, GameObject>();
-    public Dictionary<String, int> spawnAssets = new Dictionary<String, int>(); 
+    public Dictionary<String, int> spawnAssets = new Dictionary<String, int>();
     public Dictionary<int, GameObject> networkedObjects = new Dictionary<int, GameObject>();
-    
+
 
     #endregion
 
@@ -89,7 +89,7 @@ public class NetworkManager : MonoBehaviour {
             myUpdateChannelId = config.AddChannel(QosType.StateUpdate);
             myStateChannelId = config.AddChannel(QosType.StateUpdate);
             HostTopology topology = new HostTopology(config, MAX_CONNECTIONS);
-            socketId = NetworkTransport.AddHost(topology, 9090);
+            socketId = NetworkTransport.AddHost(topology, connection_port);
             Debug.Log("Socket ID: " + socketId);
             networkInitialised = true;/* TODO For the time being! */
         }
@@ -97,9 +97,9 @@ public class NetworkManager : MonoBehaviour {
         //initialise timer
 	}
 
-    #endregion 
+    #endregion
 
-	
+
     #region Update
 	void Update () {
 
@@ -128,7 +128,7 @@ public class NetworkManager : MonoBehaviour {
                     }else{
                         InvokeRepeating("SendEnemyDamage", 0.0f, 0.1f);
                     }
-                    
+
                     break;
                 case NetworkEventType.DataEvent:
                     Debug.Log("Data Received");
@@ -182,11 +182,11 @@ public class NetworkManager : MonoBehaviour {
                     }
                 }
 
-               
+
             }
         }
 	}
-    
+
     #endregion
 
     #endregion
@@ -201,18 +201,19 @@ public class NetworkManager : MonoBehaviour {
         return true;
     }
 
-    public bool RequestConnect(){
+    public void RequestConnect(){
         if(!isHost){
             byte error;
+            Debug.Log("Attempting to connect to <" + connection_ip + "> on port <" + connection_port + ">");
             int hostId = NetworkTransport.Connect(socketId, connection_ip, connection_port, 0, out error);
             if(error == (byte)NetworkError.Ok){
-                return true;
-            } 
+                //return true;
+            }
         }
-        return false;
+        //return false;
     }
 
-    #endregion 
+    #endregion
 
     #region Send Functions
     public bool SendUpdate(int connectionId){
@@ -291,7 +292,7 @@ public class NetworkManager : MonoBehaviour {
                     Debug.LogError("Failed to get the Enemy Health for id " + kvp.Key);
                     encoder.addEnemyUpdate(kvp.Key, -1, kvp.Value.transform);
                 }
-                
+
             }
 
             if(!empty){
@@ -308,7 +309,7 @@ public class NetworkManager : MonoBehaviour {
         foreach(EnemyHealth enemy in GameObject.FindObjectsOfType<EnemyHealth>()){
             if(enemy.transientHealthLoss > 0){
                 int id = enemy.GetComponent<NetworkIdentity>().getObjectId();
-                encoder.addEnemyDamge(id, enemy.transientHealthLoss);
+                encoder.addEnemyDamage(id, enemy.transientHealthLoss);
             }
         }
         byte error;
@@ -333,7 +334,7 @@ public class NetworkManager : MonoBehaviour {
         byte error2;
         DemoCoder encoder = new DemoCoder(1024);
         NetworkIdentity[] networkIdentities = getNetworkIdentities();
-        foreach(NetworkIdentity identity in networkIdentities){ 
+        foreach(NetworkIdentity identity in networkIdentities){
             int assetid;
             spawnAssets.TryGetValue(NetworkTransport.GetAssetId(identity.gameObject), out assetid);
             encoder.addSerial((Byte)MessageIdentity.Type.Initialise, identity.getObjectId(), assetid, identity.gameObject.transform);
@@ -396,10 +397,10 @@ public class NetworkManager : MonoBehaviour {
     }
 
     #endregion
-    
+
     #region Utility Functions
 
-    private NetworkIdentity[] getNetworkIdentities(){ 
+    private NetworkIdentity[] getNetworkIdentities(){
         return GameObject.FindObjectsOfType<NetworkIdentity>();
     }
 
@@ -411,7 +412,7 @@ public class NetworkManager : MonoBehaviour {
 
     #region Custom Structures
 
-    
+
 
     //class for defining message ID's
     public class MessageIdentity : MonoBehaviour {

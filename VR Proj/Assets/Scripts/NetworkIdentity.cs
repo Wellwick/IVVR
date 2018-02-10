@@ -27,20 +27,21 @@ public class NetworkIdentity : MonoBehaviour {
 		networkManager = GameObject.FindObjectOfType<NetworkManager>();
 		if(networkManager.isHost){
 			objectId = objectCount;
+			Debug.Log("This objects id is " + objectId);
 			objectCount++;
 			previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 			previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
-			Debug.Log("This objects id is " + objectId);
 			networkManager.networkedObjects.Add(objectId, gameObject);
 			if(networkManager.isConnection()){
 				networkManager.SendSpawn(gameObject);
 			}
+		} else {
+			networkManager.networkedObjects.Add(objectId, gameObject);
 		}
-		
+
 	}
-	
+
 	void Start(){
-		networkManager.networkedObjects.Add(objectId, gameObject);
 	}
 	// Update is called once per frame
 	void Update () {
@@ -54,13 +55,13 @@ public class NetworkIdentity : MonoBehaviour {
 			}else{
 				if(watched){
 					networkManager.watchList.Remove(objectId);
-					watched = false; 
+					watched = false;
 				}
 		}
 		previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 		previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
 		}
-		
+
 	}
 
 	void OnDestroy(){
@@ -71,7 +72,7 @@ public class NetworkIdentity : MonoBehaviour {
 				networkManager.watchList.Remove(objectId);
 			}
 		}
-		
+
 	}
 
 	public int getObjectId(){
@@ -81,5 +82,5 @@ public class NetworkIdentity : MonoBehaviour {
 	public void setObjectId(int id){
 		objectId = id;
 	}
-	
+
 }
