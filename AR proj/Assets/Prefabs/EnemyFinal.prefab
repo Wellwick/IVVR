@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 33764626195854822}
   - component: {fileID: 23464302928885032}
   - component: {fileID: 195273530613368138}
+  - component: {fileID: 114522947253434690}
   m_Layer: 0
   m_Name: EnemyFinal
   m_TagString: Untagged
@@ -195,6 +196,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1315508432406650}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114522947253434690
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1631003411916836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b2664328300479787123946d59d168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  cloak: {fileID: 1115418425864142}
 --- !u!136 &136416982218556200
 CapsuleCollider:
   m_ObjectHideFlags: 1

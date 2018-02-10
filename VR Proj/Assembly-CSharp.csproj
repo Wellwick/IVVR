@@ -51,7 +51,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Coder.cs" />
      <Compile Include="Assets\Scripts\ControllerGrabObject.cs" />
+     <Compile Include="Assets\Scripts\DemoCoder.cs" />
+     <Compile Include="Assets\Scripts\EnemyHealth.cs" />
      <Compile Include="Assets\Scripts\EnemyManager.cs" />
      <Compile Include="Assets\Scripts\Grappler.cs" />
      <Compile Include="Assets\Scripts\LaserPointer.cs" />
@@ -60,8 +63,8 @@
      <Compile Include="Assets\Scripts\MoveTo.cs" />
      <Compile Include="Assets\Scripts\NetworkIdentity.cs" />
      <Compile Include="Assets\Scripts\NetworkManager.cs" />
+     <Compile Include="Assets\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\Prefabs.cs" />
-     <Compile Include="Assets\Scripts\shootBall.cs" />
      <Compile Include="Assets\Scripts\Spook.cs" />
      <Compile Include="Assets\Scripts\ViveControllerInputTest.cs" />
      <Compile Include="Assets\Scripts\wallDemo.cs" />
