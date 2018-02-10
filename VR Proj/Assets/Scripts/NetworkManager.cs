@@ -268,10 +268,10 @@ public class NetworkManager : MonoBehaviour {
                 //int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
                 EnemyHealth eh = kvp.Value.GetComponent<EnemyHealth>();
                 if (eh != null) {
-                    encoder.addEnemyUpdate((Byte)MessageIdentity.Type.Update, kvp.Key, eh.GetHealth(), kvp.Value.transform);
+                    encoder.addEnemyUpdate(kvp.Key, eh.GetHealth(), kvp.Value.transform);
                 } else {
                     Debug.LogError("Failed to get the Enemy Health for id " + kvp.Key);
-                    encoder.addEnemyUpdate((Byte)MessageIdentity.Type.Update, kvp.Key, -1, kvp.Value.transform);
+                    encoder.addEnemyUpdate(kvp.Key, -1, kvp.Value.transform);
                 }
                 
             }
