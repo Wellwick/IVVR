@@ -9,6 +9,7 @@ public class EnemyHealth : MonoBehaviour {
     public int maxHealth = 100;
     public int currentHealth;
     //public Color color;
+    public int transientHealthLoss;
     private float alpha;
     public GameObject cloak;
     
