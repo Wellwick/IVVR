@@ -383,7 +383,8 @@ public class NetworkManager : MonoBehaviour {
             EnemyUpdate = 5,
             DamageEnemy = 6,
             ARUpdate = 7,
-            PortalUpdate = 8
+            PortalUpdate = 8,
+            HealPlayer = 9
         }
     }
 
