@@ -24,10 +24,17 @@ public class DemoCoder : Coder {
 
     //updates the VR on how much damage has been to an enemy by a given AR player since the last reliable
     //update
-    public void addEnemyDamge(int id, int damage) {
+    public void addEnemyDamage(int id, int damage) {
         byte type = (byte)NetworkManager.MessageIdentity.Type.DamageEnemy;
         //replace assetId with how much damage has been done
         addSerial(type, id, damage, null); //doesn't need a transform
+    }
+
+    //updates the VR on how much healing has been done to the player locally on AR
+    public void addPlayerHeal(int heal) {
+        byte type = (byte)NetworkManager.MessageIdentity.Type.PlayerHeal;
+        //replace assetId with how much healing has be done
+        addSerial(type, -1, heal, null); //doesn't need a transform
     }
 
     public void addPortal(bool[] runes) {
@@ -50,6 +57,10 @@ public class DemoCoder : Coder {
     }
 
     public int GetEnemyDamage(int index) {
+        return GetAssetID(index);
+    }
+
+    public int GetPlayerHeal(int index) {
         return GetAssetID(index);
     }
 
