@@ -266,7 +266,14 @@ public class NetworkManager : MonoBehaviour {
                     break;
                 }
                 //int id = gameObject.GetComponent<NetworkIdentity>().getObjectId();
-                encoder.addSerial((Byte)MessageIdentity.Type.Update, kvp.Key, -1, kvp.Value.transform);
+                EnemyHealth eh = kvp.Value.GetComponent<EnemyHealth>();
+                if (eh != null) {
+                    encoder.addEnemyUpdate((Byte)MessageIdentity.Type.Update, kvp.Key, eh.GetHealth(), kvp.Value.transform);
+                } else {
+                    Debug.LogError("Failed to get the Enemy Health for id " + kvp.Key);
+                    encoder.addEnemyUpdate((Byte)MessageIdentity.Type.Update, kvp.Key, -1, kvp.Value.transform);
+                }
+                
             }
 
             if(!empty){
@@ -330,6 +337,13 @@ public class NetworkManager : MonoBehaviour {
         GameObject gameObject;
         networkedObjects.TryGetValue(id, out gameObject);
         //ALTER HEALTH OF ENEMY MAN
+        EnemyHealth eh = gameObject.GetComponent<EnemyHealth>();
+        if (eh != null) {
+            //just use damage, that's fine
+            eh.Damage(damage);
+        } else {
+            Debug.LogError("Couldn't find enemy health tracking from network id" + id);
+        }
     }
 
     private void HandleEnemyUpdate(int id, Vector3 pos, Quaternion rot){
