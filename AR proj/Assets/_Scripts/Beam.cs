@@ -25,13 +25,13 @@ public class Beam : MonoBehaviour {
 		target = null;
 		source = null;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
 
 		duration = duration - Time.deltaTime;
-		if (duration <= 0.0f) {
+		if (duration <= 0.0f || source == null) {
 			beam.SetActive (false);
 		} else {
 

@@ -34,8 +34,8 @@ public class DemoCoder : Coder {
     }
 
     //updates the VR on how much healing has been done to the player locally on AR
-    public void addPlayerHeal(int heal) {
-        byte type = (byte)NetworkManager.MessageIdentity.Type.PlayerHeal;
+    public void addHealPlayer(int heal) {
+        byte type = (byte)NetworkManager.MessageIdentity.Type.HealPlayer;
         //replace assetId with how much healing has be done
         addSerial(type, -1, heal, null); //doesn't need a transform
     }
@@ -63,7 +63,7 @@ public class DemoCoder : Coder {
         return GetAssetID(index);
     }
 
-    public int GetPlayerHeal(int index) {
+    public int GetHealPlayer(int index) {
         return GetAssetID(index);
     }
 

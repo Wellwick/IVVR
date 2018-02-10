@@ -35,10 +35,12 @@ public class NetworkIdentity : MonoBehaviour {
 			if(networkManager.isConnection()){
 				networkManager.SendSpawn(gameObject);
 			}
+		} else {
+			networkManager.networkedObjects.Add(objectId, gameObject);
 		}
-		
+
 	}
-	
+
 	void Start(){
 		networkManager.networkedObjects.Add(objectId, gameObject);
 	}
@@ -54,13 +56,13 @@ public class NetworkIdentity : MonoBehaviour {
 			}else{
 				if(watched){
 					networkManager.watchList.Remove(objectId);
-					watched = false; 
+					watched = false;
 				}
 		}
 		previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 		previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
 		}
-		
+
 	}
 
 	void OnDestroy(){
@@ -71,7 +73,7 @@ public class NetworkIdentity : MonoBehaviour {
 				networkManager.watchList.Remove(objectId);
 			}
 		}
-		
+
 	}
 
 	public int getObjectId(){
@@ -81,5 +83,5 @@ public class NetworkIdentity : MonoBehaviour {
 	public void setObjectId(int id){
 		objectId = id;
 	}
-	
+
 }

@@ -59,6 +59,7 @@ GameObject:
   - component: {fileID: 23464302928885032}
   - component: {fileID: 195273530613368138}
   - component: {fileID: 114522947253434690}
+  - component: {fileID: 114898831684800760}
   m_Layer: 0
   m_Name: EnemyFinal
   m_TagString: Untagged
@@ -121,7 +122,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: a772f5802fc144d40bb47388f9630279, type: 2}
+  - {fileID: 2100000, guid: fb5e14eb1d53543c2a0f0fb4f0bedcd8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -181,7 +182,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1115418425864142}
-  m_Mesh: {fileID: 4300002, guid: 668ba7643c28b4ae1acde3fde8b1bfbc, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 9c3255efba3324188b9dca9179191b3e, type: 3}
 --- !u!33 &33764626195854822
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -209,7 +210,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
+  transientHealthLoss: 0
   cloak: {fileID: 1115418425864142}
+--- !u!114 &114898831684800760
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1631003411916836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd1a16c03bd54111a177ac43fe833dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &136416982218556200
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -237,7 +250,7 @@ SkinnedMeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 668ba7643c28b4ae1acde3fde8b1bfbc, type: 3}
+  - {fileID: 2100000, guid: fb5e14eb1d53543c2a0f0fb4f0bedcd8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -261,7 +274,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300002, guid: 668ba7643c28b4ae1acde3fde8b1bfbc, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 9c3255efba3324188b9dca9179191b3e, type: 3}
   m_Bones: []
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 0}
