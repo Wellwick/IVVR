@@ -30,7 +30,8 @@ public class UnityARCameraManager : MonoBehaviour {
 	public Vector4 arkit_position;
 	public Quaternion arkit_rotation;
 	private Vector4 offset_position = new Vector4 (0, 0, 0, 0);
-	private Quaternion offset_rotation = new Quaternion (0, 0, 0, 0);
+	private Quaternion offset_rotation = new Quaternion ();
+	private bool tracker_updated = false;
 
 
 
@@ -119,7 +120,7 @@ public class UnityARCameraManager : MonoBehaviour {
 			if (htcTrackerRelayEnabled) {
 				unityCameraPosition = tracker_position;
 				unityCameraRotation = tracker_rotation;
-			} else if (htcTrackerOffsetEnabled) {
+			} else if (htcTrackerOffsetEnabled && tracker_updated) {
 				//Take care to multiply offset_rotation * tracker_rotation, and not other way around
 				//This is because quaternion multiplication is not commutative.
 				unityCameraPosition = offset_position + arkit_position;
@@ -165,6 +166,7 @@ public class UnityARCameraManager : MonoBehaviour {
 	}
 
 	public void updateTrackerRotation(Quaternion rot) {
+		tracker_updated = true;
 		tracker_rotation = rot;
 	}
 	public Vector4 getARKitPosition(){
