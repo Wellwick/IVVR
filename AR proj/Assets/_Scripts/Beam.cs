@@ -6,6 +6,13 @@ public class Beam : MonoBehaviour {
 
 	public GameObject beam;
 
+	public enum beamType : byte {
+		DAMAGE,
+		HEAL
+	}
+
+	public beamType type;
+	public int damageVal = 0;
 	private float duration;
 	private GameObject target;
 	private GameObject source;
@@ -33,6 +40,19 @@ public class Beam : MonoBehaviour {
 
 			if (target != null) {
 				end = target.transform.position;
+				switch (type) {
+				case beamType.DAMAGE:
+					EnemyHealth eh = target.transform.parent.GetComponent<EnemyHealth>();
+					if (eh != null) {
+						eh.Damage(damageVal);
+					} else {
+						Debug.LogError("Couldn't find enemy" + target);
+					}
+					break;
+				case beamType.HEAL:
+					PlayerHealth ph = target.GetComponent<PlayerHealth>();
+					break;
+				}
 			} else {
 				end = origin + (source.transform.forward * 10.0f);
 			}

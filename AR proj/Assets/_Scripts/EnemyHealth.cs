@@ -34,6 +34,12 @@ public class EnemyHealth : MonoBehaviour {
         cloak.GetComponent<SkinnedMeshRenderer>().material.color -= new Color(0, 0, 0, (float)0.2 + (float)health / maxHealth);
     }
 
+    public void Damage(int damage) 
+    {
+        //colour will change on update anyway
+        currentHealth -= damage;
+    }
+
     void Start()
     {
 
