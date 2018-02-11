@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class NetworkInterface : MonoBehaviour {
 
-	private UnityARCameraManager ARCameraManager;
+	//private UnityARCameraManager ARCameraManager;
 
 	void Start() {
-		ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
+		//ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
 	}
 
 	void Update() {
@@ -17,8 +17,8 @@ public class NetworkInterface : MonoBehaviour {
 	 
 	public static void UpdateTrackerPose(Vector3 pos, Quaternion rot) {
 
-		ARCameraManager.updateTrackerPosition (pos);
-		ARCameraManager.updateTrackerRotation (rot);
+		//ARCameraManager.updateTrackerPosition (pos);
+		//ARCameraManager.updateTrackerRotation (rot);
 
 	}
 }

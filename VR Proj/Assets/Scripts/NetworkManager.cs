@@ -157,7 +157,7 @@ public class NetworkManager : MonoBehaviour {
                             case (byte)MessageIdentity.Type.EnemyUpdate:
                                 HandleEnemyUpdate(decoder.GetID(i), decoder.GetEnemyHealth(i), decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
-                            case (byte)MessageIdentity.Type.ARUpdate:
+                            case (byte)MessageIdentity.Type.ARUpdateVR:
                                 HandleARUpdateVR();
                                 break;
                             case (byte)MessageIdentity.Type.PortalUpdate:
@@ -316,6 +316,7 @@ public class NetworkManager : MonoBehaviour {
             DemoCoder encoder = new DemoCoder(1024);
             encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
             foreach(int client in clientIds){
+                byte error;
                 NetworkTransport.Send(socketId, client, myStateChannelId, encoder.getArray(), 1024, out error);
             }
         }
@@ -408,7 +409,7 @@ public class NetworkManager : MonoBehaviour {
     }
 
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){
-        NetworkInterface.UpdateTrackerPose(Vector3 pos, Quaternion rot);
+        //NetworkInterface.UpdateTrackerPose(pos, rot);
     }
 
     #endregion

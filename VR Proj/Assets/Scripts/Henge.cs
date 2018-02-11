@@ -14,30 +14,27 @@ public class Henge : MonoBehaviour {
 	private int activeRunes = 0;
 	private int totalRunes;
 
-	private Dictionary<GameObject, bool> active;
-
 	// Use this for initialization
 	void Start () {
 		// figure out how many runes we have in total
 		totalRunes = smallRunes.Length + largeRunes.Length;
 		// randomise which runes are already placed
-		active = new Dictionary<GameObject, bool>();
 		for (int i=0; i<smallRunes.Length; i++) {
 			if (startingRunes>0) {
-				active.Add(smallRunes[i], true);
+				smallRunes[i].GetComponent<Rune>().active = true;
 				Activate(smallRunes[i]);
 				startingRunes--;
 			} else {
-				active.Add(smallRunes[i], false);
+				smallRunes[i].GetComponent<Rune>().active = false;
 			}
 		}
 		for (int i=0; i<largeRunes.Length; i++) {
 			if (startingRunes>0) {
-				active.Add(largeRunes[i], true);
+				largeRunes[i].GetComponent<Rune>().active = true;
 				Activate(largeRunes[i]);
 				startingRunes--;
 			} else {
-				active.Add(largeRunes[i], false);
+				largeRunes[i].GetComponent<Rune>().active = false;
 			}
 		}
 		portal.SetActive(false);
@@ -64,18 +61,18 @@ public class Henge : MonoBehaviour {
 		mats[0] = properMaterial;
 		mr.materials = mats;
 		//set the dictionary value to true, just in case it hasn't already been set
-		active[rune] = true;
 		activeRunes++;
+		rune.GetComponent<Rune>().active = true;
 	}
 
 
 	public bool[] GetRuneState() {
 		bool[] states = new bool[smallRunes.Length+largeRunes.Length];
 		for (int i = 0; i<smallRunes.Length; i++) {
-			active.TryGetValue(smallRunes[i], out states[i]);
+			states[i] = smallRunes[i].GetComponent<Rune>().active;
 		}
 		for (int i = 0; i<largeRunes.Length; i++) {
-			active.TryGetValue(largeRunes[i], out states[i+smallRunes.Length]);
+			states[i+smallRunes.Length] = largeRunes[i].GetComponent<Rune>().active;
 		}
 		return states;
 	}
