@@ -10,7 +10,7 @@ public class DemoCoder : Coder {
 
     //adds an update on an ARs position and what type of shooting it is doing
     public void addARUpdate(int id, int shootEnum, Transform transform) {
-        byte type = (byte)NetworkManager.MessageIdentity.Type.ARUpdate;
+        byte type = (byte)NetworkManager.MessageIdentity.Type.ARUpdateVR;
         //replace the assetId with the shoot enumeration
         addSerial(type, id, shootEnum, transform);
     }

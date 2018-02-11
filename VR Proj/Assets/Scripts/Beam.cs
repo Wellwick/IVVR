@@ -43,7 +43,7 @@ public class Beam : MonoBehaviour {
 			if (target != null) {
 				end = target.transform.position;
 				switch (type) {
-				case beamType.DAMAGE:
+				case beamType.Damage:
 					EnemyHealth eh = target.transform.parent.GetComponent<EnemyHealth>();
 					if (eh != null) {
 						eh.Damage(damageVal);
@@ -51,7 +51,7 @@ public class Beam : MonoBehaviour {
 						Debug.LogError("Couldn't find enemy" + target);
 					}
 					break;
-				case beamType.HEAL:
+				case beamType.Heal:
 					PlayerHealth ph = target.GetComponent<PlayerHealth>();
 					break;
 				}
