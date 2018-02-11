@@ -119,6 +119,7 @@ public class NetworkManager : MonoBehaviour {
                     //because nothing is happening, let's try and update the AR on positions
                     if(isHost){
                         SendEnemyUpdate();
+                        SendVRBroadcast();
                     }
                     break;
                 case NetworkEventType.ConnectEvent: //AR connects
@@ -157,7 +158,7 @@ public class NetworkManager : MonoBehaviour {
                                 HandleEnemyUpdate(decoder.GetID(i), decoder.GetEnemyHealth(i), decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
                             case (byte)MessageIdentity.Type.ARUpdate:
-                                //update position of AR mans
+                                HandleARUpdateVR();
                                 break;
                             case (byte)MessageIdentity.Type.PortalUpdate:
                                 break;
@@ -317,6 +318,25 @@ public class NetworkManager : MonoBehaviour {
         NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
     }
 
+    public void SendARUpdate(){
+        DemoCoder encoder = new DemoCoder(1024);
+        encoder.addARUpdate(-1, (byte)Beam.type, gameObject.transform);
+        byte error;
+        NetworkTransport.Send(socketId, hostId, myStateChannelId, encoder.getArray(), 1024, out error);
+    }
+
+    public void SendVRBroadcast(){
+        if(tracker){
+            DemoCoder encoder = new DemoCoder(1024);
+            encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
+            foreach(int client in clientIds){
+                NetworkTransport.Send(socketId, client, myStateChannelId, encoder.getArray(), 1024, out error);
+            }
+        }
+        
+        
+    }
+
     #endregion
 
     #region Handler Functions
@@ -397,6 +417,10 @@ public class NetworkManager : MonoBehaviour {
         instance.transform.rotation = rot;
     }
 
+    private void HandleARUpdateVR(){
+        //to implement
+    }
+
     #endregion
 
     #region Utility Functions
@@ -426,12 +450,19 @@ public class NetworkManager : MonoBehaviour {
             Request = 4,
             EnemyUpdate = 5,
             DamageEnemy = 6,
-            ARUpdate = 7,
-            PortalUpdate = 8,
-            HealPlayer = 9
+            ARUpdateVR = 7,
+            VRUpdateAR = 8,
+            PortalUpdate = 9,
+            HealPlayer = 10
         }
     }
 
     #endregion
+
+    public enum beamType : byte {
+		None = 0,
+		Damage = 1,
+		Heal = 2
+	}
 
 }
