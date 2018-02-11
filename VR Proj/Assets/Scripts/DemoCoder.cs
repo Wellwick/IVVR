@@ -17,7 +17,7 @@ public class DemoCoder : Coder {
 
     //updates on the enemy health
     public void addEnemyUpdate(int id, int health, Transform transform) {
-        byte type = (byte)NetworkManager.MessageIdentity.Type.EnemyUpdate;
+        byte type = (byte)NetworkManager.MessageIdentity.Type.GeneralUpdate;
         //replace assetId again with current health
         addSerial(type, id, health, transform);
     }
@@ -38,13 +38,14 @@ public class DemoCoder : Coder {
     }
 
     public void addPortal(bool[] runes) {
-        byte type = (byte)NetworkManager.MessageIdentity.Type.PortalUpdate;
+        byte type = (byte)NetworkManager.MessageIdentity.Type.GeneralUpdate;
         int value = 0;
         for (int i = 0; i<runes.Length; i++) {
             if (runes[i]) value += 1 << i;
         }
         // Place the serialization of the current portal state into the assetID
-        addSerial(type, -1, value, null);
+        // Might as well send the length of the array as well 
+        addSerial(type, runes.Length, value, null);
     }
 
     public int GetShootEnum(int index) {
