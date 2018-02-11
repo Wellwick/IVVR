@@ -157,7 +157,7 @@ public class NetworkManager : MonoBehaviour {
                             case (byte)MessageIdentity.Type.EnemyUpdate:
                                 HandleEnemyUpdate(decoder.GetID(i), decoder.GetEnemyHealth(i), decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
-                            case (byte)MessageIdentity.Type.ARUpdateVR:
+                            case (byte)MessageIdentity.Type.ARUpdate:
                                 HandleARUpdateVR();
                                 break;
                             case (byte)MessageIdentity.Type.PortalUpdate:
@@ -170,20 +170,6 @@ public class NetworkManager : MonoBehaviour {
                     networkInitialised = false;
 					Debug.Log("Disconnect Received");
                     break;
-            }
-            if (isConnection()) {
-                //also send the transform of the tracker over a state channel
-                if(tracker){
-                    Debug.Log("Sending tracker info");
-                    DemoCoder trackerEncode = new DemoCoder(1024);
-                    trackerEncode.addSerial(6, -1, -1, tracker.transform);
-                    byte error2;
-                    foreach(int id in clientIds){
-                        NetworkTransport.Send(socketId, id, myStateChannelId, trackerEncode.getArray(), 1024, out error2);
-                    }
-                }
-
-
             }
         }
 	}
@@ -330,7 +316,6 @@ public class NetworkManager : MonoBehaviour {
             DemoCoder encoder = new DemoCoder(1024);
             encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
             foreach(int client in clientIds){
-                byte error;
                 NetworkTransport.Send(socketId, client, myStateChannelId, encoder.getArray(), 1024, out error);
             }
         }
@@ -420,6 +405,10 @@ public class NetworkManager : MonoBehaviour {
 
     private void HandleARUpdateVR(){
         //to implement
+    }
+
+    private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){
+        NetworkInterface.UpdateTrackerPose(Vector3 pos, Quaternion rot);
     }
 
     #endregion
