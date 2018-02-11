@@ -224,6 +224,9 @@ MonoBehaviour:
   currentHealth: 0
   transientHealthLoss: 0
   cloak: {fileID: 1115418425864142}
+  drops:
+  - {fileID: 1264658304390636, guid: 594217b9766fe4f94809cdd2bfe211ee, type: 2}
+  - {fileID: 1043478055916494, guid: 91d455f8c22b4440c9ff7659e81be181, type: 2}
 --- !u!114 &114890293596778868
 MonoBehaviour:
   m_ObjectHideFlags: 1
