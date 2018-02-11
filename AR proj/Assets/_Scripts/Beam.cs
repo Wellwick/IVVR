@@ -7,11 +7,13 @@ public class Beam : MonoBehaviour {
 	public GameObject beam;
 
 	public enum beamType : byte {
-		DAMAGE,
-		HEAL
+		None = 0,
+		Damage = 1,
+		Heal = 2
+
 	}
 
-	public beamType type;
+	public static beamType type;
 	public int damageVal = 0;
 	private float duration;
 	private GameObject target;
