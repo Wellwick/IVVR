@@ -79,6 +79,19 @@ public class Henge : MonoBehaviour {
 
 	//used on the AR end to set an updated set of runes
 	public void SetRuneState(bool[] states) {
+		for (int i = 0; i<smallRunes.Length; i++) {
+			if (states[i] && !smallRunes[i].GetComponent<Rune>().active) {
+				Activate(smallRunes[i]);
+			}
+		}
+		for (int i = 0; i<largeRunes.Length; i++) {
+			if (states[i+smallRunes.Length] && !largeRunes[i].GetComponent<Rune>().active) {
+				Activate(largeRunes[i]);
+			}
+		}
+	}
 
+	public int getSize() {
+		return totalRunes;
 	}
 }

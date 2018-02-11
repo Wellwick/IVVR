@@ -12,6 +12,7 @@ public class EnemyHealth : MonoBehaviour {
     public int transientHealthLoss;
     private float alpha;
     public GameObject cloak;
+    public GameObject[] drops;
     
     //private MeshRenderer meshRenderer; 
 
@@ -62,6 +63,8 @@ public class EnemyHealth : MonoBehaviour {
     }
 
     void Death(){
+		int selection = Random.Range(0,drops.Length);
+        GameObject.Instantiate(drops[selection], transform.position, transform.rotation);
         Destroy(gameObject);
     }
 }
