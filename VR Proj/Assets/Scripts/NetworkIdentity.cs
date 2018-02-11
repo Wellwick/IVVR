@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 
 /*
  * IMPORTANT CLASS
@@ -26,9 +27,9 @@ public class NetworkIdentity : MonoBehaviour {
 	void Awake () {
 		networkManager = GameObject.FindObjectOfType<NetworkManager>();
 		if(networkManager.isHost){
-			objectId = objectCount;
 			Debug.Log("This objects id is " + objectId);
-			objectCount++;
+			Interlocked.Increment(ref objectCount);
+			objectId = objectCount;
 			previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 			previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
 			networkManager.networkedObjects.Add(objectId, gameObject);
