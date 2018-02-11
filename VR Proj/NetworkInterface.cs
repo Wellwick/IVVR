@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NetworkInterface : MonoBehaviour {
 
-	private static UnityARCameraManager ARCameraManager;
+	private UnityARCameraManager ARCameraManager;
 
 	void Start() {
 		ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
@@ -17,16 +17,8 @@ public class NetworkInterface : MonoBehaviour {
 	 
 	public static void UpdateTrackerPose(Vector3 pos, Quaternion rot) {
 
-		if (ARCameraManager != null) {
-			
-			ARCameraManager.updateTrackerPosition (pos);
-			ARCameraManager.updateTrackerRotation (rot);
+		ARCameraManager.updateTrackerPosition (pos);
+		ARCameraManager.updateTrackerRotation (rot);
 
-		} else {
-			
-			Debug.LogError ("Attempting to update tracker pose but ARCameraManager is null.");
-
-		}
 	}
-
 }
