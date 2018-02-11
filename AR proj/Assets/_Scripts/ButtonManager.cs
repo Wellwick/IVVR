@@ -13,7 +13,7 @@ public class ButtonManager : MonoBehaviour {
 	public GameObject optionsPanelObject;
 	public GameObject poseEstimationDropdownObject;
 
-	private UnityARCameraManager ARManager;
+	private UnityARCameraManager ARCameraManager;
 
 	public Text selectedObjectText;
 
@@ -24,6 +24,8 @@ public class ButtonManager : MonoBehaviour {
 		optionsPanelObject.SetActive (showingOptions);
 
 
+
+		ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
 		//selectedObjectText = poseEstimationDropdownObject.GetComponentInChildren<Text>();
 	}
 
@@ -50,16 +52,16 @@ public class ButtonManager : MonoBehaviour {
 		int index = poseEstimationDropdownObject.GetComponent<Dropdown> ().value;
 		switch (index) {
 		case 0:
-			ARManager.htcTrackerOffsetEnabled = false;
-			ARManager.htcTrackerRelayEnabled = false;
+			ARCameraManager.htcTrackerOffsetEnabled = false;
+			ARCameraManager.htcTrackerRelayEnabled = false;
 			break;
 		case 1:
-			ARManager.htcTrackerOffsetEnabled = false;
-			ARManager.htcTrackerRelayEnabled = true;
+			ARCameraManager.htcTrackerOffsetEnabled = false;
+			ARCameraManager.htcTrackerRelayEnabled = true;
 			break;
 		case 2:
-			ARManager.htcTrackerOffsetEnabled = true;
-			ARManager.htcTrackerRelayEnabled = false;
+			ARCameraManager.htcTrackerOffsetEnabled = true;
+			ARCameraManager.htcTrackerRelayEnabled = false;
 			break;
 		}
 	}

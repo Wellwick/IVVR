@@ -115,6 +115,8 @@ bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.Audi
 463516d5b5fe8e67a0a24c48f2095b04 UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInputModule
 c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingCollider
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
+f5d312a3fd4d84ed1ea6b4c7dab47d71 Assembly-CSharp.dll:.Rune
+965d5f315ff977d5118780d01eeb5fc7 Assembly-CSharp.dll:.Henge
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:UnityEngine.XR.iOS.ConnectToEditor
 7a1ee6c718479f4d3cf744edffe2ae7b Assembly-CSharp.dll:UnityEngine.XR.iOS.UnityRemoteVideo
 63ee4d254596e7e33706786578d0fdfc Assembly-CSharp.dll:.AR3DOFCameraManager
@@ -157,6 +159,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 8610a8554614872bb6081646a4352ed9 Assembly-CSharp.dll:.PlayerHealth
 2e2a7bd47042749813855cedf111f699 Assembly-CSharp.dll:UnityEngine.XR.iOS.UnityARGeneratePlane
 5f331c27d89f9342d51f70e948d0a16f Assembly-CSharp.dll:.UI_Dropdown
-13bd428b1fdb2aedf9e0547aac4f74f3 Assembly-CSharp.dll:.Beam
+e3e929bb457a0451cdf89035467047dc Assembly-CSharp.dll:.Beam
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.NetworkInterface
 391d84b859f3b155fe38f54bfce79162 Assembly-CSharp.dll:.UnityPointCloudExample
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.UnityARCameraNearFar
