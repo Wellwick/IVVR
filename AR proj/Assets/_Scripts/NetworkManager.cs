@@ -118,7 +118,8 @@ public class NetworkManager : MonoBehaviour {
                 case NetworkEventType.Nothing:
                     //because nothing is happening, let's try and update the AR on positions
                     if(isHost){
-                        SendEnemyUpdate();
+                        SendGeneralUpdate();
+                        SendVRBroadcast();
                     }
                     break;
                 case NetworkEventType.ConnectEvent: //AR connects
@@ -153,14 +154,13 @@ public class NetworkManager : MonoBehaviour {
                             case (byte)MessageIdentity.Type.DamageEnemy:
                                 HandleDamageEnemy(decoder.GetID(i), decoder.GetEnemyDamage(i));
                                 break;
-                            case (byte)MessageIdentity.Type.EnemyUpdate:
-                                HandleEnemyUpdate(decoder.GetID(i), decoder.GetEnemyHealth(i), decoder.GetPosition(i), decoder.GetRotation(i));
+                            case (byte)MessageIdentity.Type.GeneralUpdate:
+                                HandleGeneralUpdate(i, decoder);
                                 break;
-                            case (byte)MessageIdentity.Type.ARUpdate:
-                                //update position of AR mans
+                            case (byte)MessageIdentity.Type.ARUpdateVR:
+                                HandleARUpdateVR();
                                 break;
-                            case (byte)MessageIdentity.Type.PortalUpdate:
-                                break;
+
                         }
                     }
                     break;
@@ -169,20 +169,6 @@ public class NetworkManager : MonoBehaviour {
                     networkInitialised = false;
 					Debug.Log("Disconnect Received");
                     break;
-            }
-            if (isConnection()) {
-                //also send the transform of the tracker over a state channel
-                if(tracker){
-                    Debug.Log("Sending tracker info");
-                    DemoCoder trackerEncode = new DemoCoder(1024);
-                    trackerEncode.addSerial(6, -1, -1, tracker.transform);
-                    byte error2;
-                    foreach(int id in clientIds){
-                        NetworkTransport.Send(socketId, id, myStateChannelId, trackerEncode.getArray(), 1024, out error2);
-                    }
-                }
-
-
             }
         }
 	}
@@ -268,7 +254,7 @@ public class NetworkManager : MonoBehaviour {
         }
     }
 
-    public void SendEnemyUpdate(){
+    public void SendGeneralUpdate(){
         if (isConnection()/* && Input.GetKeyDown(KeyCode.U)*/) {
             Debug.Log("Trying to update client on " + watchList.Count + " objects");
 
@@ -277,6 +263,7 @@ public class NetworkManager : MonoBehaviour {
             //using foreach and then referring to the id and Gameobject as
             //kvp.Key and kvp.Value
             DemoCoder encoder = new DemoCoder(1024);
+            encoder.addPortal(GameObject.GetComponent<Henge>().GetRuneState());
             bool empty = true;
             foreach(KeyValuePair<int, GameObject> kvp in watchList){
                 //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
@@ -315,6 +302,26 @@ public class NetworkManager : MonoBehaviour {
         }
         byte error;
         NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
+    }
+
+    public void SendARUpdate(){
+        DemoCoder encoder = new DemoCoder(1024);
+        encoder.addARUpdate(-1, (byte)Beam.type, gameObject.transform);
+        byte error;
+        NetworkTransport.Send(socketId, hostId, myStateChannelId, encoder.getArray(), 1024, out error);
+    }
+
+    public void SendVRBroadcast(){
+        if(tracker){
+            DemoCoder encoder = new DemoCoder(1024);
+            encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
+            foreach(int client in clientIds){
+                byte error;
+                NetworkTransport.Send(socketId, client, myStateChannelId, encoder.getArray(), 1024, out error);
+            }
+        }
+        
+        
     }
 
     #endregion
@@ -380,21 +387,36 @@ public class NetworkManager : MonoBehaviour {
         }
     }
 
-    private void HandleEnemyUpdate(int id, int health, Vector3 pos, Quaternion rot){
-        GameObject instance;
-        networkedObjects.TryGetValue (id, out instance);
-        EnemyHealth eh = instance.GetComponent<EnemyHealth>();
-        if (eh != null) {
-            //keeps track of networked and local at the same time
-            int currentHealth = eh.GetHealth();
-            int networkedHealth = health - eh.transientHealthLoss;
-            //don't reset transient, since this may still need to be transmitted
-            eh.SetHealth(Math.Min(currentHealth, networkedHealth));
-        } else {
-            Debug.LogError("Couldn't find enemy health tracking from network id" + id);
+    private void HandleGeneralUpdate(int index, DemoCoder decoder){
+        if(index == 0){
+            Henge henge = GameObject.FindObjectOfType<Henge>();
+            henge.SetRuneState(decoder.GetPortalRunes(index, henge.getSize()));
+        }else{
+            GameObject instance;
+            networkedObjects.TryGetValue (id, out instance);
+            EnemyHealth eh = instance.GetComponent<EnemyHealth>();
+            if (eh != null) {
+                //keeps track of networked and local at the same time
+                int currentHealth = eh.GetHealth();
+                int networkedHealth = health - eh.transientHealthLoss;
+                //don't reset transient, since this may still need to be transmitted
+                eh.SetHealth(Math.Min(currentHealth, networkedHealth));
+            } else {
+                Debug.LogError("Couldn't find enemy health tracking from network id" + id);
+            }
+            instance.transform.position = pos;
+            instance.transform.rotation = rot;
         }
-        instance.transform.position = pos;
-        instance.transform.rotation = rot;
+
+    }
+
+
+    private void HandleARUpdateVR(){
+        //to implement
+    }
+
+    private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){
+        //NetworkInterface.UpdateTrackerPose(pos, rot);
     }
 
     #endregion
@@ -424,14 +446,20 @@ public class NetworkManager : MonoBehaviour {
             Spawn = 2,
             Remove = 3,
             Request = 4,
-            EnemyUpdate = 5,
-            DamageEnemy = 6,
-            ARUpdate = 7,
-            PortalUpdate = 8,
-            HealPlayer = 9
+            DamageEnemy = 5,
+            ARUpdateVR = 6,
+            VRUpdateAR = 7,
+            HealPlayer = 8,
+            GeneralUpdate = 9
         }
     }
 
     #endregion
+
+    public enum beamType : byte {
+		None = 0,
+		Damage = 1,
+		Heal = 2
+	}
 
 }
