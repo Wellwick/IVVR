@@ -16,6 +16,9 @@ public class NetworkInterface : MonoBehaviour {
 
 	}
 
+	public static void UpdateNetworkStatus(string status) {
+		textManager.changeNetworkString (status);
+	}
 	 
 	public static void UpdateTrackerPose(Vector3 pos, Quaternion rot) {
 
