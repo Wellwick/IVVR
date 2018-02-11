@@ -310,6 +310,7 @@ public class NetworkManager : MonoBehaviour {
             if(enemy.transientHealthLoss > 0){
                 int id = enemy.GetComponent<NetworkIdentity>().getObjectId();
                 encoder.addEnemyDamage(id, enemy.transientHealthLoss);
+                enemy.transientHealthLoss = 0;
             }
         }
         byte error;
