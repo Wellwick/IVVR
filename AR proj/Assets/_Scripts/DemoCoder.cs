@@ -13,14 +13,14 @@ public class DemoCoder : Coder {
 
     //adds an update on an ARs position and what type of shooting it is doing
     public void addARUpdate(int id, int shootEnum, Transform transform) {
-        byte type = (byte)NetworkManager.MessageIdentity.Type.ARUpdate;
+        byte type = (byte)NetworkManager.MessageIdentity.Type.ARUpdateVR;
         //replace the assetId with the shoot enumeration
         addSerial(type, id, shootEnum, transform);
     }
 
     //updates on the enemy health
     public void addEnemyUpdate(int id, int health, Transform transform) {
-        byte type = (byte)NetworkManager.MessageIdentity.Type.EnemyUpdate;
+        byte type = (byte)NetworkManager.MessageIdentity.Type.GeneralUpdate;
         //replace assetId again with current health
         addSerial(type, id, health, transform);
     }
@@ -41,7 +41,7 @@ public class DemoCoder : Coder {
     }
 
     public void addPortal(bool[] runes) {
-        byte type = (byte)NetworkManager.MessageIdentity.Type.PortalUpdate;
+        byte type = (byte)NetworkManager.MessageIdentity.Type.GeneralUpdate;
         int value = 0;
         for (int i = 0; i<runes.Length; i++) {
             if (runes[i]) value += 1 << i;
