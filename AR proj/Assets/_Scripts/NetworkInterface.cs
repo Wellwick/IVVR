@@ -5,9 +5,11 @@ using UnityEngine;
 public class NetworkInterface : MonoBehaviour {
 
 	private static UnityARCameraManager ARCameraManager;
+	private static TextManager textManager;
 
 	void Start() {
 		ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
+		textManager = GameObject.FindObjectOfType<TextManager> ();
 	}
 
 	void Update() {
@@ -21,6 +23,9 @@ public class NetworkInterface : MonoBehaviour {
 			
 			ARCameraManager.updateTrackerPosition (pos);
 			ARCameraManager.updateTrackerRotation (rot);
+
+			textManager.updateTrackerPositionString (pos);
+			textManager.updateTrackerRotationString (rot);
 
 		} else {
 			
