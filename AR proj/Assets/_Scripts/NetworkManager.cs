@@ -416,7 +416,7 @@ public class NetworkManager : MonoBehaviour {
     }
 
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){
-        //NetworkInterface.UpdateTrackerPose(pos, rot);
+        NetworkInterface.UpdateTrackerPose(pos, rot);
     }
 
     #endregion
