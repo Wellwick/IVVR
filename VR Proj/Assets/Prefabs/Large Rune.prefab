@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 54070688298058764}
   - component: {fileID: 198102718122041692}
   - component: {fileID: 199639499964100232}
+  - component: {fileID: 114666497420925064}
   m_Layer: 9
   m_Name: Large Rune
   m_TagString: Untagged
@@ -38,7 +39,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1264658304390636}
-  m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 13, y: 13, z: 13}
   m_Children: []
@@ -101,6 +102,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &114666497420925064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1264658304390636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1369fc95120b84fb7a352bd2ccaf7a20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  active: 0
 --- !u!136 &136179827009161066
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -174,7 +188,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -728413771
+  randomSeed: 1669457081
   InitialModule:
     serializedVersion: 3
     enabled: 1

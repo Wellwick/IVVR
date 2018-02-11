@@ -56,7 +56,7 @@ public class Henge : MonoBehaviour {
 	}
 
 	//should only need to be called once per rune
-	void Activate(GameObject rune) {
+	public void Activate(GameObject rune) {
 		//activation is simply changing the material
 		MeshRenderer mr = rune.GetComponent<MeshRenderer>();
 		//need to change the array, instead of a single value
