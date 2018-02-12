@@ -8,8 +8,11 @@ public class NetworkInterface : MonoBehaviour {
 	private static TextManager textManager;
 
 	void Start() {
+		
 		ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
 		textManager = GameObject.FindObjectOfType<TextManager> ();
+		Debug.Log ("Starting Network Interface... <TextManager found>:" + (textManager != null) + " <ARCameraManager found>:" + (ARCameraManager != null));
+
 	}
 
 	void Update() {
@@ -17,7 +20,16 @@ public class NetworkInterface : MonoBehaviour {
 	}
 
 	public static void UpdateNetworkStatus(string status) {
-		textManager.changeNetworkString (status);
+		
+		if (textManager != null) {
+
+			textManager.changeNetworkString (status);
+
+		} else {
+
+			Debug.LogError ("Attempting to update network status but textManager is null.");
+
+		}
 	}
 	 
 	public static void UpdateTrackerPose(Vector3 pos, Quaternion rot) {
