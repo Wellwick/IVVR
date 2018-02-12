@@ -168,6 +168,7 @@ public class NetworkManager : MonoBehaviour {
                     clientsConnected--;
                     networkInitialised = false;
 					Debug.Log("Disconnect Received");
+				NetworkInterface.UpdateNetworkStatus("DC'ed");
                     break;
             }
         }
@@ -190,13 +191,18 @@ public class NetworkManager : MonoBehaviour {
     public void RequestConnect(){
         if(!isHost){
             byte error;
-            Debug.Log("Attempting to connect to <" + connection_ip + "> on port <" + connection_port + ">");
+
+            Debug.Log("Attempting to connect to <" + connection_ip + ":" + connection_port + ">");
+			NetworkInterface.UpdateNetworkStatus ("A2C: <" + connection_ip + ":" + connection_port + ">");
             int hostId = NetworkTransport.Connect(socketId, connection_ip, connection_port, 0, out error);
-            if(error == (byte)NetworkError.Ok){
-                //return true;
+			if(error == (byte)NetworkError.Ok){
+				Debug.Log("Connection established <" + connection_ip + ":" + connection_port + ">");
+				NetworkInterface.UpdateNetworkStatus ("CE: <" + connection_ip + ":" + connection_port + ">");
             }
         }
-        //return false;
+
+		Debug.Log("Failed to connect <" + connection_ip + ":" + connection_port + ">");
+		NetworkInterface.UpdateNetworkStatus ("F2C: <" + connection_ip + ":" + connection_port + ">");
     }
 
     #endregion
@@ -419,6 +425,7 @@ public class NetworkManager : MonoBehaviour {
     }
 
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){
+		Debug.Log ("Received tracker information...");
         NetworkInterface.UpdateTrackerPose(pos, rot);
     }
 

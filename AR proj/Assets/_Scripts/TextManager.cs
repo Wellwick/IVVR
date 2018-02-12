@@ -68,11 +68,11 @@ public class TextManager : MonoBehaviour {
 	public void changeNetworkString(String networkString) {
 		networkText.text = networkString;
 	}
-	public void changeTrackerRotationString(Quaternion rot) {
+	public void updateTrackerRotationString(Quaternion rot) {
 
 		rotationTrackerText.text = "rot: {" + Math.Round (rot.x, 2) + ", " + Math.Round (rot.y, 2) + ", " + Math.Round (rot.z, 2) + ", " + Math.Round (rot.w, 2) + "}";
 	}
-	public void changeTrackerPositionString(Vector3 pos) {
+	public void updateTrackerPositionString(Vector3 pos) {
 
 		positionTrackerText.text = "rot: {" + Math.Round (pos.x, 2) + ", " + Math.Round (pos.y, 2) + ", " + Math.Round (pos.z, 2) + "}";
 	}
