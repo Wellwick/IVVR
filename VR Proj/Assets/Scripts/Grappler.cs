@@ -56,7 +56,6 @@ public class Grappler : MonoBehaviour {
 			}
 		}
 		if (Controller.GetHairTriggerUp()) {
-			pull = false;
 			if (holding) ReleaseObject();
 		}
 	}
@@ -92,7 +91,11 @@ public class Grappler : MonoBehaviour {
 		return fx;
 	}
 
-	private void ReleaseObject() {
+	public bool CheckObject(GameObject otherObject) {
+		return (otherObject == pullObject);
+	}
+
+	public void ReleaseObject() {
 		if (GetComponent<FixedJoint>()) {
 			GetComponent<FixedJoint>().connectedBody = null;
 			Destroy(GetComponent<FixedJoint>());
@@ -103,5 +106,6 @@ public class Grappler : MonoBehaviour {
 
 		pullObject = null;
 		holding = false;
+		pull = false;
 	}
 }

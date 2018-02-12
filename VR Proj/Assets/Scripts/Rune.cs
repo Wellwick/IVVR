@@ -50,6 +50,15 @@ public class Rune : MonoBehaviour {
 			if (otherRune.type == runeType.SmallGrab) {
 				// Delete other and active this
 				henge.Activate(gameObject);
+				//drop the item if it was being dragged
+				Grappler left = GameObject.Find("Controller (left)").GetComponent<Grappler>();
+				Grappler right = GameObject.Find("Controller (right)").GetComponent<Grappler>();
+				if (right.CheckObject(other.gameObject)) {
+					right.ReleaseObject();
+				}
+				if (left.CheckObject(other.gameObject)) {
+					left.ReleaseObject();
+				}
 				Destroy(other.gameObject);
 			}
 			break;
