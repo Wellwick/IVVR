@@ -132,7 +132,7 @@ public class NetworkManager : MonoBehaviour {
 
                     break;
                 case NetworkEventType.DataEvent:
-                    Debug.Log("Data Received");
+                    //Debug.Log("Data Received");
                     DemoCoder decoder = new DemoCoder(recBuffer);
                     for(int i = 0; i < decoder.getCount(); i++){
                         switch (decoder.GetType(i)){
@@ -198,11 +198,14 @@ public class NetworkManager : MonoBehaviour {
 			if(error == (byte)NetworkError.Ok){
 				Debug.Log("Connection established <" + connection_ip + ":" + connection_port + ">");
 				NetworkInterface.UpdateNetworkStatus ("CE: <" + connection_ip + ":" + connection_port + ">");
+				return;
+				//Successful connection
             }
         }
 
 		Debug.Log("Failed to connect <" + connection_ip + ":" + connection_port + ">");
 		NetworkInterface.UpdateNetworkStatus ("F2C: <" + connection_ip + ":" + connection_port + ">");
+
     }
 
     #endregion
@@ -398,6 +401,7 @@ public class NetworkManager : MonoBehaviour {
     private void HandleGeneralUpdate(int index, DemoCoder decoder){
         if(index == 0){
             Henge henge = GameObject.FindObjectOfType<Henge>();
+			Debug.Log (henge == null);
             henge.SetRuneState(decoder.GetPortalRunes(index, henge.getSize()));
         }else{
             GameObject instance;
