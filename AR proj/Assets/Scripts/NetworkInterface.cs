@@ -32,6 +32,28 @@ public class NetworkInterface : MonoBehaviour {
 		}
 	}
 
+	public static Vector3 getCameraPosition() {
+		if (ARCameraManager != null) {
+			return ARCameraManager.getUnityCameraPosition();
+
+		} else {
+
+			Debug.LogError ("Attempting to retrieve Unity camera position but ARCameraManager is null.");
+
+		}
+		return new Vector3();
+	}
+	public static Quaternion getCameraRotation() {
+		if (ARCameraManager != null) {
+			return ARCameraManager.getUnityCameraRotation();
+
+		} else {
+
+			Debug.LogError ("Attempting to retrieve Unity camera rotation but ARCameraManager is null.");
+
+		}
+		return new Quaternion();
+	}
 	public static void UpdateTrackerPose(Vector3 pos, Quaternion rot) {
 
 		if (ARCameraManager != null) {
