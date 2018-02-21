@@ -6,8 +6,9 @@ public class EnemyManager : MonoBehaviour
 {
 	//public PlayerHealth playerHealth;     // Reference to the player's heatlh
 	public GameObject Enemy;                // The enemy prefab to be spawned
-	private float spawnTime = 50f;           // How long between each spawn
+	public float spawnTime = 50f;           // How long between each spawn
 	public int enemyCount;
+	public int maxEnemies = 10;
 
 	void Start () {
 		// Call the Spawn function after a delay of the spawnTime and then continue to call after the same amount of time.
@@ -20,7 +21,7 @@ public class EnemyManager : MonoBehaviour
 		// If the player has no health left...
 		// if(playerHealth.currentHealth <= 0f) return; 
 
-		if (enemyCount >= 10) return;	// Ensures not too many enemies are in the game // 
+		if (enemyCount >= maxEnemies) return;	// Ensures not too many enemies are in the game // 
 
 		// Calculate spawn location and necessary rotation  // 
 
@@ -57,7 +58,6 @@ public class EnemyManager : MonoBehaviour
 
 	Vector3 calculateHitLocation(Vector3 loc, float range) {
 		NavMeshHit hit;
-		loc = new Vector3 (0f, 0f, 0f);
 		if (NavMesh.SamplePosition (loc, out hit, range, NavMesh.AllAreas)) loc = hit.position;
 		else Debug.Log (loc);
 		return loc;
