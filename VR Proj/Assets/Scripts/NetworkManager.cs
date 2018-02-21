@@ -266,11 +266,12 @@ public class NetworkManager : MonoBehaviour {
             //using foreach and then referring to the id and Gameobject as
             //kvp.Key and kvp.Value
             DemoCoder encoder = new DemoCoder(1024);
-            encoder.addPortal(GameObject.Find("Henge").GetComponent<Henge>().GetRuneState());
-            bool empty = true;
+            Henge henge = GameObject.Find("Henge").GetComponent<Henge>();
+            encoder.addPortal(henge.GetRuneState(), henge.transform);
+            // We have removed empty, because we are always sending the henge information
             foreach(KeyValuePair<int, GameObject> kvp in watchList){
                 //Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-                empty = false;
+                
                 if (encoder.isFull()){
                     break;
                 }
@@ -285,11 +286,9 @@ public class NetworkManager : MonoBehaviour {
 
             }
 
-            if(!empty){
-                byte error3;
-                foreach(int clientId in clientIds){
-                    NetworkTransport.Send(socketId, clientId, myUpdateChannelId, encoder.getArray(), 1024, out error3);
-                }
+            byte error3;
+            foreach(int clientId in clientIds){
+                NetworkTransport.Send(socketId, clientId, myUpdateChannelId, encoder.getArray(), 1024, out error3);
             }
         }
     }
@@ -397,6 +396,8 @@ public class NetworkManager : MonoBehaviour {
         if(index == 0){
             Henge henge = GameObject.FindObjectOfType<Henge>();
             henge.SetRuneState(decoder.GetPortalRunes(index, henge.getSize()));
+            henge.transform.position = decoder.GetPosition(index);
+            henge.transform.rotation = decoder.GetRotation(index);
         }else{
             GameObject instance;
             int id = decoder.GetID(index);

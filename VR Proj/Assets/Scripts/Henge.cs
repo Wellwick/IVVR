@@ -67,12 +67,15 @@ public class Henge : MonoBehaviour {
 
 
 	public bool[] GetRuneState() {
+		int count = 0;
 		bool[] states = new bool[smallRunes.Length+largeRunes.Length];
 		for (int i = 0; i<smallRunes.Length; i++) {
 			states[i] = smallRunes[i].GetComponent<Rune>().active;
+			count++;
 		}
 		for (int i = 0; i<largeRunes.Length; i++) {
 			states[i+smallRunes.Length] = largeRunes[i].GetComponent<Rune>().active;
+			count++;
 		}
 		return states;
 	}
