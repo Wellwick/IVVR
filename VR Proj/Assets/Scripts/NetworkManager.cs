@@ -160,6 +160,9 @@ public class NetworkManager : MonoBehaviour {
                             case (byte)MessageIdentity.Type.ARUpdateVR:
                                 HandleARUpdateVR();
                                 break;
+                            case (byte)MessageIdentity.Type.VRUpdateAR:
+                                HandleVRUpdateAR(decoder.GetPosition(i), decoder.GetRotation(i));
+                                break;
 
                         }
                     }
@@ -315,7 +318,9 @@ public class NetworkManager : MonoBehaviour {
         if(tracker){
             DemoCoder encoder = new DemoCoder(1024);
             encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
+            // TODO need to send other client pos and beams to AR clients
             foreach(int client in clientIds){
+                Debug.Log("Sending Tracker info to client " + client);
                 byte error;
                 NetworkTransport.Send(socketId, client, myStateChannelId, encoder.getArray(), 1024, out error);
             }
@@ -378,6 +383,7 @@ public class NetworkManager : MonoBehaviour {
         GameObject gameObject;
         networkedObjects.TryGetValue(id, out gameObject);
         //ALTER HEALTH OF ENEMY MAN
+        Debug.Log("Has damaged enemy " + id);
         EnemyHealth eh = gameObject.GetComponent<EnemyHealth>();
         if (eh != null) {
             //just use damage, that's fine

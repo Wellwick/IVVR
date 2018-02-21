@@ -126,8 +126,9 @@ public class NetworkManager : MonoBehaviour {
                     Debug.Log("Connection request from id: " + connectionId + " Received");
                     if(isHost){
                         HandleConnect(connectionId);
-                    }else{
-                        InvokeRepeating("SendEnemyDamage", 0.0f, 0.1f);
+                    } else {
+						Debug.Log ("ConnectEvent triggered on AR side");
+                        InvokeRepeating("SendEnemyDamage", 0.1f, 0.1f);
                     }
 
                     break;
@@ -160,6 +161,9 @@ public class NetworkManager : MonoBehaviour {
                             case (byte)MessageIdentity.Type.ARUpdateVR:
                                 HandleARUpdateVR();
                                 break;
+							case (byte)MessageIdentity.Type.VRUpdateAR:
+								HandleVRUpdateAR (decoder.GetPosition(i), decoder.GetRotation(i));
+								break;
 
                         }
                     }
@@ -194,17 +198,18 @@ public class NetworkManager : MonoBehaviour {
 
             Debug.Log("Attempting to connect to <" + connection_ip + ":" + connection_port + ">");
 			NetworkInterface.UpdateNetworkStatus ("A2C: <" + connection_ip + ":" + connection_port + ">");
-            int hostId = NetworkTransport.Connect(socketId, connection_ip, connection_port, 0, out error);
+            hostId = NetworkTransport.Connect(socketId, connection_ip, connection_port, 0, out error);
 			if(error == (byte)NetworkError.Ok){
 				Debug.Log("Connection established <" + connection_ip + ":" + connection_port + ">");
 				NetworkInterface.UpdateNetworkStatus ("CE: <" + connection_ip + ":" + connection_port + ">");
 				return;
 				//Successful connection
-            }
+			}
+			Debug.Log("Failed to connect <" + connection_ip + ":" + connection_port + ">");
+			NetworkInterface.UpdateNetworkStatus ("F2C: <" + connection_ip + ":" + connection_port + ">");
+
         }
 
-		Debug.Log("Failed to connect <" + connection_ip + ":" + connection_port + ">");
-		NetworkInterface.UpdateNetworkStatus ("F2C: <" + connection_ip + ":" + connection_port + ">");
 
     }
 
@@ -401,7 +406,6 @@ public class NetworkManager : MonoBehaviour {
     private void HandleGeneralUpdate(int index, DemoCoder decoder){
         if(index == 0){
             Henge henge = GameObject.FindObjectOfType<Henge>();
-			Debug.Log (henge == null);
             henge.SetRuneState(decoder.GetPortalRunes(index, henge.getSize()));
         }else{
             GameObject instance;
@@ -429,7 +433,7 @@ public class NetworkManager : MonoBehaviour {
     }
 
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){
-		Debug.Log ("Received tracker information...");
+		//Debug.Log ("Received tracker information...");
         NetworkInterface.UpdateTrackerPose(pos, rot);
     }
 

@@ -1,52 +1,88 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 
-public class NetworkInterface : MonoBehaviour {
+/*
+ * IMPORTANT CLASS
+ * -----------------
+ * This script must be attached to any object that wants to be synchronised over a network.
+ * It uses a static counter to count the number of objects in the world and then assign a value based on that.
+ * It also keeps track of whether ab object is expecting to be updated on the other end of the network and
+ * the previous transform.
+ *
+ */
 
-	private static UnityARCameraManager ARCameraManager;
-	private static TextManager textManager;
+public class NetworkIdentity : MonoBehaviour {
 
-	void Start() {
-		
-		ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
-		textManager = GameObject.FindObjectOfType<TextManager> ();
-		Debug.Log ("Starting Network Interface... <TextManager found>:" + (textManager != null) + " <ARCameraManager found>:" + (ARCameraManager != null));
+	public static int objectCount;
+	private int objectId;
+	private bool watched = false;
+	private Vector3 previousPos;
+	private Quaternion previousRot;
+	private NetworkManager networkManager;
+
+
+	// Use this for initialization
+	void Awake () {
+		networkManager = GameObject.FindObjectOfType<NetworkManager>();
+		if(networkManager.isHost){
+			Debug.Log("This objects id is " + objectId);
+			Interlocked.Increment(ref objectCount);
+			objectId = objectCount;
+			previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+			previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
+			networkManager.networkedObjects.Add(objectId, gameObject);
+			if(networkManager.isConnection()){
+				networkManager.SendSpawn(gameObject);
+			}
+		}
 
 	}
 
-	void Update() {
-
-	}
-
-	public static void UpdateNetworkStatus(string status) {
-		
-		if (textManager != null) {
-
-			textManager.changeNetworkString (status);
-
-		} else {
-
-			Debug.LogError ("Attempting to update network status but textManager is null.");
-
+	void Start(){
+		if (!networkManager.isHost) {
+			networkManager.networkedObjects.Add(objectId, gameObject);
 		}
 	}
-	 
-	public static void UpdateTrackerPose(Vector3 pos, Quaternion rot) {
-
-		if (ARCameraManager != null) {
-			
-			ARCameraManager.updateTrackerPosition (pos);
-			ARCameraManager.updateTrackerRotation (rot);
-
-			textManager.updateTrackerPositionString (pos);
-			textManager.updateTrackerRotationString (rot);
-
-		} else {
-			
-			Debug.LogError ("Attempting to update tracker pose but ARCameraManager is null.");
-
+	// Update is called once per frame
+	void Update () {
+		if(networkManager.isHost){
+			if((!previousPos.Equals(this.transform.position) || !previousRot.Equals(this.transform.rotation))){
+				if(!networkManager.watchList.ContainsKey(objectId)){
+					Debug.Log("Adding to the watchlist");
+					networkManager.watchList.Add(objectId, gameObject);
+					watched = true;
+				}
+			}else{
+				if(watched){
+					networkManager.watchList.Remove(objectId);
+					watched = false;
+				}
 		}
+		previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+		previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
+		}
+
+	}
+
+	void OnDestroy(){
+		if(networkManager.isHost){
+			networkManager.SendRemove(objectId);
+			networkManager.networkedObjects.Remove(objectId);
+			if(watched){
+				networkManager.watchList.Remove(objectId);
+			}
+		}
+
+	}
+
+	public int getObjectId(){
+		return objectId;
+	}
+
+	public void setObjectId(int id){
+		objectId = id;
 	}
 
 }

@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class UI_Dropdown : MonoBehaviour {
 
-    List<string> actions = new List<string>() { "Select Action","Spawn", "Explode", "Fire", "Remove","Throw" };
-    List<string> objects = new List<string>() { "Select Object", "Brick", "Wall", "Cube","Ball" };
+    //List<string> actions = new List<string>() { "Select Action","Spawn", "Explode", "Fire", "Remove","Throw" };
+    //List<string> objects = new List<string>() { "Select Object", "Brick", "Wall", "Cube","Ball" };
 
 
     public Dropdown poseEstimationDropDown;
@@ -31,7 +31,7 @@ public class UI_Dropdown : MonoBehaviour {
 
     public void poseEstimationDropdownIndexChange(int index)
     {
-        selectedObject.text = objects[index];
+        //selectedObject.text = objects[index];
     }
 
 }
