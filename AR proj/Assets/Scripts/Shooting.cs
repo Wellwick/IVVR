@@ -41,7 +41,7 @@ public class Shooting : MonoBehaviour {
 
 
 		if (Physics.Raycast(origin, direction, out hit)) {
-			result = hit.transform.gameObject;
+			result = hit.transform.parent.gameObject;
 			Debug.Log(result.name);
 		}
 
@@ -58,6 +58,14 @@ public class Shooting : MonoBehaviour {
 
 		if ((target = raycast (t)) != null) {
 			Handheld.Vibrate ();
+
+			EnemyHealth enemy = target.GetComponent<EnemyHealth>();
+			if (enemy == null) {
+				Debug.LogError("Parent gameObject of raycast result does not have <EnemyHealth>");
+			} else {
+				enemy.Damage(beamDamage.GetComponent<Beam>().damageVal);	
+			}
+			
 			//ENEMY HIT???
 		} 
 

@@ -310,15 +310,20 @@ public class NetworkManager : MonoBehaviour {
 
     public void SendEnemyDamage(){
         DemoCoder encoder = new DemoCoder(1024);
+        int count = 0;
         foreach(EnemyHealth enemy in GameObject.FindObjectsOfType<EnemyHealth>()){
             if(enemy.transientHealthLoss > 0){
+                count++;
                 int id = enemy.GetComponent<NetworkIdentity>().getObjectId();
                 encoder.addEnemyDamage(id, enemy.transientHealthLoss);
                 enemy.transientHealthLoss = 0;
             }
         }
-        byte error;
-        NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
+        if (count != 0) {
+            byte error;
+            Debug.Log("In SendEnemyDamage, sending health information " + count);
+            NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
+        }
     }
 
     public void SendARUpdate(){
@@ -435,7 +440,7 @@ public class NetworkManager : MonoBehaviour {
         GameObject gameObject;
         ARPLayers.TryGetValue(clientId, out gameObject);
         gameObject.transform.position = pos;
-        gameObject.transform.rot = rot;
+        gameObject.transform.rotation = rot;
     }
 
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){

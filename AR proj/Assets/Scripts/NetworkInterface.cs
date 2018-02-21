@@ -32,7 +32,7 @@ public class NetworkInterface : MonoBehaviour {
 		}
 	}
 
-	public static Transform getCameraTransform() {
+	public static Transform GetCameraTransform() {
 		if (ARCameraManager != null) {
 			return ARCameraManager.GetUnityCameraTransform();
 
@@ -40,10 +40,10 @@ public class NetworkInterface : MonoBehaviour {
 
 			Debug.LogError ("Attempting to retrieve Unity camera transform but ARCameraManager is null.");
 
-			return null;
 		}
+		return null;
 	}
-	public static Vector3 getCameraPosition() {
+	public static Vector3 GetCameraPosition() {
 		if (ARCameraManager != null) {
 			return ARCameraManager.getUnityCameraPosition();
 
