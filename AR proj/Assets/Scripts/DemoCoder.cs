@@ -40,14 +40,14 @@ public class DemoCoder : Coder {
         addSerial(type, -1, heal, null); //doesn't need a transform
     }
 
-    public void addPortal(bool[] runes) {
+    public void addPortal(bool[] runes, Transform transform) {
         byte type = (byte)NetworkManager.MessageIdentity.Type.GeneralUpdate;
         int value = 0;
         for (int i = 0; i<runes.Length; i++) {
             if (runes[i]) value += 1 << i;
         }
         // Place the serialization of the current portal state into the assetID
-        addSerial(type, -1, value, null);
+        addSerial(type, -1, value, transform);
     }
 
     public int GetShootEnum(int index) {
