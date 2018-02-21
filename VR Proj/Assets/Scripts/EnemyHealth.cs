@@ -53,7 +53,7 @@ public class EnemyHealth : MonoBehaviour {
         //testing that the system works
         Color c = gameObject.GetComponent<Renderer>().material.color;
         c = new Color(c[0], c[1], c[2], (float)0.2 +(float)currentHealth / maxHealth);
-        Debug.Log(currentHealth / maxHealth);
+        //Debug.Log(currentHealth / maxHealth);
         gameObject.GetComponent<MeshRenderer>().material.color = c;
         cloak.GetComponent<SkinnedMeshRenderer>().material.color = c;
         if(currentHealth <= 0){

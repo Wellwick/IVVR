@@ -6,11 +6,13 @@ public class EnemyManager : MonoBehaviour
 {
 	//public PlayerHealth playerHealth;     // Reference to the player's heatlh
 	public GameObject Enemy;                // The enemy prefab to be spawned
-	public float spawnTime = 50f;           // How long between each spawn
+	private float spawnTime = 50f;           // How long between each spawn
+	public int enemyCount;
 
 	void Start () {
 		// Call the Spawn function after a delay of the spawnTime and then continue to call after the same amount of time.
 		InvokeRepeating ("Spawn", spawnTime, spawnTime);
+		enemyCount = 0;
 	}
 
 	void Spawn ()
@@ -18,16 +20,30 @@ public class EnemyManager : MonoBehaviour
 		// If the player has no health left...
 		// if(playerHealth.currentHealth <= 0f) return; 
 
+		if (enemyCount >= 10) return;	// Ensures not too many enemies are in the game // 
+
 		// Calculate spawn location and necessary rotation  // 
 
 		Quaternion rot = new Quaternion(0f, 0f, 0f, 0f);
 
-		// Spawning not too close
-		//This is inclusive so never gonna get two!
+		Vector3 loc = calculateSpawn();
+
+		loc = calculateHitLocation (loc, 2.5f);
+	
+		GameObject go = (GameObject)Instantiate (Enemy, loc, rot);
+		NavMeshAgent agent = go.GetComponent<NavMeshAgent> ();
+		agent.Warp (loc);
+		enemyCount++;
+	}
+
+	Vector3 calculateSpawn() {
 		int section = Random.Range(0,2);
 		float xLoc = 238.0f;
+		float yLoc = 110.0f;
 		float zLoc = Random.Range(275.0f, 300.0f);
-		Debug.Log (section);
+
+		//Debug.Log (section);
+
 		switch (section) {
 		case 0:
 			xLoc = Random.Range (254.0f, 264.0f);
@@ -36,20 +52,17 @@ public class EnemyManager : MonoBehaviour
 			xLoc = Random.Range (210.0f, 220.0f);
 			break;
 		}
-
-		Vector3 loc = new Vector3(xLoc, 110, zLoc);
-
-		NavMeshHit hit;
-		if (NavMesh.SamplePosition (loc, out hit, 5f, NavMesh.AllAreas)) {
-			loc = hit.position;
-			Debug.Log (loc);
-			GameObject go = (GameObject)Instantiate (Enemy, loc, rot);
-			NavMeshAgent agent = go.GetComponent<NavMeshAgent> ();
-			agent.Warp (loc);
-		} else {
-			Debug.Log (loc);
-		}
+		return new Vector3(xLoc, yLoc, zLoc);
 	}
+
+	Vector3 calculateHitLocation(Vector3 loc, float range) {
+		NavMeshHit hit;
+		loc = new Vector3 (0f, 0f, 0f);
+		if (NavMesh.SamplePosition (loc, out hit, range, NavMesh.AllAreas)) loc = hit.position;
+		else Debug.Log (loc);
+		return loc;
+	}
+
 }
 
 

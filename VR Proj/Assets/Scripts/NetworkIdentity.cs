@@ -27,7 +27,7 @@ public class NetworkIdentity : MonoBehaviour {
 	void Awake () {
 		networkManager = GameObject.FindObjectOfType<NetworkManager>();
 		if(networkManager.isHost){
-			Debug.Log("This objects id is " + objectId);
+			//Debug.Log("This objects id is " + objectId);
 			Interlocked.Increment(ref objectCount);
 			objectId = objectCount;
 			previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
@@ -49,7 +49,7 @@ public class NetworkIdentity : MonoBehaviour {
 		if(networkManager.isHost){
 			if((!previousPos.Equals(this.transform.position) || !previousRot.Equals(this.transform.rotation))){
 				if(!networkManager.watchList.ContainsKey(objectId)){
-					Debug.Log("Adding to the watchlist");
+					//Debug.Log("Adding to the watchlist");
 					networkManager.watchList.Add(objectId, gameObject);
 					watched = true;
 				}
