@@ -424,7 +424,7 @@ public class NetworkManager : MonoBehaviour {
         GameObject gameObject;
         ARPLayers.TryGetValue(clientId, out gameObject);
         gameObject.transform.position = pos;
-        gameObject.transform.rot = rot;
+        gameObject.transform.rotation = rot;
     }
 
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){

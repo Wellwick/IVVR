@@ -14,7 +14,7 @@ public class NetworkInterface : MonoBehaviour {
 
 	}
 
-	public static Transform getCameraTransform() {
+	public static Transform GetCameraTransform() {
 		/*if (ARCameraManager != null) {
 			return ARCameraManager.GetUnityCameraTransform();
 
@@ -24,6 +24,7 @@ public class NetworkInterface : MonoBehaviour {
 
 			return null;
 		}*/
+		return null;
 	}
 	 
 	public static void UpdateTrackerPose(Vector3 pos, Quaternion rot) {
