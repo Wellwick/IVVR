@@ -25,6 +25,8 @@ public class NetworkManager : MonoBehaviour {
     [Header("Spawning")]
     public GameObject[] spawnables = new GameObject[0];
 
+    public GameObject playerModel;
+
     //todo
     [Header("Channels")]
 	private int myReliableChannelId;
@@ -35,10 +37,6 @@ public class NetworkManager : MonoBehaviour {
     [Header("VR")]
 	public GameObject leftController;
 	public GameObject rightController;
-    public GameObject Camera;
-    public GameObject spooker;
-    public GameObject throwBall;
-    public GameObject wallDemo;
     public GameObject tracker;
 
     #endregion
@@ -60,6 +58,7 @@ public class NetworkManager : MonoBehaviour {
     public Dictionary<int, GameObject> watchList = new Dictionary<int, GameObject>();
     public Dictionary<String, int> spawnAssets = new Dictionary<String, int>();
     public Dictionary<int, GameObject> networkedObjects = new Dictionary<int, GameObject>();
+    public Dictionary<int, GameObject> ARPLayers = new Dictionary<int, GameObject>();
 
 
     #endregion
@@ -126,8 +125,10 @@ public class NetworkManager : MonoBehaviour {
                     Debug.Log("Connection request from id: " + connectionId + " Received");
                     if(isHost){
                         HandleConnect(connectionId);
+                        GameObject player = Instantiate(playerModel, new Vector3(0,0,0), new Quaternion(0,0,0,0));
+                        ARPLayers.Add(connectionId, player);
                     }else{
-                        InvokeRepeating("SendEnemyDamage", 0.0f, 0.1f);
+                        InvokeRepeating("SendEnemyDamage", 0.1f, 0.1f);
                     }
 
                     break;
@@ -158,7 +159,7 @@ public class NetworkManager : MonoBehaviour {
                                 HandleGeneralUpdate(i, decoder);
                                 break;
                             case (byte)MessageIdentity.Type.ARUpdateVR:
-                                HandleARUpdateVR();
+                                HandleARUpdateVR(connectionId, decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
                             case (byte)MessageIdentity.Type.VRUpdateAR:
                                 HandleVRUpdateAR(decoder.GetPosition(i), decoder.GetRotation(i));
@@ -308,7 +309,7 @@ public class NetworkManager : MonoBehaviour {
 
     public void SendARUpdate(){
         DemoCoder encoder = new DemoCoder(1024);
-        encoder.addARUpdate(-1, (byte)Beam.type, gameObject.transform);
+        encoder.addARUpdate((byte)MessageIdentity.Type.ARUpdateVR, (byte)Beam.type, NetworkInterface.GetCameraTransform());
         byte error;
         NetworkTransport.Send(socketId, hostId, myStateChannelId, encoder.getArray(), 1024, out error);
     }
@@ -419,8 +420,11 @@ public class NetworkManager : MonoBehaviour {
     }
 
 
-    private void HandleARUpdateVR(){
-        //to implement
+    private void HandleARUpdateVR(int clientId, Vector3 pos, Quaternion rot){
+        GameObject gameObject;
+        ARPLayers.TryGetValue(clientId, out gameObject);
+        gameObject.transform.position = pos;
+        gameObject.transform.rot = rot;
     }
 
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){

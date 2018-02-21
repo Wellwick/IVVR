@@ -60,6 +60,7 @@ public class NetworkManager : MonoBehaviour {
     public Dictionary<int, GameObject> watchList = new Dictionary<int, GameObject>();
     public Dictionary<String, int> spawnAssets = new Dictionary<String, int>();
     public Dictionary<int, GameObject> networkedObjects = new Dictionary<int, GameObject>();
+    public Dictionary<int, GameObject> ARPLayers = new Dictionary<int, GameObject>();
 
 
     #endregion
@@ -159,7 +160,7 @@ public class NetworkManager : MonoBehaviour {
                                 HandleGeneralUpdate(i, decoder);
                                 break;
                             case (byte)MessageIdentity.Type.ARUpdateVR:
-                                HandleARUpdateVR();
+                                HandleARUpdateVR(connectionId, decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
 							case (byte)MessageIdentity.Type.VRUpdateAR:
 								HandleVRUpdateAR (decoder.GetPosition(i), decoder.GetRotation(i));
@@ -430,8 +431,11 @@ public class NetworkManager : MonoBehaviour {
     }
 
 
-    private void HandleARUpdateVR(){
-        //to implement
+    private void HandleARUpdateVR(int clientId, Vector3 pos, Quaternion rot){
+        GameObject gameObject;
+        ARPLayers.TryGetValue(clientId, out gameObject);
+        gameObject.transform.position = pos;
+        gameObject.transform.rot = rot;
     }
 
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){
