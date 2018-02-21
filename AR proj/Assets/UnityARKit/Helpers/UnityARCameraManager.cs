@@ -190,6 +190,17 @@ public class UnityARCameraManager : MonoBehaviour {
 		}
 		return new Quaternion();
 	}
+
+	public Transform GetUnityCameraTransform() {
+		if (m_camera != null) {
+			return m_camera.transform;
+		} else {
+			Debug.Log("Cannot retrieve unity camera transform; main camera is null.");
+			return null;
+			//Return something other than null.
+			//Transform does not have constructors...
+		}
+	}
 	/*
 	//This returns the actual position that the unity camera is set to,
 	//As opposed to the position and rotation known to ARKit.
