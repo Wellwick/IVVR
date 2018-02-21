@@ -51,72 +51,72 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\_Scripts\Beam.cs" />
-     <Compile Include="Assets\_Scripts\ButtonManager.cs" />
-     <Compile Include="Assets\_Scripts\Coder.cs" />
-     <Compile Include="Assets\_Scripts\DemoCoder.cs" />
-     <Compile Include="Assets\_Scripts\EnemyHealth.cs" />
-     <Compile Include="Assets\_Scripts\NetworkIdentity.cs" />
-     <Compile Include="Assets\_Scripts\NetworkInterface.cs" />
-     <Compile Include="Assets\_Scripts\NetworkManager.cs" />
-     <Compile Include="Assets\_Scripts\PlayerHealth.cs" />
-     <Compile Include="Assets\_Scripts\Rune.cs" />
-     <Compile Include="Assets\_Scripts\Shooting.cs" />
-     <Compile Include="Assets\_Scripts\SpawnManager.cs" />
-     <Compile Include="Assets\_Scripts\TextManager.cs" />
-     <Compile Include="Assets\_Scripts\UI_Dropdown.cs" />
+     <Compile Include="Assets\Scripts\Beam.cs" />
+     <Compile Include="Assets\Scripts\ButtonManager.cs" />
+     <Compile Include="Assets\Scripts\Coder.cs" />
+     <Compile Include="Assets\Scripts\DemoCoder.cs" />
+     <Compile Include="Assets\Scripts\EnemyHealth.cs" />
      <Compile Include="Assets\Scripts\Henge.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\ARKitRemoteConnection.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\ConnectionMessageIds.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\ConnectToEditor.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\EditorHitTest.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\ObjectSerializationExtension.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\SerializableObjects.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\UnityRemoteVideo.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\AR3DOFCameraManager.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\ARPlaneAnchorGameObject.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\DontDestroyOnLoad.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\PointCloudParticleExample.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARAmbient.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARAnchorManager.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARCameraManager.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARCameraNearFar.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARGeneratePlane.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARHitTestExample.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARKitControl.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARMatrixOps.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARUserAnchorComponent.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARUtility.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityARVideo.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Helpers\UnityPointCloudExample.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARAnchor.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARCamera.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARErrorCode.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARFrame.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARHitTestResult.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARHitTestResultType.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARLightEstimate.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARPlaneAnchor.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARPlaneAnchorAlignment.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARPoint.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARRect.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARSize.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARTextureHandles.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARTrackingQuality.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARTrackingState.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARTrackingStateReason.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\ARUserAnchor.cs" />
-     <Compile Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\NativeInterface\UnityARSessionNativeInterface.cs" />
-     <None Include="Assets\UnityARKitPlugin\Examples\Common\Shaders\MobileOcclusion.shader" />
-     <None Include="Assets\UnityARKitPlugin\ARKitRemote\ARKITREMOTE.txt" />
-     <None Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Shaders\YUVShaderLinear.shader" />
-     <None Include="Assets\UnityARKitPlugin\Examples\Common\Shaders\MobileARShadow.shader" />
-     <None Include="Assets\UnityARKitPlugin\Examples\Common\Shaders\InstancedSurfaceShader.shader" />
+     <Compile Include="Assets\Scripts\NetworkIdentity.cs" />
+     <Compile Include="Assets\Scripts\NetworkInterface.cs" />
+     <Compile Include="Assets\Scripts\NetworkManager.cs" />
+     <Compile Include="Assets\Scripts\PlayerHealth.cs" />
+     <Compile Include="Assets\Scripts\Rune.cs" />
+     <Compile Include="Assets\Scripts\Shooting.cs" />
+     <Compile Include="Assets\Scripts\SpawnManager.cs" />
+     <Compile Include="Assets\Scripts\TextManager.cs" />
+     <Compile Include="Assets\Scripts\UI_Dropdown.cs" />
+     <Compile Include="Assets\UnityARKit\ARKitRemote\ARKitRemoteConnection.cs" />
+     <Compile Include="Assets\UnityARKit\ARKitRemote\ConnectionMessageIds.cs" />
+     <Compile Include="Assets\UnityARKit\ARKitRemote\ConnectToEditor.cs" />
+     <Compile Include="Assets\UnityARKit\ARKitRemote\EditorHitTest.cs" />
+     <Compile Include="Assets\UnityARKit\ARKitRemote\ObjectSerializationExtension.cs" />
+     <Compile Include="Assets\UnityARKit\ARKitRemote\SerializableObjects.cs" />
+     <Compile Include="Assets\UnityARKit\ARKitRemote\UnityRemoteVideo.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\AR3DOFCameraManager.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\ARPlaneAnchorGameObject.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\DontDestroyOnLoad.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\PointCloudParticleExample.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARAmbient.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARAnchorManager.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARCameraManager.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARCameraNearFar.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARGeneratePlane.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARHitTestExample.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARKitControl.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARMatrixOps.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARUserAnchorComponent.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARUtility.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityARVideo.cs" />
+     <Compile Include="Assets\UnityARKit\Helpers\UnityPointCloudExample.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARAnchor.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARCamera.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARErrorCode.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARFrame.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARHitTestResult.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARHitTestResultType.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARLightEstimate.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARPlaneAnchor.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARPlaneAnchorAlignment.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARPoint.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARRect.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARSize.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARTextureHandles.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARTrackingQuality.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARTrackingState.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARTrackingStateReason.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\ARUserAnchor.cs" />
+     <Compile Include="Assets\UnityARKit\NativeInterface\UnityARSessionNativeInterface.cs" />
+     <None Include="Assets\Shaders\MobileOcclusion.shader" />
+     <None Include="Assets\UnityARKit\ARKitRemote\ARKITREMOTE.txt" />
+     <None Include="Assets\UnityARKit\Shaders\YUVShaderLinear.shader" />
+     <None Include="Assets\Shaders\MobileARShadow.shader" />
+     <None Include="Assets\Shaders\InstancedSurfaceShader.shader" />
      <None Include="Assets\TUTORIAL.txt" />
-     <None Include="Assets\UnityARKitPlugin\Plugins\iOS\UnityARKit\Shaders\YUVShader.shader" />
+     <None Include="Assets\UnityARKit\Shaders\YUVShader.shader" />
      <None Include="Assets\SCENES.txt" />
  <Reference Include="Facebook.Unity.Settings">
- <HintPath>/Users/Joe/Desktop/IVVR/AR proj/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
+ <HintPath>/Users/chris/IVVR/AR proj/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UIAutomation">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UIAutomation/UnityEngine.UIAutomation.dll</HintPath>
@@ -146,10 +146,10 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Analytics">
- <HintPath>/Users/Joe/Library/Unity/cache/packages/packages.unity.com/com.unity.analytics@1.0.1/UnityEngine.Analytics.dll</HintPath>
+ <HintPath>/Users/chris/Library/Unity/cache/packages/packages.unity.com/com.unity.analytics@1.0.1/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Purchasing">
- <HintPath>/Users/Joe/Library/Unity/cache/packages/packages.unity.com/com.unity.purchasing@1.0.1/UnityEngine.Purchasing.dll</HintPath>
+ <HintPath>/Users/chris/Library/Unity/cache/packages/packages.unity.com/com.unity.purchasing@1.0.1/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
