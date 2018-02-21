@@ -322,7 +322,7 @@ public class NetworkManager : MonoBehaviour {
 
     public void SendARUpdate(){
         DemoCoder encoder = new DemoCoder(1024);
-        encoder.addARUpdate(-1, (byte)Beam.type, gameObject.transform);
+        encoder.addARUpdate((byte)MessageIdentity.Type.ARUpdateVR, (byte)Beam.type, NetworkInterface.GetCameraTransform());
         byte error;
         NetworkTransport.Send(socketId, hostId, myStateChannelId, encoder.getArray(), 1024, out error);
     }

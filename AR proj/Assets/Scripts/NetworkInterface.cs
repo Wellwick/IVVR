@@ -32,7 +32,7 @@ public class NetworkInterface : MonoBehaviour {
 		}
 	}
 
-	public static Vector3 getCameraPosition() {
+	public static Vector3 GetCameraPosition() {
 		if (ARCameraManager != null) {
 			return ARCameraManager.getUnityCameraPosition();
 
