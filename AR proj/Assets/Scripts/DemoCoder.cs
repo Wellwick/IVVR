@@ -75,12 +75,12 @@ public class DemoCoder : Coder {
             //we got a real problem!
             Debug.LogError("Got an impossible value for the portal serialization");
             //just set everything to false
-            for (int i=0; i<runes.Length; i++) {
+            for (int i=0; i<size; i++) {
                 runes[i] = false;
             }
         } else {
             // Step through the integer and bitwise check
-            for (int i=0; i<runes.Length; i++) {
+            for (int i=0; i<size; i++) {
                 if ((value & (1 << i)) != 0) runes[i] = true;
                 else runes[i] = false;
             }

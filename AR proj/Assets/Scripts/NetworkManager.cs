@@ -19,7 +19,7 @@ public class NetworkManager : MonoBehaviour {
     #region Inspector_vars
     [Header("Server Setttings")]
     public int MAX_CONNECTIONS = 1;
-    public string connection_ip = "137.205.112.42";
+    public string connection_ip = "137.205.112.43";
     public int connection_port = 9090;
 
     [Header("Spawning")]
@@ -407,6 +407,8 @@ public class NetworkManager : MonoBehaviour {
         if(index == 0){
             Henge henge = GameObject.FindObjectOfType<Henge>();
             henge.SetRuneState(decoder.GetPortalRunes(index, henge.getSize()));
+            henge.transform.position = decoder.GetPosition(index);
+            henge.transform.rotation = decoder.GetRotation(index);
         }else{
             GameObject instance;
 			int id = decoder.GetID (index);
