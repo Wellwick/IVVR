@@ -38,6 +38,7 @@ public class Henge : MonoBehaviour {
 			}
 		}
 		portal.SetActive(false);
+		//baseRune.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -54,6 +55,7 @@ public class Henge : MonoBehaviour {
 
 	//should only need to be called once per rune
 	public void Activate(GameObject rune) {
+		Debug.Log("Activating a rune");
 		//activation is simply changing the material
 		MeshRenderer mr = rune.GetComponent<MeshRenderer>();
 		//need to change the array, instead of a single value
@@ -79,16 +81,20 @@ public class Henge : MonoBehaviour {
 
 	//used on the AR end to set an updated set of runes
 	public void SetRuneState(bool[] states) {
+		int runeCount = 0;
 		for (int i = 0; i<smallRunes.Length; i++) {
 			if (states[i] && !smallRunes[i].GetComponent<Rune>().active) {
 				Activate(smallRunes[i]);
 			}
+			if (states[i]) runeCount++;
 		}
 		for (int i = 0; i<largeRunes.Length; i++) {
 			if (states[i+smallRunes.Length] && !largeRunes[i].GetComponent<Rune>().active) {
 				Activate(largeRunes[i]);
 			}
+			if (states[i]) runeCount++;
 		}
+		Debug.Log("There are currently " + runeCount + " total runes");
 	}
 
 	public int getSize() {
