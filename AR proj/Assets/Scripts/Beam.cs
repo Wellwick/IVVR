@@ -34,7 +34,8 @@ public class Beam : MonoBehaviour {
 
 		duration = duration - Time.deltaTime;
 		if (duration <= 0.0f || source == null) {
-			beam.SetActive (false);
+			//beam.SetActive (false);
+			beam.GetComponent<ParticleSystem>().Stop();
 		} else {
 
 			Vector3 end;
@@ -46,6 +47,7 @@ public class Beam : MonoBehaviour {
 				case beamType.Damage:
 					EnemyHealth eh = target.transform.parent.GetComponent<EnemyHealth>();
 					if (eh != null) {
+						Debug.Log("damaging by " + damageVal);
 						eh.Damage(damageVal);
 					} else {
 						Debug.LogError("Couldn't find enemy" + target);
@@ -60,8 +62,9 @@ public class Beam : MonoBehaviour {
 			}
 
 			float length = Vector3.Distance (end, origin);
-			beam.transform.position = Vector3.Lerp (origin, end, 0.5f);
-			beam.transform.localScale = new Vector3 (0.01f, 0.01f, length);
+			beam.transform.position = origin;
+			//beam.transform.position = Vector3.Lerp (origin, end, 0.5f);
+			//beam.transform.localScale = new Vector3 (0.01f, 0.01f, length);
 			beam.transform.LookAt (end);
 		}
 	}
@@ -73,7 +76,7 @@ public class Beam : MonoBehaviour {
 		this.offset = offset;
 
 		duration = 1.0f;
-		beam.SetActive (true);
+		beam.GetComponent<ParticleSystem>().Play();
 
 	}
 }

@@ -15,7 +15,7 @@ public class Shooting : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		rayOffset = new Vector3 (0.0f, -0.1f, 0.0f);
+		rayOffset = new Vector3 (0.0f, -0.2f, 0.0f);
 		m_camera = Camera.main;
 
 		//beamDamage.setSource (m_camera);
@@ -69,6 +69,7 @@ public class Shooting : MonoBehaviour {
 			//ENEMY HIT???
 		} 
 
+		
 
 		beamDamage.GetComponent<Beam>().Shoot(m_camera.gameObject, target, rayOffset);
 	}
