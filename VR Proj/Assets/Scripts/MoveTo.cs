@@ -14,4 +14,5 @@ public class MoveTo : MonoBehaviour {
 	void Update() {
 		GetComponent<Transform>().LookAt(goal);
 	}
+	
 }
