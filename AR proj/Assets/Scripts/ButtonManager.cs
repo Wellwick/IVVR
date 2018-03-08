@@ -52,16 +52,16 @@ public class ButtonManager : MonoBehaviour {
 		int index = poseEstimationDropdownObject.GetComponent<Dropdown> ().value;
 		switch (index) {
 		case 0:
-			ARCameraManager.htcTrackerOffsetEnabled = false;
-			ARCameraManager.htcTrackerRelayEnabled = false;
+			ARCameraManager.tracking = TrackingType.ARKit;
 			break;
 		case 1:
-			ARCameraManager.htcTrackerOffsetEnabled = false;
-			ARCameraManager.htcTrackerRelayEnabled = true;
+			ARCameraManager.tracking = TrackingType.TrackerRelay;
 			break;
 		case 2:
-			ARCameraManager.htcTrackerOffsetEnabled = true;
-			ARCameraManager.htcTrackerRelayEnabled = false;
+			ARCameraManager.tracking = TrackingType.TrackerCalibration;
+			break;
+		case 3:
+			ARCameraManager.tracking = TrackingType.HeadsetCalibration;
 			break;
 		}
 	}

@@ -6,16 +6,43 @@ using UnityEngine.UI;
 public class EnemyHealth : MonoBehaviour {
 
     // Use this for initialization
-    public int maxHealth = 100;
+    public int maxHealth = 1000;
     public int currentHealth;
     //need to keep track of health since the last time that we updated the host
     public int transientHealthLoss = 0;
     //public Color color;
     private float alpha;
     public GameObject cloak;
-    
-    //private MeshRenderer meshRenderer; 
+    public List<ParticleCollisionEvent> collisionEvents;
 
+	void Start() {
+        collisionEvents = new List<ParticleCollisionEvent>();
+	}	
+
+
+     void OnParticleCollision(GameObject other)
+    {
+        ParticleSystem particleSys = other.GetComponent<ParticleSystem>();
+
+        int numCollisionEvents = particleSys.GetCollisionEvents(gameObject, collisionEvents);
+
+        /*int i = 0;
+
+        while (i < numCollisionEvents) {
+            if (GetComponent<Rigidbody>()) {
+                Vector3 pos = collisionEvents[i].intersection;
+                Vector3 force = collisionEvents[i].velocity * 10;
+                GetComponent<Rigidbody>().AddForce(force);
+            }
+            i++;
+        }*/
+
+        //Debug.Log("Damaging enemy by " + numCollisionEvents);
+
+        
+
+        Damage(numCollisionEvents);
+    }
 
     private void Awake()
     {
@@ -43,12 +70,12 @@ public class EnemyHealth : MonoBehaviour {
         transientHealthLoss += damage;
     }
 
-    void Start()
-    {
 
-    }
 
-    // Update is called once per frame
+
+
+
+
     void Update()
     {
         //testing that the system works
@@ -58,10 +85,14 @@ public class EnemyHealth : MonoBehaviour {
         gameObject.GetComponent<MeshRenderer>().material.color = c;
         cloak.GetComponent<SkinnedMeshRenderer>().material.color = c;
 
+
+        if (currentHealth <= 0) {
+            Death();
+        }
     }
 
     void Death()
     {
-
+        gameObject.SetActive(false);
     }
 }

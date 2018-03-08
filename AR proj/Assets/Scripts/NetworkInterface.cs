@@ -11,7 +11,7 @@ public class NetworkInterface : MonoBehaviour {
 
 		ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
 		textManager = GameObject.FindObjectOfType<TextManager> ();
-		Debug.Log ("Starting Network Interface... <TextManager found>:" + (textManager != null) + " <ARCameraManager found>:" + (ARCameraManager != null));
+		//Debug.Log ("Starting Network Interface... <TextManager found>:" + (textManager != null) + " <ARCameraManager found>:" + (ARCameraManager != null));
 
 	}
 
