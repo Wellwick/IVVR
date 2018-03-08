@@ -39,6 +39,45 @@ For a scene to be able to catch the Vive's input, the default camera must be rem
 
 The Unity script editor default has been set to VSCode. Double clicking on any `.cs` file will automatically open up the projects directory for handing files in VSCode.
 
+# Compiling AR for iOS
+
+## Compatibility
+
+In order to compile the ARScene for an iOS device, one must use a computer with the macOS system, with both Unity and Xcode installed and up-to date. The process of compilation involves first building the Unity project into an Xcode project, then compiling the Xcode project for the target iOS device.
+
+At the time of writing, devices which support ARKit are limited to: iPhone 6S, iPhone SE, iPhone 7, iPhone 8, iPhone X and the respective Plus models.
+
+## Unity
+
+In Unity, one must ensure that the correct build settings are used. These settings persist through builds, which means should only have to be changed once when the Unity project is created.
+
+Firstly, iOS must be selected in the Platform window, followed by clicking the 'Switch Platform' button. This commences a lengthy process, however this must only be done once as all testing is done using the Unity player or the iOS build.
+
+After the target platform has been switches to iOS, an option in the 'Player Settings' must be set, 'Camera Usage Description'. One must ensure that this is not empty, however the extent of usage of this is simply the string shown on the screen when the user is prompted to allow the application to use the camera. In this project, this field has been set to 'Augmented Reality'.
+
+Following this, the correct scene must be ticked in the 'Scenes to Build' window. After these steps have been completed, the project can be safely built.
+
+## Xcode
+
+In Xcode, several settings must be changed in the 'Project Settings' Page. These are reset to their default values each time the Unity project is built, meaning they must be set after each build.
+
+Firstly, a development team must be assigned to the project. This requires the developer to have an Apple ID, which is free of charge; a personal team can be used. The bundle identifier must also be set; this must be a unique identifier such as com.ivvr.arscene or com.ivvrgrp.arscene.
+
+Once these two settings have been changed, the Xcode project can be compiled to the iOS device.
+
+## Known Issues
+
+Most issues can be resolved by performing the following steps:
+
+* Quit Xcode, using cmd + q.
+* Disconnect iPhone.
+* Connect iPhone and turn Xcode back on.
+
+However, some issues persist until the device is disconnected and restarted. These include:
+
+* <name>’s iPhone is busy: Waiting for Device
+* <name>’s iPhone is busy: Xcode will continue when <name>’s iPhone is finished.
+
 # Connecting via mobile
 
 The IP you will be using most will start as `137.205.112.XX`. XX tends to align with the viglab-## machine that you are at, displayed on the bash terminal. You can also use `ifconfig` to get information on what your current IP is. Keep in mind the ports that are opened on the DCS machines are in the range 9090-9099, both on TCP and UDP (Unity uses UDP).
