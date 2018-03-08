@@ -51,9 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Prefabs\NewBehaviourScript.cs" />
      <Compile Include="Assets\Scripts\Beam.cs" />
      <Compile Include="Assets\Scripts\ButtonManager.cs" />
      <Compile Include="Assets\Scripts\Coder.cs" />
+     <Compile Include="Assets\Scripts\Collision.cs" />
      <Compile Include="Assets\Scripts\DemoCoder.cs" />
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
      <Compile Include="Assets\Scripts\Henge.cs" />
