@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33421227781628134}
   - component: {fileID: 183793021399575820}
   - component: {fileID: 137674263179424560}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cloak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,8 +39,7 @@ GameObject:
   - component: {fileID: 4541460831406092}
   - component: {fileID: 33798814099556340}
   - component: {fileID: 136416982218556200}
-  - component: {fileID: 23506507255007516}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Body Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +59,9 @@ GameObject:
   - component: {fileID: 195273530613368138}
   - component: {fileID: 114522947253434690}
   - component: {fileID: 114898831684800760}
-  m_Layer: 0
+  - component: {fileID: 136313091012078950}
+  - component: {fileID: 136675807850103818}
+  m_Layer: 10
   m_Name: EnemyFinal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +75,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1631003411916836}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 3}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
   - {fileID: 4710171835529562}
@@ -142,40 +143,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!23 &23506507255007516
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1315508432406650}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
 --- !u!33 &33421227781628134
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -208,7 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2b2664328300479787123946d59d168, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 1000
   currentHealth: 0
   transientHealthLoss: 0
   cloak: {fileID: 1115418425864142}
@@ -223,6 +190,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fd1a16c03bd54111a177ac43fe833dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!136 &136313091012078950
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1631003411916836}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.0034179753
+  m_Height: 0.021590423
+  m_Direction: 1
+  m_Center: {x: 0.0000261873, y: -0.013532562, z: 0.0027551334}
 --- !u!136 &136416982218556200
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -236,6 +216,19 @@ CapsuleCollider:
   m_Height: 1.5
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &136675807850103818
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1631003411916836}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.0019999626
+  m_Height: 0.0051139314
+  m_Direction: 1
+  m_Center: {x: 0.000026187452, y: -0.0003669985, z: -0.00009789865}
 --- !u!137 &137674263179424560
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -279,8 +272,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 0}
   m_AABB:
-    m_Center: {x: -0.0000538826, y: 0.00012540817, z: -0.0032972842}
-    m_Extent: {x: 0.0051910398, y: 0.009362904, z: 0.013030052}
+    m_Center: {x: -0.00005401626, y: 0.00012520328, z: -0.0032972074}
+    m_Extent: {x: 0.0051910183, y: 0.00936291, z: 0.013030042}
   m_DirtyAABB: 0
 --- !u!183 &183793021399575820
 Cloth:
