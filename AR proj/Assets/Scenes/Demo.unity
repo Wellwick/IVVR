@@ -2150,9 +2150,11 @@ MonoBehaviour:
     m_Options:
     - m_Text: ARKit
       m_Image: {fileID: 0}
-    - m_Text: Tracker Attached
+    - m_Text: Tracker Relay
       m_Image: {fileID: 0}
-    - m_Text: Calibration
+    - m_Text: Tracker Calibration
+      m_Image: {fileID: 0}
+    - m_Text: Headset Calibration
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3059,12 +3061,11 @@ MonoBehaviour:
   m_camera: {fileID: 1287051255}
   startAlignment: 0
   planeDetection: 0
-  htcTrackerRelayEnabled: 0
-  htcTrackerOffsetEnabled: 1
-  getPointCloud: 1
-  enableLightEstimation: 1
+  tracking: 0
   tracker_position: {x: 0, y: 0, z: 0, w: 1}
   tracker_rotation: {x: 1, y: 0, z: 0, w: 0}
+  headset_position: {x: 0, y: 0, z: 0, w: 1}
+  headset_rotation: {x: 1, y: 0, z: 0, w: 0}
   arkit_position: {x: 0, y: 0, z: 0, w: 0}
   arkit_rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!4 &1257786581
