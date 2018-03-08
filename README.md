@@ -57,7 +57,7 @@ After the target platform has been switches to iOS, an option in the 'Player Set
 
 Following this, the correct scene must be ticked in the 'Scenes to Build' window. After these steps have been completed, the project can be safely built.
 
-## Xcode
+## Xcode
 
 In Xcode, several settings must be changed in the 'Project Settings' Page. These are reset to their default values each time the Unity project is built, meaning they must be set after each build.
 
@@ -75,8 +75,8 @@ Most issues can be resolved by performing the following steps:
 
 However, some issues persist until the device is disconnected and restarted. These include:
 
-* <name>’s iPhone is busy: Waiting for Device
-* <name>’s iPhone is busy: Xcode will continue when <name>’s iPhone is finished.
+* `<name>’s iPhone is busy: Waiting for Device`
+* `<name>’s iPhone is busy: Xcode will continue when <name>’s iPhone is finished.`
 
 # Connecting via mobile
 
