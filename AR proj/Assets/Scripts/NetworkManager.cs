@@ -481,7 +481,8 @@ public class NetworkManager : MonoBehaviour {
             ARUpdateVR = 6,
             VRUpdateAR = 7,
             HealPlayer = 8,
-            GeneralUpdate = 9
+            GeneralUpdate = 9,
+            VREyeUpdate = 10
         }
     }
 
