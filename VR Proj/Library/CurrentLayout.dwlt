@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 6}
-  m_MinSize: {x: 950, y: 300}
+  m_MinSize: {x: 950, y: 542}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_MinSize: {x: 683, y: 492}
   m_MaxSize: {x: 14004, y: 14042}
   vertical: 0
-  controlID: 123
+  controlID: 53
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -423,9 +423,9 @@ MonoBehaviour:
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 7a280000
-    m_LastClickedID: 10362
-    m_ExpandedIDs: 000000007a28000086290000b82900006a2a0000a22a0000ac2a0000b62a0000822d00009e2d000000ca9a3bffffff7f
+    m_SelectedIDs: 78280000
+    m_LastClickedID: 10360
+    m_ExpandedIDs: 000000007828000088290000ba2900006a2a0000a22a0000ac2a0000b62a0000882d0000a42d000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -453,7 +453,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000007a28000086290000b82900006a2a0000a22a0000ac2a0000b62a0000822d00009e2d0000
+    m_ExpandedIDs: 000000007828000088290000ba2900006a2a0000a22a0000ac2a0000b62a0000882d0000a42d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -571,7 +571,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: eee7ffffc6f8ffffd4f9ffffeef9ffff0efaffffa6faffff28fbffff3cfbffff50fbffff7afbffff9efbffff000000009e2f0000b22f0000c02f0000d82f0000e62f0000ee2f000022300000243000002c30000084300000
+    m_ExpandedIDs: cafaffffccfaffff9efbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -653,7 +653,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: -0.1211403, y: -0.61819047, z: 0.09848997, w: -0.77036697}
     speed: 2
-    m_Value: {x: -0.12114031, y: -0.6181905, z: 0.09848998, w: -0.770367}
+    m_Value: {x: 0.121140294, y: 0.61819047, z: -0.09848996, w: 0.77036697}
   m_Size:
     m_Target: 6.9928493
     speed: 2
@@ -768,6 +768,6 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 815
-    width: 1840
-    height: 568
+    y: 816
+    width: 1816
+    height: 567

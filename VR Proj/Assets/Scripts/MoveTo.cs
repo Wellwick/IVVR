@@ -5,13 +5,15 @@ using System.Collections;
 public class MoveTo : MonoBehaviour {
 
 	public Transform goal;
+	NavMeshAgent agent;
 
 	void Start () {
-		NavMeshAgent agent = GetComponent<NavMeshAgent>();
+		agent = GetComponent<NavMeshAgent>();
 		agent.destination = goal.position; 
 	}
 
 	void Update() {
+		agent.destination = goal.position;
 		GetComponent<Transform>().LookAt(goal);
 	}
 	

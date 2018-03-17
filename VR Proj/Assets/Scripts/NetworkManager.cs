@@ -360,8 +360,9 @@ public class NetworkManager : MonoBehaviour {
         GameObject player;
         clientsConnected--;
         ARPlayers.TryGetValue(connectionId, out player);
-        player.Destroy();
+        GameObject.Destroy(player);
         ARPlayers.Remove(connectionId);
+        return true;
     }
 
     private void HandleClientSpawn(int assetId, int objectId, Vector3 pos, Quaternion rot, Vector3 vel){
