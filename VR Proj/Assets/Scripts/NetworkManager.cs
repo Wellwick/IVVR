@@ -27,6 +27,8 @@ public class NetworkManager : MonoBehaviour {
 
     public GameObject playerModel;
 
+    public GameObject VREye;
+
     //todo
     [Header("Channels")]
 	private int myReliableChannelId;
@@ -310,15 +312,17 @@ public class NetworkManager : MonoBehaviour {
     }
 
     public void SendVRBroadcast(){
+        DemoCoder encoder = new DemoCoder(1024);
         if(tracker){
-            DemoCoder encoder = new DemoCoder(1024);
             encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
             // TODO need to send other client pos and beams to AR clients
-            foreach(KeyValuePair<int, GameObject> kvp in ARPlayers){
-                Debug.Log("Sending Tracker info to client " + kvp.Key);
-                byte error;
-                NetworkTransport.Send(socketId, kvp.Key, myStateChannelId, encoder.getArray(), 1024, out error);
-            }
+        }
+        encoder.addVREyeUpdate(VREye.transform);
+
+        foreach(KeyValuePair<int, GameObject> kvp in ARPlayers){
+            Debug.Log("Sending Tracker info to client " + kvp.Key);
+            byte error;
+            NetworkTransport.Send(socketId, kvp.Key, myStateChannelId, encoder.getArray(), 1024, out error);
         }
         
         
