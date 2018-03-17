@@ -128,6 +128,8 @@ public class UnityARCameraManager : MonoBehaviour {
 			Vector4 unityCameraPosition;
 			Quaternion unityCameraRotation;
 
+			Debug.Log(tracking);
+
 			if (tracking == TrackingType.TrackerRelay) {
 				unityCameraPosition = tracker_position;
 				unityCameraRotation = tracker_rotation;
