@@ -348,6 +348,7 @@ public class NetworkManager : MonoBehaviour {
         DemoCoder encoder = new DemoCoder(1024);
         NetworkIdentity[] networkIdentities = getNetworkIdentities();
         foreach(NetworkIdentity identity in networkIdentities){
+            Debug.Log("Sending spawn state of enemies");
             int assetid;
             spawnAssets.TryGetValue(NetworkTransport.GetAssetId(identity.gameObject), out assetid);
             encoder.addSerial((Byte)MessageIdentity.Type.Initialise, identity.getObjectId(), assetid, identity.gameObject.transform);

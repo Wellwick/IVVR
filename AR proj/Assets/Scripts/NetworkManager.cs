@@ -361,13 +361,14 @@ public class NetworkManager : MonoBehaviour {
         return true;
     }
     public bool HandleConnect(int connectionId){
-        //these first 2 lines need rectifying due to obvious errors
-        clientIds[clientsConnected] = connectionId;
         clientsConnected++;
+        GameObject player = Instantiate(playerModel, new Vector3(0,0,0), new Quaternion(0,0,0,0));
+        ARPlayers.Add(connectionId, player);
         byte error2;
         DemoCoder encoder = new DemoCoder(1024);
         NetworkIdentity[] networkIdentities = getNetworkIdentities();
         foreach(NetworkIdentity identity in networkIdentities){
+            Debug.Log("Sending spawn state of enemies");
             int assetid;
             spawnAssets.TryGetValue(NetworkTransport.GetAssetId(identity.gameObject), out assetid);
             encoder.addSerial((Byte)MessageIdentity.Type.Initialise, identity.getObjectId(), assetid, identity.gameObject.transform);
