@@ -5326,6 +5326,11 @@ Prefab:
       propertyPath: ARcameraManager
       value: 
       objectReference: {fileID: 1257786579}
+    - target: {fileID: 114967709742746540, guid: 7b431e96edc534d6aa15d9a185f92a84,
+        type: 2}
+      propertyPath: currentHealth
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
   m_IsPrefabParent: 0

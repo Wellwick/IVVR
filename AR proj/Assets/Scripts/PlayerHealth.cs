@@ -67,7 +67,7 @@ public class PlayerHealth : MonoBehaviour
     void Update()
     {
         //set transform to be towards cameras
-        Indicator.transform.position = UnityARCameraManager.tracker_position;
+        //Indicator.transform.position = UnityARCameraManager.tracker_position;
 
         //TESTING ONLY -- updates when changed in editor
         indicatorMaterial.SetFloat("_Cutoff", 1f - (float)currentHealth / (float)maxHealth);

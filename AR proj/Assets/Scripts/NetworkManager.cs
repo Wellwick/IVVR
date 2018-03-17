@@ -166,7 +166,7 @@ public class NetworkManager : MonoBehaviour {
 								HandleVRUpdateAR (decoder.GetPosition(i), decoder.GetRotation(i));
 								break;
                             case (byte)MessageIdentity.Type.VREyeUpdate:
-                                HandleVREyeUpdate(decoder.GetVRHealth(i), decoder.GetPosition(i));
+                                HandleVREyeUpdate(decoder.getVRHealth(i), decoder.GetPosition(i));
                                 break;
 
                         }
