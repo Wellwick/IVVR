@@ -66,21 +66,14 @@ public class ButtonManager : MonoBehaviour {
 		}
 	}
 
-	public void poseEstimationDropdown()
-	{
-		/*switch(actions[index]){
-		case "Throw": objects = new List<string>() {"Select Object","Ball"}; break;
-		case "Spawn": objects = new List<string>() { "Select Object", "Brick", "Wall", "Cube","Ball" };break;
-		case "Fire": objects = new List<string>() { "Select Object", "Brick", "Wall", "Cube","Ball" };break;
-		case "Remove": objects = new List<string>() { "Select Object", "Brick", "Wall", "Cube","Ball" };break;
-		}
-		objectDropdown.ClearOptions();
-		objectDropdown.AddOptions(objects);*/
-	}
+	void OnMouseDown()
+    {
+        
+    }
 
-	public void populatePoseEstimationDropdown() {
-		
-
-	}
+	void OnMouseUp()
+    {
+        
+    }
 
 }
