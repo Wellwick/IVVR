@@ -47,7 +47,6 @@ public class NetworkManager : MonoBehaviour {
     public bool isHost = true;
 	private bool networkInitialised = false;
     private int clientsConnected = 0;
-    private int[] clientIds;
 
     private int hostId;
 
@@ -75,9 +74,6 @@ public class NetworkManager : MonoBehaviour {
     #region Start
 
 	void Start () {
-        if(isHost){
-            clientIds = new int[MAX_CONNECTIONS];
-        }
 
         if (!networkInitialised){
             NetworkTransport.Init();
@@ -125,8 +121,6 @@ public class NetworkManager : MonoBehaviour {
                     Debug.Log("Connection request from id: " + connectionId + " Received");
                     if(isHost){
                         HandleConnect(connectionId);
-                        GameObject player = Instantiate(playerModel, new Vector3(0,0,0), new Quaternion(0,0,0,0));
-                        ARPLayers.Add(connectionId, player);
                     }else{
                         InvokeRepeating("SendEnemyDamage", 0.1f, 0.1f);
                     }
@@ -244,8 +238,8 @@ public class NetworkManager : MonoBehaviour {
         int assetIdNum;
         spawnAssets.TryGetValue(assetId, out assetIdNum);
         encoder.addSerial((byte)MessageIdentity.Type.Spawn, objectId, assetIdNum, gameObject.transform);
-        foreach(int id in clientIds){
-            NetworkTransport.Send(socketId, id, myReliableChannelId, encoder.getArray(), 50, out error2);
+        foreach(KeyValuePair<int, GameObject> kvp in ARPLayers){
+            NetworkTransport.Send(socketId, kvp.Key, myReliableChannelId, encoder.getArray(), 50, out error2);
         }
     }
 
@@ -253,8 +247,8 @@ public class NetworkManager : MonoBehaviour {
         byte error2;
         DemoCoder encoder = new DemoCoder(50);
         encoder.addSerial((byte)MessageIdentity.Type.Remove, objectId, -2, null);
-        foreach(int id in clientIds){
-            NetworkTransport.Send(socketId, id, myReliableChannelId, encoder.getArray(), 50, out error2);
+        foreach(KeyValuePair<int, GameObject> kvp in ARPLayers){
+            NetworkTransport.Send(socketId, kvp.Key, myReliableChannelId, encoder.getArray(), 50, out error2);
         }
     }
 
@@ -288,8 +282,8 @@ public class NetworkManager : MonoBehaviour {
             }
 
             byte error3;
-            foreach(int clientId in clientIds){
-                NetworkTransport.Send(socketId, clientId, myUpdateChannelId, encoder.getArray(), 1024, out error3);
+            foreach(KeyValuePair<int, GameObject> kvp in ARPLayers){
+                NetworkTransport.Send(socketId, kvp.Key, myUpdateChannelId, encoder.getArray(), 1024, out error3);
             }
         }
     }
@@ -307,7 +301,9 @@ public class NetworkManager : MonoBehaviour {
         NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
     }
 
+    
     public void SendARUpdate(){
+        //method for sending AR information to VR
         DemoCoder encoder = new DemoCoder(1024);
         encoder.addARUpdate((byte)MessageIdentity.Type.ARUpdateVR, (byte)Beam.type, NetworkInterface.GetCameraTransform());
         byte error;
@@ -319,10 +315,10 @@ public class NetworkManager : MonoBehaviour {
             DemoCoder encoder = new DemoCoder(1024);
             encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
             // TODO need to send other client pos and beams to AR clients
-            foreach(int client in clientIds){
-                Debug.Log("Sending Tracker info to client " + client);
+            foreach(KeyValuePair<int, GameObject> kvp in ARPLayers){
+                Debug.Log("Sending Tracker info to client " + kvp.Key);
                 byte error;
-                NetworkTransport.Send(socketId, client, myStateChannelId, encoder.getArray(), 1024, out error);
+                NetworkTransport.Send(socketId, kvp.Key, myStateChannelId, encoder.getArray(), 1024, out error);
             }
         }
         
@@ -342,8 +338,9 @@ public class NetworkManager : MonoBehaviour {
     }
     public bool HandleConnect(int connectionId){
         //these first 2 lines need rectifying due to obvious errors
-        clientIds[clientsConnected] = connectionId;
         clientsConnected++;
+        GameObject player = Instantiate(playerModel, new Vector3(0,0,0), new Quaternion(0,0,0,0));
+        ARPLayers.Add(connectionId, player);
         byte error2;
         DemoCoder encoder = new DemoCoder(1024);
         NetworkIdentity[] networkIdentities = getNetworkIdentities();
