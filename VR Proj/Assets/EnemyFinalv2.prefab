@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 114323360752673294}
   - component: {fileID: 195713421857957688}
   - component: {fileID: 114236459665005636}
+  - component: {fileID: 114691505207033806}
   m_Layer: 0
   m_Name: EnemyFinalv2
   m_TagString: Untagged
@@ -220,13 +221,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b09620e6d4a843be93d4fe7a509741d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 10000
   currentHealth: 0
   transientHealthLoss: 0
   cloak: {fileID: 1350328022826760}
   drops:
   - {fileID: 1264658304390636, guid: 594217b9766fe4f94809cdd2bfe211ee, type: 2}
   - {fileID: 1043478055916494, guid: 91d455f8c22b4440c9ff7659e81be181, type: 2}
+--- !u!114 &114691505207033806
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1044776250913772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4172b5465a45754ea3024909bfdb110, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &136153948660228188
 CapsuleCollider:
   m_ObjectHideFlags: 1
