@@ -100,7 +100,7 @@ public class NetworkManager : MonoBehaviour {
     #region Update
 	void Update () {
 
-        if (isConnection())
+        if (networkInitialised)
         {
             int recHostId;
             int connectionId;
