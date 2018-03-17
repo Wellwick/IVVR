@@ -40,14 +40,14 @@ MonoBehaviour:
     y: 621
     width: 1920
     height: 387
-  m_MinSize: {x: 100, y: 121}
-  m_MaxSize: {x: 4000, y: 4021}
-  m_ActualView: {fileID: 17}
+  m_MinSize: {x: 230, y: 271}
+  m_MaxSize: {x: 10000, y: 10021}
+  m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}
   - {fileID: 17}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -68,10 +68,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 1008
-  m_MinSize: {x: 683, y: 342}
-  m_MaxSize: {x: 12008, y: 8042}
+  m_MinSize: {x: 683, y: 492}
+  m_MaxSize: {x: 12008, y: 14042}
   vertical: 1
-  controlID: 25
+  controlID: 50
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_MinSize: {x: 683, y: 221}
   m_MaxSize: {x: 12008, y: 4021}
   vertical: 0
-  controlID: 26
+  controlID: 51
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -347,7 +347,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: f4270000
     m_LastClickedID: 10228
-    m_ExpandedIDs: 00000000d8270000fe270000d22800000c290000222e0000242e0000262e0000282e00002a2e00002c2e00002e2e0000
+    m_ExpandedIDs: 00000000ce270000f4270000c828000002290000222e0000242e0000262e0000282e00002a2e00002c2e00002e2e000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -375,7 +375,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000d8270000fe270000d22800000c290000222e0000242e0000262e0000282e00002a2e00002c2e00002e2e0000
+    m_ExpandedIDs: 00000000ce270000f4270000c828000002290000222e0000242e0000262e0000282e00002a2e00002c2e00002e2e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -400,8 +400,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 98080000
-    m_LastClickedInstanceID: 2200
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000e8280000022b0000ac280000f8280000e82d000056280000982a000046280000b028000000000000
     m_RenameOverlay:
@@ -458,9 +458,9 @@ MonoBehaviour:
     height: 600
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
-    m_ExpandedIDs: 28f6ffffa0fbffff00000000
+    m_SelectedIDs: 86faffff
+    m_LastClickedID: -1402
+    m_ExpandedIDs: 86faffffa6fbffff00000000dc2a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

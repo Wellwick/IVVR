@@ -62,7 +62,6 @@
      <Compile Include="Assets\Scripts\NetworkIdentity.cs" />
      <Compile Include="Assets\Scripts\NetworkInterface.cs" />
      <Compile Include="Assets\Scripts\NetworkManager.cs" />
-     <Compile Include="Assets\Scripts\PH2.cs" />
      <Compile Include="Assets\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\Rune.cs" />
      <Compile Include="Assets\Scripts\Shooting.cs" />
