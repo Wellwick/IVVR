@@ -4,19 +4,12 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour {
 
-	//public GameObject beamPrefab;
 	public GameObject beamDamage;
 	public GameObject beamHealing;
-
-	private Camera m_camera;
-	private Vector3 rayOffset;
-
 
 
 	// Use this for initialization
 	void Start () {
-		rayOffset = new Vector3 (0.0f, -0.2f, 0.0f);
-		m_camera = Camera.main;
 
 	}
 
@@ -24,15 +17,26 @@ public class Shooting : MonoBehaviour {
 		
 	}
 
-	public void damage() {
+	public void StartDamage() {
 
-		beamDamage.GetComponent<Beam>().Shoot();
+		beamDamage.GetComponent<Beam>().StartEmitting();
 
 	}
 
-	public void heal() {
+	public void StartHeal() {
 		
-		beamHealing.GetComponent<Beam>().Shoot();
+		beamHealing.GetComponent<Beam>().StartEmitting();
+
+	}
+	public void StopDamage() {
+
+		beamDamage.GetComponent<Beam>().StopEmitting();
+
+	}
+
+	public void StopHeal() {
+		
+		beamHealing.GetComponent<Beam>().StopEmitting();
 
 	}
 }

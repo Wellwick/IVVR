@@ -736,7 +736,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 198327860}
-  - component: {fileID: 198327859}
   m_Layer: 0
   m_Name: GameLogic
   m_TagString: Untagged
@@ -744,19 +743,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &198327859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 198327858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: defd081af66c54f7ab21508e0096b2de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  beamDamage: {fileID: 868404920}
-  beamHealing: {fileID: 2144854947}
 --- !u!4 &198327860
 Transform:
   m_ObjectHideFlags: 0
@@ -1703,6 +1689,7 @@ GameObject:
   - component: {fileID: 664526191}
   - component: {fileID: 664526190}
   - component: {fileID: 664526189}
+  - component: {fileID: 664526192}
   m_Layer: 5
   m_Name: Shoot-Healing-Beam-Button
   m_TagString: Untagged
@@ -1767,18 +1754,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 664526190}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 198327859}
-        m_MethodName: heal
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &664526190
@@ -1814,6 +1790,53 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 664526187}
+--- !u!114 &664526192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 664526187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2144854950}
+          m_MethodName: StartEmitting
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 1
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2144854950}
+          m_MethodName: StopEmitting
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 1
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1 &665472829
 GameObject:
   m_ObjectHideFlags: 0
@@ -2178,11 +2201,12 @@ GameObject:
   m_PrefabParentObject: {fileID: 1407286254977720, guid: b52b85b45bbd84f7690dcd3045f117f3,
     type: 2}
   m_PrefabInternal: {fileID: 150816829}
---- !u!1 &868404920 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1723740241099984, guid: 0e6164f8c4584422695256fa5eaa8ee6,
+--- !u!114 &868404921 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114503338119301448, guid: 0e6164f8c4584422695256fa5eaa8ee6,
     type: 2}
   m_PrefabInternal: {fileID: 218777437}
+  m_Script: {fileID: 11500000, guid: eb7671ce346154ea49b2d288aa11a0ed, type: 3}
 --- !u!4 &868404926 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4432431557949490, guid: 0e6164f8c4584422695256fa5eaa8ee6,
@@ -3815,6 +3839,7 @@ GameObject:
   - component: {fileID: 1582022899}
   - component: {fileID: 1582022898}
   - component: {fileID: 1582022897}
+  - component: {fileID: 1582022900}
   m_Layer: 5
   m_Name: Shoot-Damage-Beam-Button
   m_TagString: Untagged
@@ -3879,18 +3904,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1582022898}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 198327859}
-        m_MethodName: damage
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1582022898
@@ -3926,6 +3940,53 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1582022895}
+--- !u!114 &1582022900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1582022895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 868404921}
+          m_MethodName: StartEmitting
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 1
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 868404921}
+          m_MethodName: StopEmitting
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 1
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1 &1588638435
 GameObject:
   m_ObjectHideFlags: 0
@@ -5368,11 +5429,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34bfa92f7670741c8851c622bc2527d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &2144854947 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1027957985274658, guid: 256f3b0fac7ec4fcdafdde42c29c95aa,
+--- !u!114 &2144854950 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114516427737024126, guid: 256f3b0fac7ec4fcdafdde42c29c95aa,
     type: 2}
   m_PrefabInternal: {fileID: 515791889}
+  m_Script: {fileID: 11500000, guid: eb7671ce346154ea49b2d288aa11a0ed, type: 3}
 --- !u!4 &2144854953 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4063339330291996, guid: 256f3b0fac7ec4fcdafdde42c29c95aa,
