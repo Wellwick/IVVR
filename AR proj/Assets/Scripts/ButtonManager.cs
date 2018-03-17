@@ -50,6 +50,9 @@ public class ButtonManager : MonoBehaviour {
 	public void poseEstimationDropdownIndexChange()
 	{
 		int index = poseEstimationDropdownObject.GetComponent<Dropdown> ().value;
+		
+		Debug.Log("Changing pose estimation method");
+
 		switch (index) {
 		case 0:
 			ARCameraManager.tracking = TrackingType.ARKit;

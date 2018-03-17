@@ -454,7 +454,7 @@ public class NetworkManager : MonoBehaviour {
     }
 
     private void HandleVREyeUpdate(int health, Vector3 pos){
-        pos.y = pos.y + 0.2;
+        pos.y = pos.y + 0.2f;
         PlayerHealth player = GameObject.FindObjectOfType<PlayerHealth>();
         player.gameObject.transform.position = pos;
         player.currentHealth = health;
