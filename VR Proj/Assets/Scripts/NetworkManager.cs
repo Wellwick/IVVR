@@ -362,11 +362,6 @@ public class NetworkManager : MonoBehaviour {
         ARPlayers.TryGetValue(connectionId, out player);
         player.Destroy();
         ARPlayers.Remove(connectionId);
-        if(!isConnection()){
-            
-        }
-        
-
     }
 
     private void HandleClientSpawn(int assetId, int objectId, Vector3 pos, Quaternion rot, Vector3 vel){
