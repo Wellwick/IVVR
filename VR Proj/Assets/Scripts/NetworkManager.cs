@@ -57,7 +57,7 @@ public class NetworkManager : MonoBehaviour {
     public Dictionary<int, GameObject> watchList = new Dictionary<int, GameObject>();
     public Dictionary<String, int> spawnAssets = new Dictionary<String, int>();
     public Dictionary<int, GameObject> networkedObjects = new Dictionary<int, GameObject>();
-    public Dictionary<int, GameObject> ARPLayers = new Dictionary<int, GameObject>();
+    public Dictionary<int, GameObject> ARPlayers = new Dictionary<int, GameObject>();
 
 
     #endregion
@@ -98,7 +98,7 @@ public class NetworkManager : MonoBehaviour {
     #region Update
 	void Update () {
 
-        if (networkInitialised)
+        if (isConnection())
         {
             int recHostId;
             int connectionId;
@@ -163,8 +163,7 @@ public class NetworkManager : MonoBehaviour {
                     }
                     break;
                 case NetworkEventType.DisconnectEvent: //AR disconnects
-                    clientsConnected--;
-                    networkInitialised = false;
+                    HandleClientDisconnect(connectionId);
 					Debug.Log("Disconnect Received");
                     break;
             }
@@ -238,7 +237,7 @@ public class NetworkManager : MonoBehaviour {
         int assetIdNum;
         spawnAssets.TryGetValue(assetId, out assetIdNum);
         encoder.addSerial((byte)MessageIdentity.Type.Spawn, objectId, assetIdNum, gameObject.transform);
-        foreach(KeyValuePair<int, GameObject> kvp in ARPLayers){
+        foreach(KeyValuePair<int, GameObject> kvp in ARPlayers){
             NetworkTransport.Send(socketId, kvp.Key, myReliableChannelId, encoder.getArray(), 50, out error2);
         }
     }
@@ -247,7 +246,7 @@ public class NetworkManager : MonoBehaviour {
         byte error2;
         DemoCoder encoder = new DemoCoder(50);
         encoder.addSerial((byte)MessageIdentity.Type.Remove, objectId, -2, null);
-        foreach(KeyValuePair<int, GameObject> kvp in ARPLayers){
+        foreach(KeyValuePair<int, GameObject> kvp in ARPlayers){
             NetworkTransport.Send(socketId, kvp.Key, myReliableChannelId, encoder.getArray(), 50, out error2);
         }
     }
@@ -282,7 +281,7 @@ public class NetworkManager : MonoBehaviour {
             }
 
             byte error3;
-            foreach(KeyValuePair<int, GameObject> kvp in ARPLayers){
+            foreach(KeyValuePair<int, GameObject> kvp in ARPlayers){
                 NetworkTransport.Send(socketId, kvp.Key, myUpdateChannelId, encoder.getArray(), 1024, out error3);
             }
         }
@@ -315,7 +314,7 @@ public class NetworkManager : MonoBehaviour {
             DemoCoder encoder = new DemoCoder(1024);
             encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
             // TODO need to send other client pos and beams to AR clients
-            foreach(KeyValuePair<int, GameObject> kvp in ARPLayers){
+            foreach(KeyValuePair<int, GameObject> kvp in ARPlayers){
                 Debug.Log("Sending Tracker info to client " + kvp.Key);
                 byte error;
                 NetworkTransport.Send(socketId, kvp.Key, myStateChannelId, encoder.getArray(), 1024, out error);
@@ -340,7 +339,7 @@ public class NetworkManager : MonoBehaviour {
         //these first 2 lines need rectifying due to obvious errors
         clientsConnected++;
         GameObject player = Instantiate(playerModel, new Vector3(0,0,0), new Quaternion(0,0,0,0));
-        ARPLayers.Add(connectionId, player);
+        ARPlayers.Add(connectionId, player);
         byte error2;
         DemoCoder encoder = new DemoCoder(1024);
         NetworkIdentity[] networkIdentities = getNetworkIdentities();
@@ -355,6 +354,19 @@ public class NetworkManager : MonoBehaviour {
         }
         NetworkTransport.Send(socketId, connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
         return true;
+    }
+
+    public bool HandleClientDisconnect(int connectionId){
+        GameObject player;
+        clientsConnected--;
+        ARPlayers.TryGetValue(connectionId, out player);
+        player.Destroy();
+        ARPlayers.Remove(connectionId);
+        if(!isConnection()){
+            
+        }
+        
+
     }
 
     private void HandleClientSpawn(int assetId, int objectId, Vector3 pos, Quaternion rot, Vector3 vel){
@@ -419,7 +431,7 @@ public class NetworkManager : MonoBehaviour {
 
     private void HandleARUpdateVR(int clientId, Vector3 pos, Quaternion rot){
         GameObject gameObject;
-        ARPLayers.TryGetValue(clientId, out gameObject);
+        ARPlayers.TryGetValue(clientId, out gameObject);
         gameObject.transform.position = pos;
         gameObject.transform.rotation = rot;
     }
