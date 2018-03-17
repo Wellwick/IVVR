@@ -31,6 +31,7 @@ public class UnityARCameraManager : MonoBehaviour {
 	//public bool htcTrackerOffsetEnabled = true;
 
 	
+	
 	public TrackingType tracking;
 
 	//These may be used later if camera control (setting position and rotation equal to the tracker infromation) is done through this class
@@ -53,10 +54,10 @@ public class UnityARCameraManager : MonoBehaviour {
 #if !UNITY_EDITOR
 		Application.targetFrameRate = 60;
         ARKitWorldTrackingSessionConfiguration config = new ARKitWorldTrackingSessionConfiguration();
-		config.planeDetection = planeDetection;
-		config.alignment = startAlignment;
-		config.getPointCloudData = getPointCloud;
-		config.enableLightEstimation = enableLightEstimation;
+		//config.planeDetection = planeDetection;
+		//config.startAlignment = false;
+		//config.getPointCloudData = false;
+		//config.enableLightEstimation = false;
         m_session.RunWithConfig(config);
 
 		if (m_camera == null) {

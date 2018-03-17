@@ -6,6 +6,7 @@ public class EnemyManager : MonoBehaviour
 {
 	//public PlayerHealth playerHealth;     // Reference to the player's heatlh
 	public GameObject Enemy;                // The enemy prefab to be spawned
+	public GameObject camera;
 	public float spawnTime = 50f;           // How long between each spawn
 	public int enemyCount;
 	public int maxEnemies = 10;
@@ -33,6 +34,7 @@ public class EnemyManager : MonoBehaviour
 	
 		GameObject go = (GameObject)Instantiate (Enemy, loc, rot);
 		NavMeshAgent agent = go.GetComponent<NavMeshAgent> ();
+		go.GetComponent<MoveTo>().goal = camera.transform;
 		agent.Warp (loc);
 		enemyCount++;
 	}

@@ -52,6 +52,12 @@ public class DemoCoder : Coder {
         addSerial(type, runes.Length, value, transform);
     }
 
+    public void addVREyeUpdate(Transform transform) {
+        byte type = (byte)NetworkManager.MessageIdentity.Type.VREyeUpdate;
+        // Do not need to transform an assetId or id
+        addSerial(type, -1, -1, transform);
+    }
+
     public int GetShootEnum(int index) {
         return GetAssetID(index);
     }
@@ -88,6 +94,10 @@ public class DemoCoder : Coder {
             }
         }
         return runes;
+    }
+
+    public Vector3 getVREyeTransform(int index) {
+        return GetPosition(index);
     }
 
 }
