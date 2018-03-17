@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Grappler : MonoBehaviour {
 
-	private SteamVR_TrackedObject trackedObj;
+	private SteamVR_TrackedController trackedObj;
 	public GameObject grapplePrefab;
 	private GameObject grapple;
 	private Transform grappleTransform;
@@ -61,11 +61,11 @@ public class Grappler : MonoBehaviour {
 	}
 
 	private SteamVR_Controller.Device Controller {
-		get { return SteamVR_Controller.Input((int)trackedObj.index); }
+		get { return SteamVR_Controller.Input((int)trackedObj.controllerIndex); }
 	}
 
 	void Awake() {
-		trackedObj = GetComponent<SteamVR_TrackedObject>();
+		trackedObj = GetComponent<SteamVR_TrackedController>();
 	}
 
 	private void ShowGrapple(RaycastHit hit) {

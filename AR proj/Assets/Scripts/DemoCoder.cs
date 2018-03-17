@@ -50,10 +50,11 @@ public class DemoCoder : Coder {
         addSerial(type, -1, value, transform);
     }
 
-    public void addVREyeUpdate(Transform transform) {
+    public void addVREyeUpdate(int health, Transform transform) {
         byte type = (byte)NetworkManager.MessageIdentity.Type.VREyeUpdate;
-        // Do not need to transform an assetId or id
-        addSerial(type, -1, -1, transform);
+        // Do not need id
+        // Use assetId as health
+        addSerial(type, -1, health, transform);
     }
 
     public int GetShootEnum(int index) {
@@ -96,6 +97,10 @@ public class DemoCoder : Coder {
 
     public Vector3 getVREyeTransform(int index) {
         return GetPosition(index);
+    }
+
+    public int getVRHealth(int index) {
+        return GetAssetID(index);
     }
 
 }
