@@ -380,7 +380,7 @@ public class NetworkManager : MonoBehaviour {
     private void HandleClientSpawn(int assetId, int objectId, Vector3 pos, Quaternion rot, Vector3 vel){
         GameObject instance = Instantiate(spawnables[assetId], pos, rot);
         if(!isHost){
-            instance.GetComponent<NetworkIdentity>().setObjectId(objectId);
+            instance.GetComponent<NetworkIdentity>().OnCreate(objectId);
         }
 
     }

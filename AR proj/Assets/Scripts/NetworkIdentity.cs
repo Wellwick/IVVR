@@ -36,9 +36,7 @@ public class NetworkIdentity : MonoBehaviour {
 			if(networkManager.isConnection()){
 				networkManager.SendSpawn(gameObject);
 			}
-		} else {
-			networkManager.networkedObjects.Add(objectId, gameObject);
-		}
+		} 
 
 	}
 
@@ -82,6 +80,11 @@ public class NetworkIdentity : MonoBehaviour {
 
 	public void setObjectId(int id){
 		objectId = id;
+	}
+
+	public void OnCreate(int id){
+		objectId = id;
+		networkManager.networkedObjects.Add(objectId, gameObject);
 	}
 
 }
