@@ -418,19 +418,21 @@ public class NetworkManager : MonoBehaviour {
         }else{
             GameObject instance;
 			int id = decoder.GetID (index);
-            networkedObjects.TryGetValue (id, out instance);
-            EnemyHealth eh = instance.GetComponent<EnemyHealth>();
-            if (eh != null) {
-                //keeps track of networked and local at the same time
-                int currentHealth = eh.GetHealth();
-				int networkedHealth = decoder.GetEnemyHealth(index) - eh.transientHealthLoss;
-                //don't reset transient, since this may still need to be transmitted
-                eh.SetHealth(Math.Min(currentHealth, networkedHealth));
-            } else {
-                Debug.LogError("Couldn't find enemy health tracking from network id" + id);
+            if(networkedObjects.TryGetValue(id, out instance)){
+                EnemyHealth eh = instance.GetComponent<EnemyHealth>();
+                if (eh != null) {
+                    //keeps track of networked and local at the same time
+                    int currentHealth = eh.GetHealth();
+                    int networkedHealth = decoder.GetEnemyHealth(index) - eh.transientHealthLoss;
+                    //don't reset transient, since this may still need to be transmitted
+                    eh.SetHealth(Math.Min(currentHealth, networkedHealth));
+                } else {
+                    Debug.LogError("Couldn't find enemy health tracking from network id" + id);
+                }
+                instance.transform.position = decoder.GetPosition(index);
+                instance.transform.rotation = decoder.GetRotation(index);
             }
-			instance.transform.position = decoder.GetPosition(index);
-			instance.transform.rotation = decoder.GetRotation(index);
+           
         }
 
     }
@@ -483,12 +485,14 @@ public class NetworkManager : MonoBehaviour {
         }
     }
 
-    #endregion
+    
 
     public enum beamType : byte {
 		None = 0,
 		Damage = 1,
 		Heal = 2
 	}
+
+    #endregion
 
 }
