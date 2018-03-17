@@ -166,7 +166,7 @@ public class NetworkManager : MonoBehaviour {
 								HandleVRUpdateAR (decoder.GetPosition(i), decoder.GetRotation(i));
 								break;
                             case (byte)MessageIdentity.Type.VREyeUpdate:
-                                HandleVREyeUpdate(decoder.GetPosition(i));
+                                HandleVREyeUpdate(decoder.GetVRHealth(i), decoder.GetPosition(i));
                                 break;
 
                         }
@@ -454,10 +454,11 @@ public class NetworkManager : MonoBehaviour {
         NetworkInterface.UpdateTrackerPose(pos, rot);
     }
 
-    private void HandleVREyeUpdate(Vector3 pos){
-        pos.y = pos.y + 0.2;
+    private void HandleVREyeUpdate(int health, Vector3 pos){
+        pos.y = pos.y + 0.2f;
         PlayerHealth player = GameObject.FindObjectOfType<PlayerHealth>();
         player.gameObject.transform.position = pos;
+        player.currentHealth = health;
     }
 
     #endregion

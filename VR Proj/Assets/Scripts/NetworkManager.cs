@@ -317,7 +317,7 @@ public class NetworkManager : MonoBehaviour {
             encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
             // TODO need to send other client pos and beams to AR clients
         }
-        encoder.addVREyeUpdate(VREye.transform);
+        encoder.addVREyeUpdate(VREye.GetComponent<PlayerHealth>().currentHealth, VREye.transform);
 
         foreach(KeyValuePair<int, GameObject> kvp in ARPlayers){
             Debug.Log("Sending Tracker info to client " + kvp.Key);
