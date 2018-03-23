@@ -35,6 +35,7 @@ public class EnemyManager : MonoBehaviour
 	
 		GameObject go = (GameObject)Instantiate (Enemy, loc, rot);
 		NavMeshAgent agent = go.GetComponent<NavMeshAgent> ();
+		go.GetComponent<MoveTo>().healthSprite = healthSprite;
 		go.GetComponent<MoveTo>().goal = camera.transform;
 		agent.Warp (loc);
 		enemyCount++;
@@ -42,7 +43,8 @@ public class EnemyManager : MonoBehaviour
 
 	void Update ()
 	{
-		healthSprite.GetComponent<SpriteRenderer>().color = calculateSpriteColor();
+		// If an enemy is in range of the player then cause damage
+		// This is done in the MoveTo script
 	}
 
 	Vector3 calculateSpawn() {
@@ -80,13 +82,13 @@ public class EnemyManager : MonoBehaviour
 			float percentage = 1.0f -(float)(ph.currentHealth-halfHealth) / halfHealth;
 			float red = 255.0f*percentage;
 			Debug.Log("Red Percentage: " + percentage + ", this is " + red);
-			return new Color(red, 255.0f, 0.0f);
+			return new Color(percentage, 1.0f, 0.0f);
 		} else {
 			// Aiming for maximum red, green in range
 			float percentage = (float)ph.currentHealth / halfHealth;
 			float green = 255.0f*percentage;
 			Debug.Log("Green Percentage: " + percentage + ", this is " + green);
-			return new Color(255.0f, green, 0.0f);
+			return new Color(1.0f, percentage, 0.0f);
 		}
 	}
 
