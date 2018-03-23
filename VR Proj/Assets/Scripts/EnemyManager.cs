@@ -74,20 +74,15 @@ public class EnemyManager : MonoBehaviour
 	}
 
 	// Works out what colour the particle is that is leaving the player
-	Color calculateSpriteColor() {
-		PlayerHealth ph = camera.GetComponent<PlayerHealth>();
+	public static Color calculateSpriteColor(PlayerHealth ph) {
 		float halfHealth = (float)ph.maxHealth/2.0f;
 		if (ph.currentHealth > halfHealth) {
 			// We want maximum green and red in a range
-			float percentage = 1.0f -(float)(ph.currentHealth-halfHealth) / halfHealth;
-			float red = 255.0f*percentage;
-			Debug.Log("Red Percentage: " + percentage + ", this is " + red);
+			float percentage = 1.0f - (float)(ph.currentHealth-halfHealth) / halfHealth;
 			return new Color(percentage, 1.0f, 0.0f);
 		} else {
 			// Aiming for maximum red, green in range
 			float percentage = (float)ph.currentHealth / halfHealth;
-			float green = 255.0f*percentage;
-			Debug.Log("Green Percentage: " + percentage + ", this is " + green);
 			return new Color(1.0f, percentage, 0.0f);
 		}
 	}

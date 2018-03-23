@@ -30,6 +30,8 @@ public class MoveTo : MonoBehaviour {
 			ph.currentHealth -= 1;
 			// Spawn the sprite and have it come to enemy
 			GameObject sprite = GameObject.Instantiate(healthSprite, goal.position, goal.rotation);
+			sprite.GetComponent<SpriteRenderer>().color = EnemyManager.calculateSpriteColor(ph);
+			damageTimer = 1.0f;
 		}
 	}
 	
