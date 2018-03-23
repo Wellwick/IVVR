@@ -7,6 +7,7 @@ public class EnemyManager : MonoBehaviour
 	//public PlayerHealth playerHealth;     // Reference to the player's heatlh
 	public GameObject Enemy;                // The enemy prefab to be spawned
 	public GameObject camera;
+	public GameObject healthSprite;
 	public float spawnTime = 50f;           // How long between each spawn
 	public int enemyCount;
 	public int maxEnemies = 10;
@@ -39,6 +40,11 @@ public class EnemyManager : MonoBehaviour
 		enemyCount++;
 	}
 
+	void Update ()
+	{
+		healthSprite.GetComponent<SpriteRenderer>().color = calculateSpriteColor();
+	}
+
 	Vector3 calculateSpawn() {
 		int section = Random.Range(0,2);
 		float xLoc = 238.0f;
@@ -63,6 +69,25 @@ public class EnemyManager : MonoBehaviour
 		if (NavMesh.SamplePosition (loc, out hit, range, NavMesh.AllAreas)) loc = hit.position;
 		else Debug.Log (loc);
 		return loc;
+	}
+
+	// Works out what colour the particle is that is leaving the player
+	Color calculateSpriteColor() {
+		PlayerHealth ph = camera.GetComponent<PlayerHealth>();
+		float halfHealth = (float)ph.maxHealth/2.0f;
+		if (ph.currentHealth > halfHealth) {
+			// We want maximum green and red in a range
+			float percentage = 1.0f -(float)(ph.currentHealth-halfHealth) / halfHealth;
+			float red = 255.0f*percentage;
+			Debug.Log("Red Percentage: " + percentage + ", this is " + red);
+			return new Color(red, 255.0f, 0.0f);
+		} else {
+			// Aiming for maximum red, green in range
+			float percentage = (float)ph.currentHealth / halfHealth;
+			float green = 255.0f*percentage;
+			Debug.Log("Green Percentage: " + percentage + ", this is " + green);
+			return new Color(255.0f, green, 0.0f);
+		}
 	}
 
 }

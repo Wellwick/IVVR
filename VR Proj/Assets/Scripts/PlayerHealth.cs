@@ -71,13 +71,13 @@ public class PlayerHealth : MonoBehaviour
         indicatorMaterial.SetFloat("_Cutoff", 1f - (float)currentHealth / (float)maxHealth);
         indicatorMaterialinv.SetFloat("_Cutoff", (float)currentHealth / (float)maxHealth);
         //Take the right controllers position and offset to be just to the left hand side of it
-        gameObject.transform.position = trackObject.transform.position + 
+        Indicator.transform.position = trackObject.transform.position + 
             (trackObject.transform.right * -0.1f) + 
             (trackObject.transform.up * 0.03f) + 
             (trackObject.transform.forward * -0.05f);
         //Rotate positon so it's in parallel with the controller
-        gameObject.transform.rotation = trackObject.transform.rotation;
-        gameObject.transform.Rotate(0.0f, 90.0f, 0.0f);
+        Indicator.transform.rotation = trackObject.transform.rotation;
+        Indicator.transform.Rotate(0.0f, 90.0f, 0.0f);
     }
 
     void Death()
