@@ -8,6 +8,7 @@ public class PlayerHealth : MonoBehaviour
     // Use this for initialization
     public int maxHealth = 100;
     public int currentHealth;
+    public int transientHealthGain = 0;
 
     //green part
     public GameObject healthIndicator;
@@ -62,6 +63,12 @@ public class PlayerHealth : MonoBehaviour
         indicatorMaterialinv.SetFloat("_cutoff", ((float)currentHealth / (float)maxHealth));
     }
 
+    public void Heal(int damage) 
+    {
+        //colour will change on update anyway
+        currentHealth += damage;
+        transientHealthGain += damage;
+    }
 
     // Update is called once per frame
     void Update()
