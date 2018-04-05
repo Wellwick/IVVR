@@ -35,11 +35,15 @@ public class NetworkManager : MonoBehaviour {
 	private int myUnreliableChannelId;
 	private int myUpdateChannelId;
     private int myStateChannelId;
+    private int myPingChannelId
 
     [Header("VR")]
 	public GameObject leftController;
 	public GameObject rightController;
     public GameObject tracker;
+
+    [Header("Debug")]
+    public bool showPing = false;
 
     #endregion
 
@@ -51,6 +55,8 @@ public class NetworkManager : MonoBehaviour {
     private int clientsConnected = 0;
 
     private int hostId;
+    private bool pingSent = false;
+    private float pingTime = Time.time;
 
     #endregion
 
@@ -83,6 +89,7 @@ public class NetworkManager : MonoBehaviour {
             ConnectionConfig config = new ConnectionConfig();
             config.SendDelay = 0;
             myReliableChannelId = config.AddChannel(QosType.Reliable);
+            myPingChannelId = config.AddChannel(QosType.Reliable);
             myUpdateChannelId = config.AddChannel(QosType.StateUpdate);
             myStateChannelId = config.AddChannel(QosType.StateUpdate);
             HostTopology topology = new HostTopology(config, MAX_CONNECTIONS);
@@ -110,6 +117,13 @@ public class NetworkManager : MonoBehaviour {
             int dataSize;
             byte error;
             NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
+            if(channelId == myPingChannelId){
+                if(pingSent){
+                    Dubug.Log(pingTime - Time.time);
+                    pingTime = Time.time;
+                }
+                SendPing();
+            }
             switch (recData)
             {
                 case NetworkEventType.Nothing:
@@ -121,6 +135,7 @@ public class NetworkManager : MonoBehaviour {
                     break;
                 case NetworkEventType.ConnectEvent: //AR connects
                     Debug.Log("Connection request from id: " + connectionId + " Received");
+                    if 
                     if(isHost){
                         HandleConnect(connectionId);
                     }else{
@@ -332,6 +347,12 @@ public class NetworkManager : MonoBehaviour {
         
     }
 
+    private void SendPing(){
+        byte error;
+        NetworkTransport.Send(socketId, connectionId, myPingChannelId, [0], 1, out error);
+        pingSent = true;
+    }
+
     #endregion
 
     #region Handler Functions
@@ -482,16 +503,18 @@ public class NetworkManager : MonoBehaviour {
             VRUpdateAR = 7,
             HealPlayer = 8,
             GeneralUpdate = 9,
-            VREyeUpdate = 10
+            VREyeUpdate = 10,
+            Ping = 11
         }
     }
 
-    #endregion
 
     public enum beamType : byte {
 		None = 0,
 		Damage = 1,
 		Heal = 2
 	}
+
+    #endregion
 
 }
