@@ -21,8 +21,10 @@ public class MoveTo : MonoBehaviour {
 
 
 		if (damageTimer > 0.0f) damageTimer -= Time.deltaTime;
+		Vector3 currentPos = new Vector3(transform.position.x, 0.0f, transform.position.z);
+		Vector3 goalPos = new Vector3(goal.position.x, 0.0f, goal.position.z);
 
-		float dist = Vector3.Distance(transform.position, goal.position);
+		float dist = Vector3.Distance(currentPos, goalPos);
 		// Example distance is 2 units
 		// Damage the enemy if the damage timer is back below 0
 		if (dist < 2.0f && damageTimer <= 0.0f) {
