@@ -15,7 +15,7 @@ using System.Threading;
 
 public class NetworkIdentity : MonoBehaviour {
 
-	public static int objectCount;
+	public static int objectCount = 0;
 	private int objectId;
 	private bool watched = false;
 	private Vector3 previousPos;
@@ -28,8 +28,8 @@ public class NetworkIdentity : MonoBehaviour {
 		networkManager = GameObject.FindObjectOfType<NetworkManager>();
 		if(networkManager.isHost){
 			//Debug.Log("This objects id is " + objectId);
-			Interlocked.Increment(ref objectCount);
 			objectId = objectCount;
+			Interlocked.Increment(ref objectCount);
 			previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 			previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
 			networkManager.networkedObjects.Add(objectId, gameObject);
