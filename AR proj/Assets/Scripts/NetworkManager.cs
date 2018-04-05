@@ -100,7 +100,6 @@ public class NetworkManager : MonoBehaviour {
             Debug.Log("Socket ID: " + socketId);
             networkInitialised = true;/* TODO For the time being! */
         }
-
         //initialise timer
 	}
 
@@ -122,10 +121,10 @@ public class NetworkManager : MonoBehaviour {
             NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
             if(channelId == myPingChannelId){
                 if(pingSent){
-                    Dubug.Log(pingTime - Time.time);
+                    Debug.Log(pingTime - Time.time);
                     pingTime = Time.time;
                 }
-                SendPing();
+                SendPing(connectionId);
             }
             switch (recData)
             {
@@ -376,9 +375,10 @@ public class NetworkManager : MonoBehaviour {
 
     }
 
-    private void SendPing(){
+    private void SendPing(int connectionId){
         byte error;
-        NetworkTransport.Send(socketId, connectionId, myPingChannelId, [0], 1, out error);
+        byte[] data = {0};
+        NetworkTransport.Send(socketId, connectionId, myPingChannelId, data, 1, out error);
         pingSent = true;
     }
 

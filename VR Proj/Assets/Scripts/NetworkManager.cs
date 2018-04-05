@@ -122,7 +122,7 @@ public class NetworkManager : MonoBehaviour {
                     Dubug.Log(pingTime - Time.time);
                     pingTime = Time.time;
                 }
-                SendPing();
+                SendPing(connectionId);
             }
             switch (recData)
             {
@@ -135,9 +135,9 @@ public class NetworkManager : MonoBehaviour {
                     break;
                 case NetworkEventType.ConnectEvent: //AR connects
                     Debug.Log("Connection request from id: " + connectionId + " Received");
-                    if 
                     if(isHost){
                         HandleConnect(connectionId);
+                        SendPing(connectionId);
                     }else{
                         InvokeRepeating("SendEnemyDamage", 0.1f, 0.1f);
                     }
@@ -347,9 +347,10 @@ public class NetworkManager : MonoBehaviour {
         
     }
 
-    private void SendPing(){
+    private void SendPing(int connectionId){
         byte error;
-        NetworkTransport.Send(socketId, connectionId, myPingChannelId, [0], 1, out error);
+        byte[] data = {0};
+        NetworkTransport.Send(socketId, connectionId, myPingChannelId, data, 1, out error);
         pingSent = true;
     }
 
