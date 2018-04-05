@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Beam : MonoBehaviour {
 
-	public GameObject beam;
 
 	public enum beamType : byte {
 		None = 0,
@@ -12,7 +11,8 @@ public class Beam : MonoBehaviour {
 		Heal = 2
 
 	}
-	public ParticleSystem particleSys;
+	private ParticleSystem particleSys;
+
 	public static beamType type;
 	public float damageVal;
 	public float rotationSpeed;
@@ -24,28 +24,28 @@ public class Beam : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//Set beams to converge at a point <range> distance in front of the camera.
-		Vector3 target = beam.transform.parent.position + (beam.transform.parent.forward * range);
-		beam.transform.LookAt(target);
+		Vector3 target = gameObject.transform.parent.position + (gameObject.transform.parent.forward * range);
+		gameObject.transform.LookAt(target);
 
-		particleSys = beam.GetComponent<ParticleSystem>();
+		particleSys = gameObject.GetComponent<ParticleSystem>();
 		StopEmitting();
 	}
 
 	// Update is called once per frame
 	void Update () {
 
-		beam.transform.Rotate(0, 0, rotationSpeed * duration * 2);
+		gameObject.transform.Rotate(0, 0, rotationSpeed * duration * 2);
 
 	}
 
 
 	public void StartEmitting() {
 		particleSys.Play();
-		Debug.Log("STarting Emmission");
+		//Debug.Log("STarting Emmission");
 	}
 
 	public void StopEmitting() {
 		particleSys.Stop(false, ParticleSystemStopBehavior.StopEmitting);
-		Debug.Log("Stopping Emmission");
+		//Debug.Log("Stopping Emmission");
 	}
 }

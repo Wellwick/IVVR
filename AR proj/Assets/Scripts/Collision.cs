@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Collision : MonoBehaviour {
 
-	public ParticleSystem particle;
+	private ParticleSystem particle;
     public List<ParticleCollisionEvent> collisionEvents;
+    public bool damagingBeam; // if set to 1: variable 'other' in OnParticleCollision is only going to be of type Enemy
 
 	void Start() {
         particle = GetComponent<ParticleSystem>();
@@ -20,7 +21,6 @@ public class Collision : MonoBehaviour {
     void OnParticleCollision(GameObject other)
     {
         int numCollisionEvents = particle.GetCollisionEvents(other, collisionEvents);
-		Debug.Log("onparticlecollision");
         Rigidbody rb = other.GetComponent<Rigidbody>();
         int i = 0;
 
@@ -34,9 +34,15 @@ public class Collision : MonoBehaviour {
             }*/
             i++;
         }
-        if (i > 0) {
-            Debug.Log("Damaging enemy by " + i);
-            //Damage(i);
+
+        if (damagingBeam) {
+            other.GetComponentInParent<EnemyHealth>().Damage(i);
+            Debug.Log("damaging enemy by " + i);
+        }
+
+        if (!damagingBeam) {
+            other.GetComponentInParent<PlayerHealth>().Heal(i);
+            Debug.Log("healing player by " + i);
         }
     }
 

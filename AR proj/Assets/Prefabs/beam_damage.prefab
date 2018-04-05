@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 199497060847786102}
   - component: {fileID: 198583475851370098}
   - component: {fileID: 114503338119301448}
+  - component: {fileID: 114504182456978358}
   m_Layer: 0
   m_Name: beam_damage
   m_TagString: Untagged
@@ -53,10 +54,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb7671ce346154ea49b2d288aa11a0ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beam: {fileID: 1723740241099984}
   damageVal: 1
   rotationSpeed: 0
   range: 10
+--- !u!114 &114504182456978358
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1723740241099984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fbc48c8e68794c18ae40e061afc527b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagingBeam: 1
 --- !u!198 &198583475851370098
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -117,7 +129,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1968055169
+  randomSeed: 432394235
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -2566,11 +2578,11 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 1024
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
