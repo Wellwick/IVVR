@@ -382,8 +382,8 @@ public class NetworkManager : MonoBehaviour {
     }
     public bool HandleConnect(int connectionId){
         clientsConnected++;
-        GameObject player = Instantiate(playerModel, new Vector3(0,0,0), new Quaternion(0,0,0,0));
-        ARPlayers.Add(connectionId, player);
+        //GameObject player = Instantiate(playerModel, new Vector3(0,0,0), new Quaternion(0,0,0,0));
+        //ARPlayers.Add(connectionId, player);
         byte error2;
         DemoCoder encoder = new DemoCoder(1024);
         NetworkIdentity[] networkIdentities = getNetworkIdentities();
