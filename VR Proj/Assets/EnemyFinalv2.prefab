@@ -210,6 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goal: {fileID: 4225897389525828, guid: 1befe10c2a6fd4ef09e9eea36dcc520e, type: 2}
+  healthSprite: {fileID: 0}
 --- !u!114 &114323360752673294
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -221,7 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b09620e6d4a843be93d4fe7a509741d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10000
+  maxHealth: 1000
   currentHealth: 0
   transientHealthLoss: 0
   cloak: {fileID: 1350328022826760}
