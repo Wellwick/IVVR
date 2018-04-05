@@ -26,37 +26,47 @@ public class Grappler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad)) {
-			RaycastHit hit;
+		try {
+			if (Controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad)) {
+				RaycastHit hit;
 
 
-			if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, 100, 
-					grappleMask)) {
-				ShowGrapple(hit);
-				shouldPull = true;
-				pullObject = hit.transform.gameObject;
-			}
-		} else {
-			grapple.SetActive(false);
-			shouldPull = false;
-		}
-		
-		if (Controller.GetHairTriggerDown() && shouldPull) {
-			pull = true;
-		}
-		if (pull) {
-			float step = speed * Time.deltaTime;
-			pullObject.transform.position = Vector3.MoveTowards(pullObject.transform.position, 
-												trackedObj.transform.position, step);
-			if (Vector3.Distance(pullObject.transform.position,trackedObj.transform.position)<0.3f) {
-				//treat this as a grab
-				GrabObject();
-				pull = false;
+				if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, 100, 
+						grappleMask)) {
+					ShowGrapple(hit);
+					shouldPull = true;
+					pullObject = hit.transform.gameObject;
+				}
+			} else {
+				grapple.SetActive(false);
 				shouldPull = false;
 			}
-		}
-		if (Controller.GetHairTriggerUp()) {
-			if (holding) ReleaseObject();
+			
+			if (Controller.GetHairTriggerDown() && shouldPull) {
+				pull = true;
+			}
+			if (pull) {
+				float step = speed * Time.deltaTime;
+				pullObject.transform.position = Vector3.MoveTowards(pullObject.transform.position, 
+													trackedObj.transform.position, step);
+				if (Vector3.Distance(pullObject.transform.position,trackedObj.transform.position)<0.3f) {
+					//treat this as a grab
+					GrabObject();
+					pull = false;
+					shouldPull = false;
+				}
+			}
+			if (Controller.GetHairTriggerUp()) {
+				if (holding) ReleaseObject();
+			}
+		} catch (MissingReferenceException e) {
+			if (GetComponent<FixedJoint()) {
+				GetComponent<FixedJoint>().connectedBody = null;
+				Destroy(GetComponent<FixedJoint>());
+			}
+			pullObject = null;
+			holding = false;
+			pull = false;
 		}
 	}
 

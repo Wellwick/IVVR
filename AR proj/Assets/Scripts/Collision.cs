@@ -37,12 +37,12 @@ public class Collision : MonoBehaviour {
 
         if (damagingBeam) {
             other.GetComponentInParent<EnemyHealth>().Damage(i);
-            Debug.Log("damaging enemy by " + i);
+            //Debug.Log("damaging enemy by " + i);
         }
 
         if (!damagingBeam) {
             other.GetComponentInParent<PlayerHealth>().Heal(i);
-            Debug.Log("healing player by " + i);
+            //Debug.Log("healing player by " + i);
         }
     }
 
