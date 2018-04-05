@@ -124,7 +124,7 @@ f5d312a3fd4d84ed1ea6b4c7dab47d71 Assembly-CSharp.dll:.Rune
 2041c871bc804feaa14f1713988c5c33 Assembly-CSharp.dll:UnityEngine.XR.iOS.UnityARVideo
 9edf7902d47b30c926fb59fe1da5b67d Assembly-CSharp.dll:UnityEngine.XR.iOS.EditorHitTest
 4b4137c2f8b0e29d8ff09b73ac5220f2 Assembly-CSharp.dll:.ButtonManager
-7b6c682423172168e83bc5476f342fdb Assembly-CSharp.dll:.Collision
+7bfccdcf542f0a2c5a0b4ae8b2d93be3 Assembly-CSharp.dll:.Collision
 691f570d064b4fd85ce980f8fa064dac Assembly-CSharp.dll:.SpawnManager
 32e8fe00b63ed946490b898f6024a2f2 Facebook.Unity.Settings.dll:Facebook.Unity.Settings.FacebookSettings
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
@@ -160,8 +160,8 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 2e2a7bd47042749813855cedf111f699 Assembly-CSharp.dll:UnityEngine.XR.iOS.UnityARGeneratePlane
 5f331c27d89f9342d51f70e948d0a16f Assembly-CSharp.dll:.UI_Dropdown
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.NewBehaviourScript
-b1040c96ea8e3a270123994f5fb50a22 Assembly-CSharp.dll:.Beam
-c1538dc5938b3455073b9b5e0ca16d9e Assembly-CSharp.dll:.PlayerHealth
+0a4f4a0540ae9a5a1027d87773e89c16 Assembly-CSharp.dll:.Beam
+20f6fc2f97acb2a653a4d4f87e187d96 Assembly-CSharp.dll:.PlayerHealth
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.NetworkInterface
 391d84b859f3b155fe38f54bfce79162 Assembly-CSharp.dll:.UnityPointCloudExample
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.UnityARCameraNearFar

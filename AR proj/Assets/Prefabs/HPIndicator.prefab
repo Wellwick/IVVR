@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33776344329157048}
   - component: {fileID: 136860089067593166}
   - component: {fileID: 23589123677308334}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 33316687078581214}
   - component: {fileID: 136168117912961782}
   - component: {fileID: 23759180160445474}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4636715352303282}
   - component: {fileID: 114967709742746540}
-  m_Layer: 10
+  - component: {fileID: 136631068037395570}
+  - component: {fileID: 114682012429862166}
+  m_Layer: 11
   m_Name: HPIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +85,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1737780244112000}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.175, z: 3}
+  m_LocalPosition: {x: 0, y: 3.3, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4915583439686846}
@@ -186,6 +188,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1350515220971808}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114682012429862166
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1737780244112000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd1a16c03bd54111a177ac43fe833dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114967709742746540
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -197,8 +210,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220804fedfd2ca44dbe890028942c3bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
+  maxHealth: 2500
+  currentHealth: 2500
+  transientHealthGain: 0
   healthIndicator: {fileID: 1350515220971808}
   healthIndicatorinv: {fileID: 1617203601575428}
   ARcameraManager: {fileID: 0}
@@ -217,6 +231,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &136631068037395570
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1737780244112000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.3679204
+  m_Height: 2.5020664
+  m_Direction: 1
+  m_Center: {x: -0.0032947063, y: -0.75283587, z: 0}
 --- !u!136 &136860089067593166
 CapsuleCollider:
   m_ObjectHideFlags: 1
