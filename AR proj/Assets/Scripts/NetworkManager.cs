@@ -130,6 +130,7 @@ public class NetworkManager : MonoBehaviour {
                     } else {
 						Debug.Log ("ConnectEvent triggered on AR side");
                         InvokeRepeating("SendEnemyDamage", 0.1f, 0.1f);
+                        InvokeRepeating("SendPlayerHeal", 0.1f, 0.1f);
                     }
 
                     break;
@@ -347,6 +348,25 @@ public class NetworkManager : MonoBehaviour {
         }
         
         
+    }
+
+    public void SendPlayerHeal(){
+        DemoCoder encoder = new DemoCoder(52);
+        PlayerHealth playerhealth = GameObject.FindObjectOfType<PlayerHealth>();
+        if(playerhealth.transientHealthGain > 0){
+            encoder.addHealPlayer(playerhealth.transientHealthGain);
+            NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 52, out error);
+
+            playerhealth.transientHealthGain = 0;
+        }
+
+
+
+        if (count != 0) {
+            byte error;
+            Debug.Log("In SendEnemyDamage, sending health information " + count);
+            NetworkTransport.Send(socketId, hostId, myReliableChannelId, encoder.getArray(), 1024, out error);
+        }
     }
 
     #endregion

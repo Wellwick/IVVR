@@ -61,6 +61,7 @@ public class PlayerHealth : MonoBehaviour
     }
 
 
+
     // Update is called once per frame
     void Update()
     {
@@ -78,6 +79,11 @@ public class PlayerHealth : MonoBehaviour
         //Rotate positon so it's in parallel with the controller
         Indicator.transform.rotation = trackObject.transform.rotation;
         Indicator.transform.Rotate(0.0f, 90.0f, 0.0f);
+    }
+
+    public void Heal(int health) {
+        currentHealth = Mathf.Clamp(currentHealth + health, 0, maxHealth);
+
     }
 
     void Death()

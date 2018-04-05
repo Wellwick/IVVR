@@ -160,6 +160,10 @@ public class NetworkManager : MonoBehaviour {
                             case (byte)MessageIdentity.Type.VRUpdateAR:
                                 HandleVRUpdateAR(decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
+                            case (byte)MessageIdentity.Type.HealPlayer:
+                                HandleHealPlayer(decoder.GetPlayerHeal(i));
+                                break;
+
 
                         }
                     }
@@ -440,6 +444,11 @@ public class NetworkManager : MonoBehaviour {
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){
         //NetworkInterface.UpdateTrackerPose(pos, rot);
     }
+
+    private void HandleHealPlayer(int heal) {
+        VREye.GetComponent<PlayerHealth>().Heal(heal);
+    }
+
 
     #endregion
 
