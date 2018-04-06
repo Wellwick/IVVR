@@ -229,6 +229,7 @@
     <Compile Include="Assets\Scripts\EnemyHealth.cs" />
     <Compile Include="Assets\Scripts\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Grappler.cs" />
+    <Compile Include="Assets\Scripts\HealthParticle.cs" />
     <Compile Include="Assets\Scripts\Henge.cs" />
     <Compile Include="Assets\Scripts\LaserPointer.cs" />
     <Compile Include="Assets\Scripts\manSpawn.cs" />
@@ -244,6 +245,7 @@
     <Compile Include="Assets\Scripts\Spook.cs" />
     <Compile Include="Assets\Scripts\UI_Input.cs" />
     <Compile Include="Assets\Scripts\ViveControllerInputTest.cs" />
+    <Compile Include="Assets\Scripts\VRUI_Item.cs" />
     <Compile Include="Assets\Scripts\wallDemo.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_GazeTracker.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_LaserPointer.cs" />

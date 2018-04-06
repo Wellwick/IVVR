@@ -13,6 +13,8 @@ public class EnemyHealth : MonoBehaviour {
     private float alpha;
     public GameObject cloak;
     public GameObject[] drops;
+    private Henge henge;
+    
     
     //private MeshRenderer meshRenderer; 
 
@@ -22,6 +24,7 @@ public class EnemyHealth : MonoBehaviour {
         currentHealth = maxHealth;
         //color = gameObject.GetComponent<Renderer>().material.color;
         cloak = gameObject.transform.Find("Cloak").gameObject;
+        henge = GameObject.Find("Henge").GetComponent<Henge>();
     }
 
     public int GetHealth()
@@ -51,11 +54,11 @@ public class EnemyHealth : MonoBehaviour {
     void Update()
     {
         //testing that the system works
-        Color c = gameObject.GetComponent<Renderer>().material.color;
-        c = new Color(c[0], c[1], c[2], (float)0.2 +(float)currentHealth / maxHealth);
+        //Color c = gameObject.GetComponent<Renderer>().material.color;
+        //c = new Color(c[0], c[1], c[2], (float)0.2 +(float)currentHealth / maxHealth);
         //Debug.Log(currentHealth / maxHealth);
-        gameObject.GetComponent<MeshRenderer>().material.color = c;
-        cloak.GetComponent<SkinnedMeshRenderer>().material.color = c;
+        //gameObject.GetComponent<MeshRenderer>().material.color = c;
+        //cloak.GetComponent<SkinnedMeshRenderer>().material.color = c;
         if(currentHealth <= 0){
             Death();
         }
@@ -63,7 +66,22 @@ public class EnemyHealth : MonoBehaviour {
     }
 
     void Death(){
-		int selection = Random.Range(0,drops.Length);
+
+        //THIS MAKES THE ASSUMPTION THAT THE ONLY DROPS ARE RUNES
+        int selection;
+        if (henge.remainingLargeRunes < 1)
+        {
+            selection = 1;//small rune
+        }else if(henge.remainingSmallRunes < 1)
+        {
+            selection = 0;//large rune
+        }
+        else
+        {
+            selection = Random.Range(0, drops.Length);//random drop
+        }
+
+		//int selection = Random.Range(0,drops.Length);
         GameObject.Instantiate(drops[selection], transform.position, transform.rotation);
         GameObject.FindObjectOfType<EnemyManager>().enemyCount--;
         Destroy(gameObject);
