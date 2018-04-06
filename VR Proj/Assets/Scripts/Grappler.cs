@@ -60,7 +60,7 @@ public class Grappler : MonoBehaviour {
 				if (holding) ReleaseObject();
 			}
 		} catch (MissingReferenceException e) {
-			if (GetComponent<FixedJoint()) {
+			if (GetComponent<FixedJoint>()) {
 				GetComponent<FixedJoint>().connectedBody = null;
 				Destroy(GetComponent<FixedJoint>());
 			}

@@ -35,7 +35,7 @@ public class NetworkManager : MonoBehaviour {
 	private int myUnreliableChannelId;
 	private int myUpdateChannelId;
     private int myStateChannelId;
-    private int myPingChannelId
+    private int myPingChannelId;
 
     [Header("VR")]
 	public GameObject leftController;
@@ -119,7 +119,7 @@ public class NetworkManager : MonoBehaviour {
             NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
             if(channelId == myPingChannelId){
                 if(pingSent){
-                    Dubug.Log(pingTime - Time.time);
+                    Debug.Log(pingTime - Time.time);
                     pingTime = Time.time;
                 }
                 SendPing(connectionId);
