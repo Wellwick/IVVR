@@ -56,7 +56,7 @@ public class NetworkManager : MonoBehaviour {
 
     private int hostId;
     private bool pingSent = false;
-    private float pingTime = Time.time;
+    private float pingTime;
 
     #endregion
 
@@ -331,15 +331,19 @@ public class NetworkManager : MonoBehaviour {
     }
 
     public void SendVRBroadcast(){
-        DemoCoder encoder = new DemoCoder(1024);
-        if(tracker){
-            encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
-            // TODO need to send other client pos and beams to AR clients
-        }
-        encoder.addVREyeUpdate(VREye.GetComponent<PlayerHealth>().currentHealth, VREye.transform);
-
         foreach(KeyValuePair<int, GameObject> kvp in ARPlayers){
+            DemoCoder encoder = new DemoCoder(1024);
+            if(tracker){
+                encoder.addSerial((Byte)MessageIdentity.Type.VRUpdateAR, -1, -1, tracker.transform);
+            }
+
+            encoder.addVREyeUpdate(VREye.GetComponent<PlayerHealth>().currentHealth, VREye.transform);
             Debug.Log("Sending Tracker info to client " + kvp.Key);
+            foreach(KeyValuePair<int, GameObject> kvp2 in ARPlayers){
+                if(kvp2.Key != kvp.Key){
+                    encoder.addARUpdate(kvp2.Key, (int)kvp.Value.GetComponent<ARClient>().firetype, kvp.Value.transform);
+                }
+            }
             byte error;
             NetworkTransport.Send(socketId, kvp.Key, myStateChannelId, encoder.getArray(), 1024, out error);
         }
