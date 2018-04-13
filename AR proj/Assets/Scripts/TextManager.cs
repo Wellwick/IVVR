@@ -9,8 +9,8 @@ using UnityEngine.XR.iOS;
 public class TextManager : MonoBehaviour {
 
 	public GameObject networkTextObject;
-	//public GameObject framerateTextObject;
-	//public GameObject latencyTextObject;
+	public GameObject framerateTextObject;
+	public GameObject latencyTextObject;
 
 	public GameObject positionARKitObject;
 	public GameObject rotationARKitObject;
@@ -22,8 +22,8 @@ public class TextManager : MonoBehaviour {
 	private UnityARCameraManager ARManager;
 	
 	private Text networkText;
-	public Text framerateText;
-	public Text latencyText;
+	private Text framerateText;
+	private Text latencyText;
 
 	private Text positionARKitText;
 	private Text rotationARKitText;
@@ -38,8 +38,8 @@ public class TextManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		networkText = networkTextObject.GetComponent<Text>();
-		//framerateText = framerateTextObject.GetComponent<Text>();
-		//latencyText = latencyTextObject.GetComponent<Text>();
+		framerateText = framerateTextObject.GetComponent<Text>();
+		latencyText = latencyTextObject.GetComponent<Text>();
 
 		positionARKitText = positionARKitObject.GetComponent<Text>();
 		rotationARKitText = rotationARKitObject.GetComponent<Text> ();
@@ -67,13 +67,15 @@ public class TextManager : MonoBehaviour {
 	void Update () {
 
 		frameTimes.Enqueue(Time.time);
-		if (frameTimes.Count >= FrameQueueSize) {
-			float firstFrame = frameTimes.Dequeue();
-			Debug.Log(Time.time);
-			float framerate = frameTimes.Count / (Time.time - firstFrame);
 
-			changeFramerateString("Framerate: " + framerate + "fps");
-			Debug.Log("Updating framerate" + framerate);
+		float firstFrame = frameTimes.Peek();
+		float framerate = 0;
+		framerate = (frameTimes.Count) / (Time.time - firstFrame);
+		
+		changeFramerateString("Framerate: " + Math.Round(framerate) + "fps");
+
+		if (frameTimes.Count > FrameQueueSize) {
+			firstFrame = frameTimes.Dequeue();
 		}
 
 		Vector3 enginePosition = ARManager.getUnityCameraPosition ();
