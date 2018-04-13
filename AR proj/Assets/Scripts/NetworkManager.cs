@@ -94,7 +94,7 @@ public class NetworkManager : MonoBehaviour {
             myReliableChannelId = config.AddChannel(QosType.Reliable);
             myUpdateChannelId = config.AddChannel(QosType.StateUpdate);
             myStateChannelId = config.AddChannel(QosType.StateUpdate);
-            myPingChannelId = config.AddChannel(QosType.Reliable);
+            myPingChannelId = config.AddChannel(QosType.ReliableSequenced);
             HostTopology topology = new HostTopology(config, MAX_CONNECTIONS);
             socketId = NetworkTransport.AddHost(topology, connection_port);
             Debug.Log("Socket ID: " + socketId);
