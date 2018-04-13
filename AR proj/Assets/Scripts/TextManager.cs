@@ -32,7 +32,8 @@ public class TextManager : MonoBehaviour {
 	private Text positionEngineText;
 	private Text rotationEngineText;
 
-
+	Queue<float> frameTimes;
+	public int FrameQueueSize;
 
 	// Use this for initialization
 	void Start () {
@@ -58,10 +59,23 @@ public class TextManager : MonoBehaviour {
 		networkText.text = "Network Status";
 
 		ARManager = GameObject.FindObjectOfType<UnityARCameraManager>();
+
+		frameTimes = new Queue<float>();
 	}
 
 	// Update is called once per frame
 	void Update () {
+
+		frameTimes.Enqueue(Time.time);
+		if (frameTimes.Count >= FrameQueueSize) {
+			float firstFrame = frameTimes.Dequeue();
+			Debug.Log(Time.time);
+			float framerate = frameTimes.Count / (Time.time - firstFrame);
+
+			changeFramerateString("Framerate: " + framerate + "fps");
+			Debug.Log("Updating framerate" + framerate);
+		}
+
 		Vector3 enginePosition = ARManager.getUnityCameraPosition ();
 		Quaternion engineRotation = ARManager.getUnityCameraRotation (); //UnityARMatrixOps.GetRotation (UnityARSessionNativeInterface.lastTransform);
 		Vector4 ARKitPosition = ARManager.getARKitPosition ();
