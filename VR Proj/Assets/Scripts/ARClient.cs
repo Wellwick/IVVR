@@ -11,6 +11,10 @@ public class ARClient : MonoBehaviour {
 	void Start () {
 
 	}
+
+	void Update() {
+		Heal();
+	}
 	
 	public void Heal() {
 		healBeam.GetComponent<Beam>().StartEmitting();
