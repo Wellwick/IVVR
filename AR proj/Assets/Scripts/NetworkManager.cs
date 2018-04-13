@@ -27,7 +27,7 @@ public class NetworkManager : MonoBehaviour {
 
     //todo
     [Header("Channels")]
-    //private int myPingChannelId;
+    private int myPingChannelId;
 	private int myReliableChannelId;
 	private int myUnreliableChannelId;
 	private int myUpdateChannelId;
@@ -43,7 +43,7 @@ public class NetworkManager : MonoBehaviour {
     public GameObject tracker;
 
     [Header("Debug")]
-    //public bool showPing = false;
+    public bool showPing = false;
 
     #endregion
 
@@ -54,8 +54,8 @@ public class NetworkManager : MonoBehaviour {
 	private bool networkInitialised = false;
     private int clientsConnected = 0;
     private int[] clientIds;
-    //private bool pingSent = false;
-    //private float pingTime;
+    private bool pingSent = false;
+    private float pingTime;
     private int hostId;
 
     #endregion
@@ -94,7 +94,7 @@ public class NetworkManager : MonoBehaviour {
             myReliableChannelId = config.AddChannel(QosType.Reliable);
             myUpdateChannelId = config.AddChannel(QosType.StateUpdate);
             myStateChannelId = config.AddChannel(QosType.StateUpdate);
-            //myPingChannelId = config.AddChannel(QosType.Reliable);
+            myPingChannelId = config.AddChannel(QosType.Reliable);
             HostTopology topology = new HostTopology(config, MAX_CONNECTIONS);
             socketId = NetworkTransport.AddHost(topology, connection_port);
             Debug.Log("Socket ID: " + socketId);
@@ -119,13 +119,13 @@ public class NetworkManager : MonoBehaviour {
             int dataSize;
             byte error;
             NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
-            //if(channelId == myPingChannelId){
-                //if(pingSent){
-                    //Debug.Log(pingTime - Time.time);
-                    //Time = Time.time;
-                //}
-                //SendPing(connectionId);
-            //}
+            if(channelId == myPingChannelId){
+                if(pingSent){
+                    Debug.Log(pingTime - Time.time);
+                    pingTime = Time.time;
+                }
+                SendPing(connectionId);
+            }
             switch (recData)
             {
                 case NetworkEventType.Nothing:
@@ -143,8 +143,8 @@ public class NetworkManager : MonoBehaviour {
 						Debug.Log ("ConnectEvent triggered on AR side");
                         InvokeRepeating("SendEnemyDamage", 0.1f, 0.1f);
                         InvokeRepeating("SendPlayerHeal", 0.1f, 0.1f);
-                        InvokeRepeating("SendARUpdate", 0.1f, 0.1f);
                     }
+
                     break;
                 case NetworkEventType.DataEvent:
                     //Debug.Log("Data Received");
@@ -375,12 +375,12 @@ public class NetworkManager : MonoBehaviour {
 
     }
 
-    /*private void SendPing(int connectionId){
+    private void SendPing(int connectionId){
         byte error;
         byte[] data = {0};
         NetworkTransport.Send(socketId, connectionId, myPingChannelId, data, 1, out error);
         pingSent = true;
-    }*/
+    }
 
     #endregion
 
@@ -527,7 +527,7 @@ public class NetworkManager : MonoBehaviour {
             HealPlayer = 8,
             GeneralUpdate = 9,
             VREyeUpdate = 10,
-            //Ping = 11
+            Ping = 11
         }
     }
 

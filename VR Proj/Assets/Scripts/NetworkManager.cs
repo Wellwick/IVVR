@@ -89,9 +89,9 @@ public class NetworkManager : MonoBehaviour {
             ConnectionConfig config = new ConnectionConfig();
             config.SendDelay = 0;
             myReliableChannelId = config.AddChannel(QosType.Reliable);
-            myPingChannelId = config.AddChannel(QosType.Reliable);
             myUpdateChannelId = config.AddChannel(QosType.StateUpdate);
             myStateChannelId = config.AddChannel(QosType.StateUpdate);
+            myPingChannelId = config.AddChannel(QosType.ReliableSequenced);
             HostTopology topology = new HostTopology(config, MAX_CONNECTIONS);
             socketId = NetworkTransport.AddHost(topology, connection_port);
             Debug.Log("Socket ID: " + socketId);
@@ -170,7 +170,7 @@ public class NetworkManager : MonoBehaviour {
                                 HandleGeneralUpdate(i, decoder);
                                 break;
                             case (byte)MessageIdentity.Type.ARUpdateVR:
-                                HandleARUpdateVR(connectionId, decoder.GetPosition(i), decoder.GetRotation(i));
+                                HandleARUpdateVR(connectionId, decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetShootEnum(i));
                                 break;
                             case (byte)MessageIdentity.Type.VRUpdateAR:
                                 HandleVRUpdateAR(decoder.GetPosition(i), decoder.GetRotation(i));
@@ -456,11 +456,22 @@ public class NetworkManager : MonoBehaviour {
     }
 
 
-    private void HandleARUpdateVR(int clientId, Vector3 pos, Quaternion rot){
+    private void HandleARUpdateVR(int clientId, Vector3 pos, Quaternion rot, int shootEnum){
         GameObject gameObject;
         ARPlayers.TryGetValue(clientId, out gameObject);
         gameObject.transform.position = pos;
         gameObject.transform.rotation = rot;
+        switch (shootEnum) {
+        case (int)Beam.beamType.Damage:
+            gameObject.GetComponent<ARClient>().Damage();
+            break;
+        case (int)Beam.beamType.Heal:
+            gameObject.GetComponent<ARClient>().Heal();
+            break;
+        default:
+            gameObject.GetComponent<ARClient>().Beamless();
+            break;
+        }
     }
 
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){
