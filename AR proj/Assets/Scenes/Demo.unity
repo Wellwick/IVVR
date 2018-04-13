@@ -2724,7 +2724,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.49803922}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6213,7 +6213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.49803922}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6699,6 +6699,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1670053806}
+--- !u!1 &1674495527 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1723740241099984, guid: 0e6164f8c4584422695256fa5eaa8ee6,
+    type: 2}
+  m_PrefabInternal: {fileID: 218777437}
 --- !u!1 &1734406420
 GameObject:
   m_ObjectHideFlags: 0
@@ -6882,15 +6887,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkTextObject: {fileID: 1872667407}
-  framerateTextObject: {fileID: 0}
-  latencyTextObject: {fileID: 0}
   positionARKitObject: {fileID: 1201771435}
   rotationARKitObject: {fileID: 2030308032}
   positionTrackerObject: {fileID: 1734406420}
   rotationTrackerObject: {fileID: 1595932620}
   positionEngineObject: {fileID: 1662539828}
   rotationEngineObject: {fileID: 11573642}
-  networkText: {fileID: 0}
   framerateText: {fileID: 699014955}
   latencyText: {fileID: 1595528747}
 --- !u!4 &1813858994
@@ -7402,6 +7404,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1881814294}
+--- !u!1 &1882428750 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1027957985274658, guid: 256f3b0fac7ec4fcdafdde42c29c95aa,
+    type: 2}
+  m_PrefabInternal: {fileID: 515791889}
 --- !u!1 &1915248368
 GameObject:
   m_ObjectHideFlags: 0
@@ -8322,6 +8329,32 @@ Prefab:
       propertyPath: m_Center.y
       value: -0.75
       objectReference: {fileID: 0}
+    - target: {fileID: 4915583439686846, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4915583439686846, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4056976893916970, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4056976893916970, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 136860089067593166, guid: 7b431e96edc534d6aa15d9a185f92a84,
+        type: 2}
+      propertyPath: m_Radius
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 136168117912961782, guid: 7b431e96edc534d6aa15d9a185f92a84,
+        type: 2}
+      propertyPath: m_Radius
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
   m_IsPrefabParent: 0
@@ -8597,7 +8630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5cdbfad9d1743bea2d4dbc8c04155a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAX_CONNECTIONS: 1
+  MAX_CONNECTIONS: 5
   connection_ip: 137.205.112.42
   connection_port: 9090
   spawnables:
@@ -8634,6 +8667,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34bfa92f7670741c8851c622bc2527d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HealBeamObject: {fileID: 1882428750}
+  DamageBeamObject: {fileID: 1674495527}
 --- !u!114 &2144854950 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114516427737024126, guid: 256f3b0fac7ec4fcdafdde42c29c95aa,

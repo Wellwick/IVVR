@@ -4,18 +4,35 @@ using UnityEngine;
 
 public class NetworkInterface : MonoBehaviour {
 
+	public GameObject HealBeamObject;
+	public GameObject DamageBeamObject;
+
 	private static UnityARCameraManager ARCameraManager;
 	private static TextManager textManager;
+	private static Beam HealBeam;
+	private static Beam DamageBeam;
 
 	void Start() {
 
 		ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
 		textManager = GameObject.FindObjectOfType<TextManager> ();
 		//Debug.Log ("Starting Network Interface... <TextManager found>:" + (textManager != null) + " <ARCameraManager found>:" + (ARCameraManager != null));
-
+		HealBeam = HealBeamObject.GetComponent<Beam>();
+		DamageBeam = DamageBeamObject.GetComponent<Beam>();
 	}
 
 	void Update() {
+
+	}
+
+	public static int getBeamType(){
+		if (HealBeam.isEmitting()) {
+			return 2;
+		} else if (DamageBeam.isEmitting()) {
+			return 1;
+		} else {
+			return 0;
+		}
 
 	}
 
@@ -24,6 +41,7 @@ public class NetworkInterface : MonoBehaviour {
 		if (textManager != null) {
 
 			textManager.changeNetworkString (status);
+			textManager.changeLatencyString (status);
 
 		} else {
 

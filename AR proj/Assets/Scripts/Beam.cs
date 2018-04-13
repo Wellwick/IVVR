@@ -19,6 +19,7 @@ public class Beam : MonoBehaviour {
 	public float range;
 
 	private float duration;
+	private bool emitting;
 
 
 	// Use this for initialization
@@ -33,7 +34,7 @@ public class Beam : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
+
 		duration = duration + Time.deltaTime;
 		gameObject.transform.Rotate(0, 0, rotationSpeed * duration * 2);
 
@@ -42,11 +43,17 @@ public class Beam : MonoBehaviour {
 
 	public void StartEmitting() {
 		particleSys.Play();
+		emitting = true;
 		//Debug.Log("STarting Emmission");
 	}
 
 	public void StopEmitting() {
 		particleSys.Stop(false, ParticleSystemStopBehavior.StopEmitting);
+		emitting = false;
 		//Debug.Log("Stopping Emmission");
+	}
+
+	public bool isEmitting() {
+		return emitting;
 	}
 }

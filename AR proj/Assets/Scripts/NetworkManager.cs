@@ -27,7 +27,7 @@ public class NetworkManager : MonoBehaviour {
 
     //todo
     [Header("Channels")]
-    private int myPingChannelId;
+    //private int myPingChannelId;
 	private int myReliableChannelId;
 	private int myUnreliableChannelId;
 	private int myUpdateChannelId;
@@ -43,7 +43,7 @@ public class NetworkManager : MonoBehaviour {
     public GameObject tracker;
 
     [Header("Debug")]
-    public bool showPing = false;
+    //public bool showPing = false;
 
     #endregion
 
@@ -54,8 +54,8 @@ public class NetworkManager : MonoBehaviour {
 	private bool networkInitialised = false;
     private int clientsConnected = 0;
     private int[] clientIds;
-    private bool pingSent = false;
-    private float pingTime;
+    //private bool pingSent = false;
+    //private float pingTime;
     private int hostId;
 
     #endregion
@@ -94,7 +94,7 @@ public class NetworkManager : MonoBehaviour {
             myReliableChannelId = config.AddChannel(QosType.Reliable);
             myUpdateChannelId = config.AddChannel(QosType.StateUpdate);
             myStateChannelId = config.AddChannel(QosType.StateUpdate);
-            myPingChannelId = config.AddChannel(QosType.Reliable);
+            //myPingChannelId = config.AddChannel(QosType.Reliable);
             HostTopology topology = new HostTopology(config, MAX_CONNECTIONS);
             socketId = NetworkTransport.AddHost(topology, connection_port);
             Debug.Log("Socket ID: " + socketId);
@@ -119,13 +119,13 @@ public class NetworkManager : MonoBehaviour {
             int dataSize;
             byte error;
             NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
-            if(channelId == myPingChannelId){
+            /*if(channelId == myPingChannelId){
                 if(pingSent){
                     Debug.Log(pingTime - Time.time);
                     pingTime = Time.time;
                 }
                 SendPing(connectionId);
-            }
+            }*/
             switch (recData)
             {
                 case NetworkEventType.Nothing:
@@ -142,6 +142,7 @@ public class NetworkManager : MonoBehaviour {
                     } else {
 						Debug.Log ("ConnectEvent triggered on AR side");
                         InvokeRepeating("SendEnemyDamage", 0.1f, 0.1f);
+                        InvokeRepeating("SendARUpdate", 0.1f, 0.1f);
                         InvokeRepeating("SendPlayerHeal", 0.1f, 0.1f);
                     }
 
@@ -189,7 +190,7 @@ public class NetworkManager : MonoBehaviour {
                     clientsConnected--;
                     networkInitialised = false;
 					Debug.Log("Disconnect Received");
-				NetworkInterface.UpdateNetworkStatus("DC'ed");
+				NetworkInterface.UpdateNetworkStatus("Disconnected");
                     break;
             }
         }
@@ -214,17 +215,20 @@ public class NetworkManager : MonoBehaviour {
             byte error;
 
             Debug.Log("Attempting to connect to <" + connection_ip + ":" + connection_port + ">");
-			NetworkInterface.UpdateNetworkStatus ("A2C: <" + connection_ip + ":" + connection_port + ">");
+			//NetworkInterface.UpdateNetworkStatus ("A2C: <" + connection_ip + ":" + connection_port + ">");
+            NetworkInterface.UpdateNetworkStatus ("Connecting...");
             hostId = NetworkTransport.Connect(socketId, connection_ip, connection_port, 0, out error);
 			if(error == (byte)NetworkError.Ok){
-				Debug.Log("Connection established <" + connection_ip + ":" + connection_port + ">");
-				NetworkInterface.UpdateNetworkStatus ("CE: <" + connection_ip + ":" + connection_port + ">");
-				return;
+				//Debug.Log("Connection established <" + connection_ip + ":" + connection_port + ">");
+				//NetworkInterface.UpdateNetworkStatus ("CE: <" + connection_ip + ":" + connection_port + ">");
+				//etworkInterface.UpdateNetworkStatus ("Connected");
 				//Successful connection
-			}
-			Debug.Log("Failed to connect <" + connection_ip + ":" + connection_port + ">");
-			NetworkInterface.UpdateNetworkStatus ("F2C: <" + connection_ip + ":" + connection_port + ">");
+			} else {
 
+                Debug.Log("Failed to connect <" + connection_ip + ":" + connection_port + ">");
+                //NetworkInterface.UpdateNetworkStatus ("F2C: <" + connection_ip + ":" + connection_port + ">");
+                NetworkInterface.UpdateNetworkStatus ("Error " + error);
+            }
         }
 
 
@@ -344,7 +348,7 @@ public class NetworkManager : MonoBehaviour {
 
     public void SendARUpdate(){
         DemoCoder encoder = new DemoCoder(1024);
-        encoder.addARUpdate((byte)MessageIdentity.Type.ARUpdateVR, (byte)Beam.type, NetworkInterface.GetCameraTransform());
+        encoder.addARUpdate((byte)MessageIdentity.Type.ARUpdateVR, (int)NetworkInterface.getBeamType(), NetworkInterface.GetCameraTransform());
         byte error;
         NetworkTransport.Send(socketId, hostId, myStateChannelId, encoder.getArray(), 1024, out error);
     }
@@ -375,12 +379,12 @@ public class NetworkManager : MonoBehaviour {
 
     }
 
-    private void SendPing(int connectionId){
+    /*private void SendPing(int connectionId){
         byte error;
         byte[] data = {0};
         NetworkTransport.Send(socketId, connectionId, myPingChannelId, data, 1, out error);
         pingSent = true;
-    }
+    }*/
 
     #endregion
 
@@ -527,7 +531,7 @@ public class NetworkManager : MonoBehaviour {
             HealPlayer = 8,
             GeneralUpdate = 9,
             VREyeUpdate = 10,
-            Ping = 11
+            //Ping = 11
         }
     }
 
