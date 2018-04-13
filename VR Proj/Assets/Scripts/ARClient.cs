@@ -13,7 +13,7 @@ public class ARClient : MonoBehaviour {
 	}
 
 	void Update() {
-		Heal();
+		
 	}
 	
 	public void Heal() {

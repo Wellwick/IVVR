@@ -35,7 +35,7 @@ public class NetworkManager : MonoBehaviour {
 	private int myUnreliableChannelId;
 	private int myUpdateChannelId;
     private int myStateChannelId;
-    private int myPingChannelId;
+    //private int myPingChannelId;
 
     [Header("VR")]
 	public GameObject leftController;
@@ -56,7 +56,7 @@ public class NetworkManager : MonoBehaviour {
 
     private int hostId;
     private bool pingSent = false;
-    private float pingTime = Time.time;
+    private float pingTime;
 
     #endregion
 
@@ -77,6 +77,7 @@ public class NetworkManager : MonoBehaviour {
             String assetId = NetworkTransport.GetAssetId(spawnables[i]);
             spawnAssets.Add(assetId, i);
         }
+        pingTime = Time.time;
     }
 
     #region Start
@@ -91,7 +92,7 @@ public class NetworkManager : MonoBehaviour {
             myReliableChannelId = config.AddChannel(QosType.Reliable);
             myUpdateChannelId = config.AddChannel(QosType.StateUpdate);
             myStateChannelId = config.AddChannel(QosType.StateUpdate);
-            myPingChannelId = config.AddChannel(QosType.ReliableSequenced);
+            //myPingChannelId = config.AddChannel(QosType.ReliableSequenced);
             HostTopology topology = new HostTopology(config, MAX_CONNECTIONS);
             socketId = NetworkTransport.AddHost(topology, connection_port);
             Debug.Log("Socket ID: " + socketId);
@@ -117,13 +118,15 @@ public class NetworkManager : MonoBehaviour {
             int dataSize;
             byte error;
             NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
+            /*
             if(channelId == myPingChannelId){
                 if(pingSent){
                     Debug.Log(pingTime - Time.time);
                     pingTime = Time.time;
                 }
-                SendPing(connectionId);
+                //SendPing(connectionId);
             }
+            */
             switch (recData)
             {
                 case NetworkEventType.Nothing:
@@ -137,7 +140,7 @@ public class NetworkManager : MonoBehaviour {
                     Debug.Log("Connection request from id: " + connectionId + " Received");
                     if(isHost){
                         HandleConnect(connectionId);
-                        SendPing(connectionId);
+                        //SendPing(connectionId);
                     }else{
                         InvokeRepeating("SendEnemyDamage", 0.1f, 0.1f);
                     }
@@ -347,12 +350,14 @@ public class NetworkManager : MonoBehaviour {
         
     }
 
+    /*
     private void SendPing(int connectionId){
         byte error;
         byte[] data = {0};
         NetworkTransport.Send(socketId, connectionId, myPingChannelId, data, 1, out error);
         pingSent = true;
     }
+    */
 
     #endregion
 
@@ -457,10 +462,12 @@ public class NetworkManager : MonoBehaviour {
 
 
     private void HandleARUpdateVR(int clientId, Vector3 pos, Quaternion rot, int shootEnum){
+        Debug.Log("Receiving message from AR");
         GameObject gameObject;
         ARPlayers.TryGetValue(clientId, out gameObject);
         gameObject.transform.position = pos;
         gameObject.transform.rotation = rot;
+        gameObject.transform.Rotate(new Vector3(0, 90, 0));
         switch (shootEnum) {
         case (int)Beam.beamType.Damage:
             gameObject.GetComponent<ARClient>().Damage();

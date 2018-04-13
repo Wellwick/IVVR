@@ -8,6 +8,8 @@ public class Henge : MonoBehaviour {
 	public GameObject[] largeRunes;
 	public GameObject baseRune;
 	public GameObject portal;
+	public GameObject largeDrop;
+	public GameObject smallDrop;
 
 	public Material properMaterial;
 	public int startingRunes = 3;
@@ -18,24 +20,44 @@ public class Henge : MonoBehaviour {
 	void Start () {
 		// figure out how many runes we have in total
 		totalRunes = smallRunes.Length + largeRunes.Length;
-		// randomise which runes are already placed
+		// start off all of them false
 		for (int i=0; i<smallRunes.Length; i++) {
-			if (startingRunes>0) {
-				smallRunes[i].GetComponent<Rune>().active = true;
-				Activate(smallRunes[i]);
-				startingRunes--;
-			} else {
-				smallRunes[i].GetComponent<Rune>().active = false;
-			}
+			smallRunes[i].GetComponent<Rune>().active = false;
 		}
 		for (int i=0; i<largeRunes.Length; i++) {
-			if (startingRunes>0) {
-				largeRunes[i].GetComponent<Rune>().active = true;
-				Activate(largeRunes[i]);
-				startingRunes--;
-			} else {
-				largeRunes[i].GetComponent<Rune>().active = false;
+			largeRunes[i].GetComponent<Rune>().active = false;
+		}
+		// randomise which runes are already placed
+		int tempCounter = totalRunes;
+		while (startingRunes > 0) {
+			int selection = (int)Random.Range(0.0f, tempCounter-0.1f);
+			Debug.Log("Selection value was set to " + selection);
+			//step through and reduce until we reach the selection value
+			for (int i=0; i<smallRunes.Length; i++) {
+				if (selection == 0 && smallRunes[i].GetComponent<Rune>().active == false) {
+					Activate(smallRunes[i]);
+					selection--;
+					break;
+				} else {
+					if (smallRunes[i].GetComponent<Rune>().active == false) {
+						selection--;
+					}
+				}
 			}
+
+			for (int i=0; i<largeRunes.Length; i++) {
+				if (selection == -1) break;
+				if (selection == 0 && largeRunes[i].GetComponent<Rune>().active == false) {
+					Activate(largeRunes[i]);
+					break;
+				} else {
+					if (largeRunes[i].GetComponent<Rune>().active == false) {
+						selection--;
+					}
+				}
+			}
+			startingRunes--;
+			tempCounter--;
 		}
 		portal.SetActive(false);
 	}
@@ -96,5 +118,30 @@ public class Henge : MonoBehaviour {
 
 	public int getSize() {
 		return totalRunes;
+	}
+
+	public GameObject GetItemDrop() {
+		int smallDrops = 0;
+		int largeDrops = 0;
+
+		for (int i = 0; i < smallRunes.Length; i++) {
+			if (smallRunes[i].GetComponent<Rune>().active)
+				smallDrops++;
+		}
+		for (int i = 0; i < largeRunes.Length; i++) {
+			if (largeRunes[i].GetComponent<Rune>().active)
+				largeDrops++;
+		}
+
+		if (smallDrops+largeDrops == 0) {
+			return null;
+		} else {
+			int spawn = (int)Random.Range(0.0f, smallDrops+largeDrops-0.1f)+1;
+			if (spawn < smallDrops) {
+				return smallDrop;
+			} else {
+				return largeDrop;
+			}
+		}
 	}
 }

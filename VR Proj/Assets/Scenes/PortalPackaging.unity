@@ -201,6 +201,7 @@ MonoBehaviour:
   leftController: {fileID: 1042182807}
   rightController: {fileID: 1042182806}
   tracker: {fileID: 1900964984}
+  showPing: 0
   isHost: 1
 --- !u!4 &69331142
 Transform:
@@ -3233,7 +3234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaea01ded71da4b538048919a8f2fbfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 2500
   currentHealth: 0
   healthIndicator: {fileID: 510847732}
   healthIndicatorinv: {fileID: 1349142626}
@@ -5428,7 +5429,7 @@ Transform:
   m_GameObject: {fileID: 1900964984}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_Children: []
   m_Father: {fileID: 1368742147}
   m_RootOrder: 3
@@ -5472,6 +5473,18 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 114165856381696648, guid: b52b85b45bbd84f7690dcd3045f117f3,
+        type: 2}
+      propertyPath: largeDrop
+      value: 
+      objectReference: {fileID: 1264658304390636, guid: 594217b9766fe4f94809cdd2bfe211ee,
+        type: 2}
+    - target: {fileID: 114165856381696648, guid: b52b85b45bbd84f7690dcd3045f117f3,
+        type: 2}
+      propertyPath: smallDrop
+      value: 
+      objectReference: {fileID: 1043478055916494, guid: 91d455f8c22b4440c9ff7659e81be181,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b52b85b45bbd84f7690dcd3045f117f3, type: 2}
   m_IsPrefabParent: 0
