@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33401892347250274}
   - component: {fileID: 136153948660228188}
   - component: {fileID: 23581339405118696}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Body Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 195713421857957688}
   - component: {fileID: 114236459665005636}
   - component: {fileID: 114691505207033806}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyFinalv2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

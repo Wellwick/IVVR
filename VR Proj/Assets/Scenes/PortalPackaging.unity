@@ -3268,8 +3268,9 @@ GameObject:
   - component: {fileID: 1142499632}
   - component: {fileID: 1142499631}
   - component: {fileID: 1142499633}
+  - component: {fileID: 1142499634}
   - component: {fileID: 1142499630}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Camera (eye)
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -3366,6 +3367,19 @@ MonoBehaviour:
   trackObject: {fileID: 0}
   Indicator: {fileID: 0}
   cam: {fileID: 0}
+--- !u!136 &1142499634
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1142499628}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.35
+  m_Height: 2.5
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.8, z: 0}
 --- !u!1 &1156739537
 GameObject:
   m_ObjectHideFlags: 0
@@ -4841,6 +4855,10 @@ Prefab:
         type: 2}
       propertyPath: maxHealth
       value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1026421736276420, guid: fc97018c166ef408ab214d9ea72cc6d8, type: 2}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fc97018c166ef408ab214d9ea72cc6d8, type: 2}
