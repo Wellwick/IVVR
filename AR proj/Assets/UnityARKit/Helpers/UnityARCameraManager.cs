@@ -52,8 +52,7 @@ public class UnityARCameraManager : MonoBehaviour {
 		m_session = UnityARSessionNativeInterface.GetARSessionNativeInterface();
 	
 #if !UNITY_EDITOR
-		tracking = TrackingType.TrackerRelay;
-
+		//iOS
 		Application.targetFrameRate = 60;
         ARKitWorldTrackingSessionConfiguration config = new ARKitWorldTrackingSessionConfiguration();
 		//config.planeDetection = planeDetection;
@@ -66,6 +65,9 @@ public class UnityARCameraManager : MonoBehaviour {
 			m_camera = Camera.main;
 		}
 #else
+		//UNITY EDITOR
+		tracking = TrackingType.TrackerRelay;
+
 		ARKitSessionConfiguration sessionConfig = new ARKitSessionConfiguration (startAlignment, true, true);
 		m_session.RunWithConfig(sessionConfig);
 
@@ -130,7 +132,7 @@ public class UnityARCameraManager : MonoBehaviour {
 			Vector4 unityCameraPosition;
 			Quaternion unityCameraRotation;
 
-			Debug.Log(tracking);
+			//Debug.Log(tracking);
 
 			if (tracking == TrackingType.TrackerRelay) {
 				unityCameraPosition = tracker_position;

@@ -64,7 +64,9 @@ public class EnemyHealth : MonoBehaviour {
 
     void Death(){
 		int selection = Random.Range(0,drops.Length);
-        GameObject.Instantiate(drops[selection], transform.position, transform.rotation);
+        GameObject drop = GameObject.FindObjectOfType<Henge>().GetItemDrop();
+        if (drop != null)
+            GameObject.Instantiate(drop, transform.position, transform.rotation);
         GameObject.FindObjectOfType<EnemyManager>().enemyCount--;
         Destroy(gameObject);
     }
