@@ -12,6 +12,7 @@ public class ButtonManager : MonoBehaviour {
 	public GameObject debugPanelObject;
 	public GameObject optionsPanelObject;
 	public GameObject poseEstimationDropdownObject;
+	public GameObject optionsButton;
 
 	private UnityARCameraManager ARCameraManager;
 
@@ -22,9 +23,6 @@ public class ButtonManager : MonoBehaviour {
 	void Start() {
 		debugPanelObject.SetActive (showingDebug);
 		optionsPanelObject.SetActive (showingOptions);
-
-
-
 		ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
 		//selectedObjectText = poseEstimationDropdownObject.GetComponentInChildren<Text>();
 	}
@@ -33,6 +31,16 @@ public class ButtonManager : MonoBehaviour {
 
 		showingOptions = !showingOptions;
 		optionsPanelObject.SetActive (showingOptions);
+		Debug.Log("Clicked");
+		var rotationVector = transform.rotation.eulerAngles;
+		if (showingOptions) {
+			rotationVector.x = 180.0f;
+			rotationVector.y = 180.0f;
+		} else {
+			rotationVector.x = 0.0f;
+			rotationVector.y = 0.0f;
+		}
+		optionsButton.transform.rotation = Quaternion.Euler(rotationVector);
 
 	}
 
