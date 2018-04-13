@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 190655000}
-  m_IndirectSpecularColor: {r: 0.21933953, g: 0.09871638, b: 0.19492899, a: 1}
+  m_IndirectSpecularColor: {r: 0.21934007, g: 0.098716706, b: 0.19492953, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -195,11 +195,12 @@ MonoBehaviour:
   connection_ip: 137.205.112.42
   connection_port: 9090
   spawnables: []
-  playerModel: {fileID: 0}
-  VREye: {fileID: 0}
-  leftController: {fileID: 0}
-  rightController: {fileID: 0}
-  tracker: {fileID: 0}
+  playerModel: {fileID: 1991126312200844, guid: 225a92834c6714a6e934a2efcc52b955,
+    type: 2}
+  VREye: {fileID: 1142499628}
+  leftController: {fileID: 1042182807}
+  rightController: {fileID: 1042182806}
+  tracker: {fileID: 1900964984}
   showPing: 0
   isHost: 1
 --- !u!4 &69331142
