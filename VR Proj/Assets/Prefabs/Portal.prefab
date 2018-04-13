@@ -2512,6 +2512,8 @@ MonoBehaviour:
   - {fileID: 1792949445065364}
   baseRune: {fileID: 1109728079594372}
   portal: {fileID: 1716696258670220}
+  largeDrop: {fileID: 1264658304390636, guid: 594217b9766fe4f94809cdd2bfe211ee, type: 2}
+  smallDrop: {fileID: 1043478055916494, guid: 91d455f8c22b4440c9ff7659e81be181, type: 2}
   properMaterial: {fileID: 2100000, guid: ddafdbed0c98f40328e1ad8970442a67, type: 2}
   startingRunes: 3
 --- !u!114 &114184694647410478
