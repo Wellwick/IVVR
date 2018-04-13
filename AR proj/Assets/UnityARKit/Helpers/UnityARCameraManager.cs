@@ -52,6 +52,8 @@ public class UnityARCameraManager : MonoBehaviour {
 		m_session = UnityARSessionNativeInterface.GetARSessionNativeInterface();
 	
 #if !UNITY_EDITOR
+		tracking = TrackingType.TrackerRelay;
+
 		Application.targetFrameRate = 60;
         ARKitWorldTrackingSessionConfiguration config = new ARKitWorldTrackingSessionConfiguration();
 		//config.planeDetection = planeDetection;

@@ -9,6 +9,9 @@ using UnityEngine.XR.iOS;
 public class TextManager : MonoBehaviour {
 
 	public GameObject networkTextObject;
+	//public GameObject framerateTextObject;
+	//public GameObject latencyTextObject;
+
 	public GameObject positionARKitObject;
 	public GameObject rotationARKitObject;
 	public GameObject positionTrackerObject;
@@ -19,6 +22,9 @@ public class TextManager : MonoBehaviour {
 	private UnityARCameraManager ARManager;
 	
 	private Text networkText;
+	public Text framerateText;
+	public Text latencyText;
+
 	private Text positionARKitText;
 	private Text rotationARKitText;
 	private Text positionTrackerText;
@@ -27,9 +33,12 @@ public class TextManager : MonoBehaviour {
 	private Text rotationEngineText;
 
 
+
 	// Use this for initialization
 	void Start () {
-		networkText = networkTextObject.GetComponent<Text> ();
+		networkText = networkTextObject.GetComponent<Text>();
+		//framerateText = framerateTextObject.GetComponent<Text>();
+		//latencyText = latencyTextObject.GetComponent<Text>();
 
 		positionARKitText = positionARKitObject.GetComponent<Text>();
 		rotationARKitText = rotationARKitObject.GetComponent<Text> ();
@@ -37,6 +46,7 @@ public class TextManager : MonoBehaviour {
 		rotationTrackerText = rotationTrackerObject.GetComponent<Text> ();
 		positionEngineText = positionEngineObject.GetComponent<Text> ();
 		rotationEngineText = rotationEngineObject.GetComponent<Text> ();
+
 
 		positionARKitText.text = "ARKit Pos";
 		rotationARKitText.text = "ARKit Rot";
@@ -57,12 +67,16 @@ public class TextManager : MonoBehaviour {
 		Vector4 ARKitPosition = ARManager.getARKitPosition ();
 		Quaternion ARKitRotation = ARManager.getARKitRotation ();
 
-
-
 		positionARKitText.text = "pos: {" + Math.Round(ARKitPosition.x, 2) + ", " + Math.Round(ARKitPosition.y, 2) + ", " + Math.Round(ARKitPosition.z, 2) + "}";
 		rotationARKitText.text = "rot: {" + Math.Round(ARKitRotation.x, 2) + ", " + Math.Round(ARKitRotation.y, 2) + ", " + Math.Round(ARKitRotation.z, 2) + ", " + Math.Round(ARKitRotation.w, 2) + "}";
 		positionEngineText.text = "pos: {" + Math.Round(enginePosition.x, 2) + ", " + Math.Round(enginePosition.y, 2) + ", " + Math.Round(enginePosition.z, 2) + "}";
 		rotationEngineText.text = "rot: {" + Math.Round(engineRotation.x, 2) + ", " + Math.Round(engineRotation.y, 2) + ", " + Math.Round(engineRotation.z, 2) + ", " + Math.Round(engineRotation.w, 2) + "}";
+	}
+	public void changeLatencyString(String latencyString) {
+		latencyText.text = latencyString;
+	}
+	public void changeFramerateString(String framerateString) {
+		framerateText.text = framerateString;
 	}
 
 	public void changeNetworkString(String networkString) {

@@ -33,7 +33,8 @@ public class Beam : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		
+		duration = duration + Time.deltaTime;
 		gameObject.transform.Rotate(0, 0, rotationSpeed * duration * 2);
 
 	}
