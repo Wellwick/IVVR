@@ -210,7 +210,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goal: {fileID: 4225897389525828, guid: 1befe10c2a6fd4ef09e9eea36dcc520e, type: 2}
-  healthSprite: {fileID: 0}
+  healthSprite: {fileID: 1336105474880524, guid: 5720b54c1c5bd417f84f2fe270a87c70,
+    type: 2}
 --- !u!114 &114323360752673294
 MonoBehaviour:
   m_ObjectHideFlags: 1
