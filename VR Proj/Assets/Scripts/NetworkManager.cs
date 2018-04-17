@@ -344,7 +344,7 @@ public class NetworkManager : MonoBehaviour {
             Debug.Log("Sending Tracker info to client " + kvp.Key);
             foreach(KeyValuePair<int, GameObject> kvp2 in ARPlayers){
                 if(kvp2.Key != kvp.Key){
-                    encoder.addARUpdate(kvp2.Key, (int)kvp.Value.GetComponent<ARClient>().firetype, kvp.Value.transform);
+                    encoder.addARUpdate(kvp2.Key, (int)kvp.Value.GetComponent<ARClient>().fireType, kvp.Value.transform);
                 }
             }
             byte error;

@@ -16,10 +16,13 @@ ModelImporter:
     2100004: Material
     2300000: Cylinder_MeshPart0
     2300002: Cylinder_MeshPart1
+    2300004: //RootNode
     3300000: Cylinder_MeshPart0
     3300002: Cylinder_MeshPart1
+    3300004: //RootNode
     4300000: Cylinder_MeshPart0
     4300002: Cylinder_MeshPart1
+    4300004: Cylinder
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -63,6 +66,8 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
