@@ -73,10 +73,19 @@ public class NetworkManager : MonoBehaviour {
     #region Unity Functions
     //value to check when we should send a new batch of updates
     void Awake(){
-        for(int i = 0; i < spawnables.Length; i++){
-            String assetId = NetworkTransport.GetAssetId(spawnables[i]);
-            spawnAssets.Add(assetId, i);
-        }
+        /* 
+        Debug.Log("Awake() NetworkManager.cs");
+        try {
+            for(int i = 0; i < spawnables.Length; i++){
+                String assetId = NetworkTransport.GetAssetId(spawnables[i]);
+                String assetName = spawnables[i].name;
+                Debug.Log("Adding asset " + i + ": " + spawnables[i].name + "\tid: " + assetId);
+                
+                spawnAssets.Add(assetId, i);
+            }
+        } catch (ArgumentException e) {
+            Debug.LogError(e);
+        }*/
     }
 
     #region Start
@@ -221,8 +230,9 @@ public class NetworkManager : MonoBehaviour {
 			if(error == (byte)NetworkError.Ok){
 				//Debug.Log("Connection established <" + connection_ip + ":" + connection_port + ">");
 				//NetworkInterface.UpdateNetworkStatus ("CE: <" + connection_ip + ":" + connection_port + ">");
-				//etworkInterface.UpdateNetworkStatus ("Connected");
+				NetworkInterface.UpdateNetworkStatus ("Connected");
 				//Successful connection
+
 			} else {
 
                 Debug.Log("Failed to connect <" + connection_ip + ":" + connection_port + ">");
@@ -481,7 +491,12 @@ public class NetworkManager : MonoBehaviour {
 
     private void HandleARUpdateVR(int clientId, Vector3 pos, Quaternion rot){
         GameObject gameObject;
-        ARPLayers.TryGetValue(clientId, out gameObject);
+        bool success = ARPLayers.TryGetValue(clientId, out gameObject);
+        if (!success) {
+            //ANOTHER AR PLAYER
+            gameObject = Instantiate(spawnables[1], new Vector3(0.0f,0.0f,0.0f), new Quaternion(0.0f,0.0f,0.0f, 0.0f));
+            ARPLayers.Add(clientId, gameObject);
+        }
         gameObject.transform.position = pos;
         gameObject.transform.rotation = rot;
     }

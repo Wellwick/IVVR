@@ -61,10 +61,10 @@
      <Compile Include="Assets\Scripts\NetworkIdentity.cs" />
      <Compile Include="Assets\Scripts\NetworkInterface.cs" />
      <Compile Include="Assets\Scripts\NetworkManager.cs" />
+     <Compile Include="Assets\Scripts\OtherAR.cs" />
      <Compile Include="Assets\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\Rune.cs" />
      <Compile Include="Assets\Scripts\Shooting.cs" />
-     <Compile Include="Assets\Scripts\SpawnManager.cs" />
      <Compile Include="Assets\Scripts\TextManager.cs" />
      <Compile Include="Assets\Scripts\UI_Dropdown.cs" />
      <Compile Include="Assets\UnityARKit\ARKitRemote\ARKitRemoteConnection.cs" />
