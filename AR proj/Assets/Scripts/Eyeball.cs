@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OtherAR : MonoBehaviour {
+public class Eyeball : MonoBehaviour {
 
 	public GameObject healBeam;
 	public GameObject damageBeam;

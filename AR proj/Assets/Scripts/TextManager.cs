@@ -19,6 +19,13 @@ public class TextManager : MonoBehaviour {
 	public GameObject positionEngineObject;
 	public GameObject rotationEngineObject;
 
+	public GameObject playerHealthObject;
+	public GameObject hengeObject;
+
+	private PlayerHealth playerHealth;
+	private Henge henge;
+	
+
 	private UnityARCameraManager ARManager;
 	
 	private Text networkText;
@@ -32,6 +39,7 @@ public class TextManager : MonoBehaviour {
 	private Text positionEngineText;
 	private Text rotationEngineText;
 
+	private int latency = 0;
 	Queue<float> frameTimes;
 	public int FrameQueueSize;
 
@@ -48,7 +56,6 @@ public class TextManager : MonoBehaviour {
 		positionEngineText = positionEngineObject.GetComponent<Text> ();
 		rotationEngineText = rotationEngineObject.GetComponent<Text> ();
 
-
 		positionARKitText.text = "ARKit Pos";
 		rotationARKitText.text = "ARKit Rot";
 		positionTrackerText.text = "Tracker Pos";
@@ -59,25 +66,50 @@ public class TextManager : MonoBehaviour {
 		networkText.text = "Network Status";
 
 		ARManager = GameObject.FindObjectOfType<UnityARCameraManager>();
+		playerHealth = playerHealthObject.GetComponent<PlayerHealth>();
+		henge = hengeObject.GetComponent<Henge>();
 
 		frameTimes = new Queue<float>();
 	}
 
+
+
 	// Update is called once per frame
 	void Update () {
 
+		//Framerate calculation
 		frameTimes.Enqueue(Time.time);
 
 		float firstFrame = frameTimes.Peek();
 		float framerate = 0;
 		framerate = (frameTimes.Count) / (Time.time - firstFrame);
 		
-		changeFramerateString(String.Format("Framerate: {0:0.0}", framerate));
+		changeFramerateString(String.Format("Framerate:\t{0:0}fps\nLatency:\t{1:0}ms", framerate, latency));
 
 		if (frameTimes.Count > FrameQueueSize) {
 			firstFrame = frameTimes.Dequeue();
 		}
 
+		//Update Player health, Rune completion, Allies, Enemies debug text
+		//Apart from player health, probably do not want to be doing these calculations every frame
+		//Consider updating those every x seconds
+		String ph = String.Format("{0:0}%", (playerHealth.currentHealth / playerHealth.maxHealth) * 100);
+		//String rs = String.Format("{0:0}%", (henge.getActiveRunes() / henge.getSize()) * 100);
+		String rs = henge.getActiveRunes() + "/" + henge.getSize();
+		int allies = FindObjectsOfType<Eyeball>().Length + 1;
+		int enemies = FindObjectsOfType<EnemyHealth>().Length;
+
+		String[] debug = new String[4];
+		debug[0] = String.Format("Player:{0,5}", ph);
+		debug[1] = String.Format("Henge:{0,5}", rs);
+		debug[2] = String.Format("Allies:{0,5}", allies);
+		debug[3] = String.Format("Enemies:{0,5}", enemies);
+
+
+		changeLatencyString(debug[0] + "\n" + debug[1] + "\n" + debug[2] + "\n" + debug[3]);
+		
+
+		//Debug text for engine, ARKit positions and rotations
 		Vector3 enginePosition = ARManager.getUnityCameraPosition ();
 		Quaternion engineRotation = ARManager.getUnityCameraRotation (); //UnityARMatrixOps.GetRotation (UnityARSessionNativeInterface.lastTransform);
 		Vector4 ARKitPosition = ARManager.getARKitPosition ();
@@ -88,11 +120,14 @@ public class TextManager : MonoBehaviour {
 		positionEngineText.text = "pos: {" + Math.Round(enginePosition.x, 2) + ", " + Math.Round(enginePosition.y, 2) + ", " + Math.Round(enginePosition.z, 2) + "}";
 		rotationEngineText.text = "rot: {" + Math.Round(engineRotation.x, 2) + ", " + Math.Round(engineRotation.y, 2) + ", " + Math.Round(engineRotation.z, 2) + ", " + Math.Round(engineRotation.w, 2) + "}";
 	}
-	public void changeLatencyString(String latencyString) {
-		latencyText.text = latencyString;
+	public void updateLatency(int latency) {
+		this.latency = latency;
 	}
 	public void changeFramerateString(String framerateString) {
 		framerateText.text = framerateString;
+	}
+	public void changeLatencyString(String latencyString) {
+		latencyText.text = latencyString;
 	}
 
 	public void changeNetworkString(String networkString) {

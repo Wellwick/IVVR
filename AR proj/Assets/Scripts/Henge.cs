@@ -100,4 +100,8 @@ public class Henge : MonoBehaviour {
 	public int getSize() {
 		return totalRunes;
 	}
+
+	public int getActiveRunes() {
+		return activeRunes;
+	}
 }
