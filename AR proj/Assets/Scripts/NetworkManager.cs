@@ -65,7 +65,7 @@ public class NetworkManager : MonoBehaviour {
     public Dictionary<int, GameObject> watchList = new Dictionary<int, GameObject>();
     public Dictionary<String, int> spawnAssets = new Dictionary<String, int>();
     public Dictionary<int, GameObject> networkedObjects = new Dictionary<int, GameObject>();
-    public Dictionary<int, GameObject> ARPLayers = new Dictionary<int, GameObject>();
+    public Dictionary<int, GameObject> ARPlayers = new Dictionary<int, GameObject>();
 
 
     #endregion
@@ -183,7 +183,7 @@ public class NetworkManager : MonoBehaviour {
                                 HandleGeneralUpdate(i, decoder);
                                 break;
                             case (byte)MessageIdentity.Type.ARUpdateVR:
-                                HandleARUpdateVR(connectionId, decoder.GetPosition(i), decoder.GetRotation(i));
+                                HandleARUpdateVR(connectionId, decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetShootEnum(i));
                                 break;
 							case (byte)MessageIdentity.Type.VRUpdateAR:
 								HandleVRUpdateAR (decoder.GetPosition(i), decoder.GetRotation(i));
@@ -489,16 +489,24 @@ public class NetworkManager : MonoBehaviour {
     }
 
 
-    private void HandleARUpdateVR(int clientId, Vector3 pos, Quaternion rot){
+    private void HandleARUpdateVR(int clientId, Vector3 pos, Quaternion rot, int fireType){
         GameObject gameObject;
-        bool success = ARPLayers.TryGetValue(clientId, out gameObject);
+        bool success = ARPlayers.TryGetValue(clientId, out gameObject);
         if (!success) {
-            //ANOTHER AR PLAYER
+            //NEW AR PLAYER (does not exist in known players dictionary)
             gameObject = Instantiate(spawnables[1], new Vector3(0.0f,0.0f,0.0f), new Quaternion(0.0f,0.0f,0.0f, 0.0f));
-            ARPLayers.Add(clientId, gameObject);
+            ARPlayers.Add(clientId, gameObject);
         }
         gameObject.transform.position = pos;
         gameObject.transform.rotation = rot;
+
+        Eyeball eyeball = gameObject.GetComponent<Eyeball>();
+        //Here, set whether the player is firing
+        switch ((beamType)fireType) {
+            case beamType.Damage : eyeball.Damage(); break;
+            case beamType.Heal : eyeball.Heal(); break;
+            case beamType.None : eyeball.Beamless(); break;
+        }
     }
 
     private void HandleVRUpdateAR(Vector3 pos, Quaternion rot){
