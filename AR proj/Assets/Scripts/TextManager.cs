@@ -55,7 +55,7 @@ public class TextManager : MonoBehaviour {
 		rotationTrackerText.text = "Tracker Rot";
 		positionEngineText.text = "Engine Pos";
 		rotationEngineText.text = "Engine Rot";
-
+		
 		networkText.text = "Network Status";
 
 		ARManager = GameObject.FindObjectOfType<UnityARCameraManager>();
@@ -72,7 +72,7 @@ public class TextManager : MonoBehaviour {
 		float framerate = 0;
 		framerate = (frameTimes.Count) / (Time.time - firstFrame);
 		
-		changeFramerateString("Framerate: " + Math.Round(framerate) + "fps");
+		changeFramerateString(String.Format("Framerate: {0:0.0}", framerate));
 
 		if (frameTimes.Count > FrameQueueSize) {
 			firstFrame = frameTimes.Dequeue();
