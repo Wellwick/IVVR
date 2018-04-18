@@ -93,7 +93,7 @@ public class TextManager : MonoBehaviour {
 		//Update Player health, Rune completion, Allies, Enemies debug text
 		//Apart from player health, probably do not want to be doing these calculations every frame
 		//Consider updating those every x seconds
-		String ph = String.Format("{0:0}%", (playerHealth.currentHealth / playerHealth.maxHealth) * 100);
+		String ph = String.Format("{0:0}%", ((float)playerHealth.currentHealth / (float)playerHealth.maxHealth) * 100.0f);
 		//String rs = String.Format("{0:0}%", (henge.getActiveRunes() / henge.getSize()) * 100);
 		String rs = henge.getActiveRunes() + "/" + henge.getSize();
 		int allies = FindObjectsOfType<Eyeball>().Length + 1;

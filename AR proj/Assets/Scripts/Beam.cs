@@ -29,6 +29,7 @@ public class Beam : MonoBehaviour {
 		gameObject.transform.LookAt(target);
 
 		particleSys = gameObject.GetComponent<ParticleSystem>();
+		Debug.Log("Setting up new beam... Particle system: " + particleSys);
 		StopEmitting();
 	}
 
@@ -42,15 +43,18 @@ public class Beam : MonoBehaviour {
 
 
 	public void StartEmitting() {
+		//Debug.Log("STarting Emmission");
+		particleSys = gameObject.GetComponent<ParticleSystem>();
 		particleSys.Play();
 		emitting = true;
-		//Debug.Log("STarting Emmission");
 	}
 
 	public void StopEmitting() {
+		//Debug.Log("Stopping Emmission");
+		particleSys = gameObject.GetComponent<ParticleSystem>();
 		particleSys.Stop(false, ParticleSystemStopBehavior.StopEmitting);
 		emitting = false;
-		//Debug.Log("Stopping Emmission");
+		//Debug.Log(System.Environment.StackTrace.ToString());
 	}
 
 	public bool isEmitting() {
