@@ -471,7 +471,7 @@ public class NetworkManager : MonoBehaviour {
         ARPlayers.TryGetValue(clientId, out gameObject);
         gameObject.transform.position = pos;
         gameObject.transform.rotation = rot;
-        gameObject.transform.Rotate(new Vector3(0, 90, 0));
+        //gameObject.transform.Rotate(new Vector3(0, 90, 0));
         switch (shootEnum) {
         case (int)Beam.beamType.Damage:
             gameObject.GetComponent<ARClient>().Damage();
