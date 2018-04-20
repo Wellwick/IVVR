@@ -30,9 +30,11 @@ public class MoveTo : MonoBehaviour {
 		if (dist < 2.0f && damageTimer <= 0.0f) {
 			PlayerHealth ph = goal.gameObject.GetComponent<PlayerHealth>();
 			ph.currentHealth -= 60;
-			// Spawn the sprite and have it come to enemy
-			GameObject sprite = GameObject.Instantiate(healthSprite, goal.position, goal.rotation);
-			sprite.GetComponent<HealthParticle>().camera = goal;
+            // Spawn the sprite and have it come to enemy
+            Transform belowCam = goal;
+            belowCam.position += new Vector3(0.0f, -0.4f, 0.0f);
+			GameObject sprite = GameObject.Instantiate(healthSprite, belowCam.position, belowCam.rotation);
+			sprite.GetComponent<HealthParticle>().camera = belowCam;
 			sprite.GetComponent<HealthParticle>().target = transform;
 			sprite.GetComponent<SpriteRenderer>().color = EnemyManager.calculateSpriteColor(ph);
 			damageTimer = 1.0f;
