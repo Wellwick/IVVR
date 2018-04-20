@@ -59,7 +59,6 @@ public class ButtonManager : MonoBehaviour {
 	{
 		int index = poseEstimationDropdownObject.GetComponent<Dropdown> ().value;
 		
-		Debug.Log("Changing pose estimation method");
 
 		switch (index) {
 		case 0:
@@ -75,6 +74,7 @@ public class ButtonManager : MonoBehaviour {
 			ARCameraManager.tracking = TrackingType.HeadsetCalibration;
 			break;
 		}
+		Debug.Log("Changing pose estimation method: " + index+ " - " + ARCameraManager.tracking.ToString());
 	}
 
 	void OnMouseDown()
