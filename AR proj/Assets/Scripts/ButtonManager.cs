@@ -28,17 +28,19 @@ public class ButtonManager : MonoBehaviour {
 	}
 
 	public void ToggleOptions() {
+		Debug.Log("Toggle Options");
 
 		showingOptions = !showingOptions;
 		optionsPanelObject.SetActive (showingOptions);
-		Debug.Log("Clicked");
-		var rotationVector = transform.rotation.eulerAngles;
+		Vector3 rotationVector = transform.rotation.eulerAngles;
+		
 		if (showingOptions) {
-			rotationVector.x = 180.0f;
-			rotationVector.y = 180.0f;
-		} else {
 			rotationVector.x = 0.0f;
 			rotationVector.y = 0.0f;
+
+		} else {
+			rotationVector.x = 180.0f;
+			rotationVector.y = 180.0f;
 		}
 		optionsButton.transform.rotation = Quaternion.Euler(rotationVector);
 

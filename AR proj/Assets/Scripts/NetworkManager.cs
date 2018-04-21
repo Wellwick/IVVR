@@ -199,7 +199,7 @@ public class NetworkManager : MonoBehaviour {
                     clientsConnected--;
                     networkInitialised = false;
 					Debug.Log("Disconnect Received");
-				NetworkInterface.UpdateNetworkStatus("Disconnected");
+                    NetworkInterface.UpdateNetworkStatus("Disconnected");
                     break;
             }
         }
@@ -224,7 +224,15 @@ public class NetworkManager : MonoBehaviour {
             byte error;
 
             //Attempt to get IPAddress entered by user in UI
-            connection_ip =  NetworkInterface.getUserIP();
+            String userIP = NetworkInterface.getUserIP();
+            System.Net.IPAddress testAddress;
+            //Test if IPAddress entered by user is valid
+            if (System.Net.IPAddress.TryParse(userIP, out testAddress)) {
+                connection_ip = userIP;
+            } else {
+                NetworkInterface.UpdateNetworkStatus ("Invalid IP");
+                return;
+            }
 
             Debug.Log("Attempting to connect to <" + connection_ip + ":" + connection_port + ">");
 			//NetworkInterface.UpdateNetworkStatus ("A2C: <" + connection_ip + ":" + connection_port + ">");
@@ -233,8 +241,8 @@ public class NetworkManager : MonoBehaviour {
 			if(error == (byte)NetworkError.Ok){
 				//Debug.Log("Connection established <" + connection_ip + ":" + connection_port + ">");
 				//NetworkInterface.UpdateNetworkStatus ("CE: <" + connection_ip + ":" + connection_port + ">");
-				NetworkInterface.UpdateNetworkStatus ("Connected");
-				//Successful connection
+				//NetworkInterface.UpdateNetworkStatus ("Connected");
+				//Successful connection MAYBE?
 
 			} else {
 
