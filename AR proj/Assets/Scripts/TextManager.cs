@@ -40,7 +40,7 @@ public class TextManager : MonoBehaviour {
 	//Queue<float> frameTimes;
 	//public int FrameQueueSize;
 
-	private float fpsDelay = 5.0f;
+	private float fpsDelay = 1.0f;
 	private float deltaTime = 0.0f;
 	private float fpsmin = float.MaxValue;
 	private float fpsavg = 0.0f;
@@ -129,10 +129,10 @@ public class TextManager : MonoBehaviour {
 			//reset?
 		}
 
-		psDebug[0] = String.Format("Framerate:\t\t{0:0.0} ms ({1:0} fps)", msec, fps);
+		psDebug[0] = String.Format("{0,-12}{1:0.0} ms ({2:0} fps)", "Framerate:", msec, fps);
 		//psDebug[1] = String.Format("{0}\t{1})", frametimetotal, frametimecount);
-		psDebug[1] = String.Format("Min/Avg/Max:\t{0:0.0}/{1:0.0}/{2:0.0}"  , fpsmin, fpsavg, fpsmax);
-		psDebug[2] = String.Format("Network:\t\t{0}", networkStatus);
+		psDebug[1] = String.Format("{0,-12}{1:0.0}/{2:0.0}/{3:0.0}"  ,"Min/Avg/Max:", fpsmin, fpsavg, fpsmax);
+		psDebug[2] = String.Format("{0,-12}{1}", "Network:", networkStatus);
 
 
 		//Update Player health, Rune completion, Allies, Enemies debug text
@@ -156,14 +156,23 @@ public class TextManager : MonoBehaviour {
 
 		//Debug text for engine, ARKit positions and rotations
 		Vector3 enginePosition = ARManager.getUnityCameraPosition ();
-		Quaternion engineRotation = ARManager.getUnityCameraRotation (); //UnityARMatrixOps.GetRotation (UnityARSessionNativeInterface.lastTransform);
 		Vector4 ARKitPosition = ARManager.getARKitPosition ();
-		Quaternion ARKitRotation = ARManager.getARKitRotation ();
+		//Quaternion engineRotation = ARManager.getUnityCameraRotation (); //UnityARMatrixOps.GetRotation (UnityARSessionNativeInterface.lastTransform);
+		//Quaternion ARKitRotation = ARManager.getARKitRotation ();
+		Vector3 engineRotation = ARManager.getUnityCameraRotation ().eulerAngles;
+		Vector3 ARKitRotation = ARManager.getARKitRotation ().eulerAngles;
 
-		positionARKitText.text = "pos: {" + Math.Round(ARKitPosition.x, 2) + ", " + Math.Round(ARKitPosition.y, 2) + ", " + Math.Round(ARKitPosition.z, 2) + "}";
-		rotationARKitText.text = "rot: {" + Math.Round(ARKitRotation.x, 2) + ", " + Math.Round(ARKitRotation.y, 2) + ", " + Math.Round(ARKitRotation.z, 2) + ", " + Math.Round(ARKitRotation.w, 2) + "}";
+		/*
+ 		positionARKitText.text = "pos: {" + Math.Round(ARKitPosition.x, 2) + ", " + Math.Round(ARKitPosition.y, 2) + ", " + Math.Round(ARKitPosition.z, 2) + "}";
+		rotationARKitText.text = "rot: {" + Math.Round(ARKitRotation.x, 2) + ", " + Math.Round(ARKitRotation.y, 2) + ", " + Math.Round(ARKitRotation.z, 2) + "}";
 		positionEngineText.text = "pos: {" + Math.Round(enginePosition.x, 2) + ", " + Math.Round(enginePosition.y, 2) + ", " + Math.Round(enginePosition.z, 2) + "}";
-		rotationEngineText.text = "rot: {" + Math.Round(engineRotation.x, 2) + ", " + Math.Round(engineRotation.y, 2) + ", " + Math.Round(engineRotation.z, 2) + ", " + Math.Round(engineRotation.w, 2) + "}";
+		rotationEngineText.text = "rot: {" + Math.Round(engineRotation.x, 2) + ", " + Math.Round(engineRotation.y, 2) + ", " + Math.Round(engineRotation.z, 2) + "}";
+		*/
+		positionARKitText.text = "pos: {}";
+		rotationARKitText.text = "rot: {" + Math.Round(ARKitRotation.x, 2) + ", " + Math.Round(ARKitRotation.y, 2) + ", " + Math.Round(ARKitRotation.z, 2) + "}";
+		positionEngineText.text = "pos: {" + Math.Round(enginePosition.x, 2) + ", " + Math.Round(enginePosition.y, 2) + ", " + Math.Round(enginePosition.z, 2) + "}";
+		rotationEngineText.text = "rot: {" + Math.Round(engineRotation.x, 2) + ", " + Math.Round(engineRotation.y, 2) + ", " + Math.Round(engineRotation.z, 2) + "}";
+		
 	}
 	public void updateLatency(int latency) {
 		this.latency = latency;

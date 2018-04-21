@@ -42,7 +42,7 @@ public class UnityARCameraManager : MonoBehaviour {
 	public Vector4 arkit_position;
 	public Quaternion arkit_rotation;
 	private Vector4 offset_position = new Vector4 (0, 0, 0, 0);
-	private Quaternion offset_rotation = new Quaternion ();
+	private Quaternion offset_rotation = new Quaternion();
 
 
 
@@ -140,6 +140,7 @@ public class UnityARCameraManager : MonoBehaviour {
 			} else if ((tracking == TrackingType.TrackerCalibration) || (tracking == TrackingType.HeadsetCalibration)) {
 				//Take care to multiply offset_rotation * tracker_rotation, and not other way around
 				//This is because quaternion multiplication is not commutative.
+				//arkit_position.z = -arkit_position.z;
 				unityCameraPosition = offset_position + arkit_position;
 				unityCameraRotation = offset_rotation * arkit_rotation;
 			} else { //if (tracking == TrackingType.ARKit) {
@@ -147,6 +148,8 @@ public class UnityARCameraManager : MonoBehaviour {
 				unityCameraPosition = arkit_position;
 				unityCameraRotation = arkit_rotation;
 			}
+
+
 
 			m_camera.transform.localPosition = unityCameraPosition;
 			m_camera.transform.localRotation = unityCameraRotation;
@@ -181,6 +184,8 @@ public class UnityARCameraManager : MonoBehaviour {
 			//Must rotate around y axis as phone and headset will face in opposite Z directions
 			//When placed opposite each other for calibration.
 		}
+
+		//lastPosARKit.z = -lastPosARKit.z;
 
 		//The offsets for position and rotation are trivially calculated.
 		//Make sure target_position and lastPosARKit both have w set to 1.

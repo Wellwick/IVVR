@@ -13,6 +13,7 @@ public class ButtonManager : MonoBehaviour {
 	public GameObject optionsPanelObject;
 	public GameObject poseEstimationDropdownObject;
 	public GameObject optionsButton;
+	public GameObject HPindicatorObject;
 
 	private UnityARCameraManager ARCameraManager;
 
@@ -79,14 +80,11 @@ public class ButtonManager : MonoBehaviour {
 		Debug.Log("Changing pose estimation method: " + index+ " - " + ARCameraManager.tracking.ToString());
 	}
 
-	void OnMouseDown()
-    {
-        
-    }
+	public void changeOcclusion() {
+		Debug.Log("Changing occlusion to: " + !HPindicatorObject.activeSelf);
+		HPindicatorObject.SetActive(!HPindicatorObject.activeSelf);
+	}
 
-	void OnMouseUp()
-    {
-        
-    }
+
 
 }
