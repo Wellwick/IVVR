@@ -45,7 +45,7 @@ public class NetworkInterface : MonoBehaviour {
 
 		if (textManager != null) {
 
-			textManager.changeNetworkString (status);
+			textManager.updateNetworkString (status);
 			//textManager.changeLatencyString (status);
 
 		} else {

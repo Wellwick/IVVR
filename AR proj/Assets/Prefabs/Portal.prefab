@@ -2412,8 +2412,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ae70d553ada94390bd423c3e8ebb282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smallRunes: []
-  largeRunes: []
+  smallRunes:
+  - {fileID: 1380125094245424}
+  - {fileID: 1928218538087508}
+  - {fileID: 1407286254977720}
+  - {fileID: 1759843191769496}
+  - {fileID: 1562515025520514}
+  - {fileID: 1472760785442880}
+  - {fileID: 1435561113105320}
+  - {fileID: 1316355435521638}
+  - {fileID: 1597085357741912}
+  - {fileID: 1123690705122848}
+  - {fileID: 1608314884814334}
+  - {fileID: 1980956560364890}
+  largeRunes:
+  - {fileID: 1679272158068628}
+  - {fileID: 1328148946690498}
+  - {fileID: 1422804697531670}
+  - {fileID: 1887598038075240}
+  - {fileID: 1392358541678640}
+  - {fileID: 1079382963622576}
+  - {fileID: 1976908889854880}
+  - {fileID: 1445449547043922}
+  - {fileID: 1407354664856904}
+  - {fileID: 1300381708040560}
+  - {fileID: 1795902815369022}
+  - {fileID: 1792949445065364}
   baseRune: {fileID: 1109728079594372}
   portal: {fileID: 1716696258670220}
   properMaterial: {fileID: 2100000, guid: ddafdbed0c98f40328e1ad8970442a67, type: 2}

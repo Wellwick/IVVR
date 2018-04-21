@@ -29,7 +29,6 @@ public class Beam : MonoBehaviour {
 		gameObject.transform.LookAt(target);
 
 		particleSys = gameObject.GetComponent<ParticleSystem>();
-		Debug.Log("Setting up new beam... Particle system: " + particleSys);
 		StopEmitting();
 	}
 

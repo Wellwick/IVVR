@@ -10,7 +10,7 @@ public class TextManager : MonoBehaviour {
 
 	public GameObject networkTextObject;
 	public GameObject framerateTextObject;
-	public GameObject latencyTextObject;
+	public GameObject gameStateTextObject;
 
 	public GameObject positionARKitObject;
 	public GameObject rotationARKitObject;
@@ -24,13 +24,11 @@ public class TextManager : MonoBehaviour {
 
 	private PlayerHealth playerHealth;
 	private Henge henge;
-	
-
 	private UnityARCameraManager ARManager;
 	
 	private Text networkText;
 	private Text framerateText;
-	private Text latencyText;
+	private Text gameStateText;
 
 	private Text positionARKitText;
 	private Text rotationARKitText;
@@ -39,15 +37,25 @@ public class TextManager : MonoBehaviour {
 	private Text positionEngineText;
 	private Text rotationEngineText;
 
+	//Queue<float> frameTimes;
+	//public int FrameQueueSize;
+
+	private float fpsDelay = 5.0f;
+	private float deltaTime = 0.0f;
+	private float fpsmin = float.MaxValue;
+	private float fpsavg = 0.0f;
+	private float fpsmax = 0.0f;
+	private float frametimecount = 0.0f;
+	private float frametimetotal = 0.0f;
+
 	private int latency = 0;
-	Queue<float> frameTimes;
-	public int FrameQueueSize;
+	private String networkStatus;
 
 	// Use this for initialization
 	void Start () {
 		networkText = networkTextObject.GetComponent<Text>();
 		framerateText = framerateTextObject.GetComponent<Text>();
-		latencyText = latencyTextObject.GetComponent<Text>();
+		gameStateText = gameStateTextObject.GetComponent<Text>();
 
 		positionARKitText = positionARKitObject.GetComponent<Text>();
 		rotationARKitText = rotationARKitObject.GetComponent<Text> ();
@@ -69,26 +77,63 @@ public class TextManager : MonoBehaviour {
 		playerHealth = playerHealthObject.GetComponent<PlayerHealth>();
 		henge = hengeObject.GetComponent<Henge>();
 
-		frameTimes = new Queue<float>();
+		//frameTimes = new Queue<float>();
 	}
 
 
+	/*
+	private float getFramerate() {
+	//OLD Framerate calculation
+	frameTimes.Enqueue(Time.time);
+	float firstFrame = frameTimes.Peek();
+	float framerate = 0;
+	
+	changeFramerateString(String.Format("Framerate:\t{0:0}fps\nNetwork:\t{1:0}ms", framerate, latency));
+
+	if (frameTimes.Count > FrameQueueSize) {
+		framerate = (frameTimes.Count) / (Time.time - firstFrame);
+		frameTimes.Dequeue();
+	}
+	return framerate;
+	}*/
 
 	// Update is called once per frame
 	void Update () {
+		//Arrays of strings displayed as debug information
+		String[] psDebug = new String[3];	//performance stats debug
+		String[] gsDebug = new String[4];	//game state debug
 
-		//Framerate calculation
-		frameTimes.Enqueue(Time.time);
+		deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
 
-		float firstFrame = frameTimes.Peek();
-		float framerate = 0;
-		framerate = (frameTimes.Count) / (Time.time - firstFrame);
-		
-		changeFramerateString(String.Format("Framerate:\t{0:0}fps\nLatency:\t{1:0}ms", framerate, latency));
-
-		if (frameTimes.Count > FrameQueueSize) {
-			firstFrame = frameTimes.Dequeue();
+		if (fpsDelay > 0) {
+			fpsDelay -= Time.deltaTime;
+			return;
 		}
+
+		//deltaTime = Time.deltaTime;
+		float msec = deltaTime * 1000.0f;
+		float fps = (1.0f / deltaTime);
+
+		if (fps > fpsmax) {
+			fpsmax = fps;
+		}
+		if (fps < fpsmin) {
+			fpsmin = fps;
+		}
+
+		frametimetotal += deltaTime;
+		frametimecount++;
+		fpsavg = (frametimecount / frametimetotal);
+
+		if (frametimecount > 64000) {
+			//reset?
+		}
+
+		psDebug[0] = String.Format("Framerate:\t\t{0:0.0} ms ({1:0} fps)", msec, fps);
+		//psDebug[1] = String.Format("{0}\t{1})", frametimetotal, frametimecount);
+		psDebug[1] = String.Format("Min/Avg/Max:\t{0:0.0}/{1:0.0}/{2:0.0}"  , fpsmin, fpsavg, fpsmax);
+		psDebug[2] = String.Format("Network:\t\t{0}", networkStatus);
+
 
 		//Update Player health, Rune completion, Allies, Enemies debug text
 		//Apart from player health, probably do not want to be doing these calculations every frame
@@ -99,15 +144,15 @@ public class TextManager : MonoBehaviour {
 		int allies = FindObjectsOfType<Eyeball>().Length + 1;
 		int enemies = FindObjectsOfType<EnemyHealth>().Length;
 
-		String[] debug = new String[4];
-		debug[0] = String.Format("Player:{0,5}", ph);
-		debug[1] = String.Format("Henge:{0,5}", rs);
-		debug[2] = String.Format("Allies:{0,5}", allies);
-		debug[3] = String.Format("Enemies:{0,5}", enemies);
+		gsDebug[0] = String.Format("Player:{0,5}", ph);
+		gsDebug[1] = String.Format("Henge:{0,5}", rs);
+		gsDebug[2] = String.Format("Allies:{0,5}", allies);
+		gsDebug[3] = String.Format("Enemies:{0,5}", enemies);
+
+		changeFramerateString(psDebug[0] + "\n" + psDebug[1] + "\n" + psDebug[2]);//+ "\n" + psDebug[3]);
+		changeGameStatusString(gsDebug[0] + "\n" + gsDebug[1] + "\n" + gsDebug[2] + "\n" + gsDebug[3]);
 
 
-		changeLatencyString(debug[0] + "\n" + debug[1] + "\n" + debug[2] + "\n" + debug[3]);
-		
 
 		//Debug text for engine, ARKit positions and rotations
 		Vector3 enginePosition = ARManager.getUnityCameraPosition ();
@@ -126,12 +171,14 @@ public class TextManager : MonoBehaviour {
 	public void changeFramerateString(String framerateString) {
 		framerateText.text = framerateString;
 	}
-	public void changeLatencyString(String latencyString) {
-		latencyText.text = latencyString;
+
+	public void changeGameStatusString(String gameStatus) {
+		gameStateText.text = gameStatus;
 	}
 
-	public void changeNetworkString(String networkString) {
+	public void updateNetworkString(String networkString) {
 		networkText.text = networkString;
+		networkStatus = networkString;
 	}
 	public void updateTrackerRotationString(Quaternion rot) {
 
