@@ -223,6 +223,9 @@ public class NetworkManager : MonoBehaviour {
         if(!isHost){
             byte error;
 
+            //Attempt to get IPAddress entered by user in UI
+            connection_ip =  NetworkInterface.getUserIP();
+
             Debug.Log("Attempting to connect to <" + connection_ip + ":" + connection_port + ">");
 			//NetworkInterface.UpdateNetworkStatus ("A2C: <" + connection_ip + ":" + connection_port + ">");
             NetworkInterface.UpdateNetworkStatus ("Connecting...");

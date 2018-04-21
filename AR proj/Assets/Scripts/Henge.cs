@@ -38,7 +38,7 @@ public class Henge : MonoBehaviour {
 			}
 		}
 		portal.SetActive(false);
-		//baseRune.SetActive(false);
+		baseRune.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -50,6 +50,7 @@ public class Henge : MonoBehaviour {
 			mats[0] = properMaterial;
 			mr.materials = mats;
 			portal.SetActive(true);
+			baseRune.SetActive(true);
 		}
 	}
 

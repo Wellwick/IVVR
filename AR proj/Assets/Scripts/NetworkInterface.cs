@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NetworkInterface : MonoBehaviour {
 
 	public GameObject HealBeamObject;
 	public GameObject DamageBeamObject;
+	public Text IPinputFieldObject;
 
+	private static Text IPinputField;
 	private static UnityARCameraManager ARCameraManager;
 	private static TextManager textManager;
 	private static Beam HealBeam;
@@ -19,6 +22,8 @@ public class NetworkInterface : MonoBehaviour {
 		//Debug.Log ("Starting Network Interface... <TextManager found>:" + (textManager != null) + " <ARCameraManager found>:" + (ARCameraManager != null));
 		HealBeam = HealBeamObject.GetComponent<Beam>();
 		DamageBeam = DamageBeamObject.GetComponent<Beam>();
+
+		IPinputField = IPinputFieldObject;
 	}
 
 	void Update() {
@@ -100,4 +105,7 @@ public class NetworkInterface : MonoBehaviour {
 		}
 	}
 
+	public static string getUserIP() {
+		return IPinputField.text;
+	}
 }
