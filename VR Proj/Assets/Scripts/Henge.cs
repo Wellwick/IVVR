@@ -137,7 +137,7 @@ public class Henge : MonoBehaviour {
 			return null;
 		} else {
 			int spawn = (int)Random.Range(0.0f, smallDrops+largeDrops-0.1f)+1;
-			if (spawn < smallDrops) {
+			if (largeDrops == 0 || spawn < smallDrops) {
 				return smallDrop;
 			} else {
 				return largeDrop;
