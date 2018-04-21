@@ -125,11 +125,11 @@ public class Henge : MonoBehaviour {
 		int largeDrops = 0;
 
 		for (int i = 0; i < smallRunes.Length; i++) {
-			if (smallRunes[i].GetComponent<Rune>().active)
+			if (!smallRunes[i].GetComponent<Rune>().active)
 				smallDrops++;
 		}
 		for (int i = 0; i < largeRunes.Length; i++) {
-			if (largeRunes[i].GetComponent<Rune>().active)
+			if (!largeRunes[i].GetComponent<Rune>().active)
 				largeDrops++;
 		}
 
