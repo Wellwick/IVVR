@@ -104,6 +104,7 @@ public class NetworkInterface : MonoBehaviour {
 
 		}
 	}
+	
 
 	public static string getUserIP() {
 		return IPinputField.text;

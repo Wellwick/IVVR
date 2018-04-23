@@ -13,7 +13,7 @@ public class ButtonManager : MonoBehaviour {
 	public GameObject optionsPanelObject;
 	public GameObject poseEstimationDropdownObject;
 	public GameObject optionsButton;
-	public GameObject HPindicatorObject;
+	public GameObject OcclusionObject;
 
 	private UnityARCameraManager ARCameraManager;
 
@@ -71,9 +71,12 @@ public class ButtonManager : MonoBehaviour {
 			ARCameraManager.tracking = TrackingType.TrackerRelay;
 			break;
 		case 2:
-			ARCameraManager.tracking = TrackingType.TrackerCalibration;
+			ARCameraManager.tracking = TrackingType.HeadsetRelay;
 			break;
 		case 3:
+			ARCameraManager.tracking = TrackingType.TrackerCalibration;
+			break;
+		case 4:
 			ARCameraManager.tracking = TrackingType.HeadsetCalibration;
 			break;
 		}
@@ -81,8 +84,8 @@ public class ButtonManager : MonoBehaviour {
 	}
 
 	public void changeOcclusion() {
-		Debug.Log("Changing occlusion to: " + !HPindicatorObject.activeSelf);
-		HPindicatorObject.SetActive(!HPindicatorObject.activeSelf);
+		Debug.Log("Changing occlusion to: " + !OcclusionObject.activeSelf);
+		OcclusionObject.SetActive(!OcclusionObject.activeSelf);
 	}
 
 

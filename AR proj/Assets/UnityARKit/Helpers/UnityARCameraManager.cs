@@ -6,13 +6,11 @@ using UnityEngine.XR.iOS;
 public enum TrackingType : byte {
 		ARKit = 0,
 		TrackerRelay = 1,
-		TrackerCalibration = 2,
-		HeadsetCalibration = 3
+		HeadsetRelay = 2,
+		TrackerCalibration = 3,
+		HeadsetCalibration = 4
 	}
 public class UnityARCameraManager : MonoBehaviour {
-
-	
-
 
     public Camera m_camera;
     private UnityARSessionNativeInterface m_session;
@@ -137,6 +135,9 @@ public class UnityARCameraManager : MonoBehaviour {
 			if (tracking == TrackingType.TrackerRelay) {
 				unityCameraPosition = tracker_position;
 				unityCameraRotation = tracker_rotation;
+			} else if (tracking == TrackingType.HeadsetRelay) {
+				unityCameraPosition = headset_position;
+				unityCameraRotation = headset_rotation;
 			} else if ((tracking == TrackingType.TrackerCalibration) || (tracking == TrackingType.HeadsetCalibration)) {
 				//Take care to multiply offset_rotation * tracker_rotation, and not other way around
 				//This is because quaternion multiplication is not commutative.

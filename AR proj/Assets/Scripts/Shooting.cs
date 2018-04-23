@@ -18,14 +18,17 @@ public class Shooting : MonoBehaviour {
 	}
 
 	public void StartDamage() {
-
-		beamDamage.GetComponent<Beam>().StartEmitting();
+		if (!beamHealing.GetComponent<Beam>().isEmitting()) {
+			beamDamage.GetComponent<Beam>().StartEmitting();
+		}
 
 	}
 
 	public void StartHeal() {
 		
-		beamHealing.GetComponent<Beam>().StartEmitting();
+		if (!beamDamage.GetComponent<Beam>().isEmitting()) {
+			beamHealing.GetComponent<Beam>().StartEmitting();
+		}
 
 	}
 	public void StopDamage() {

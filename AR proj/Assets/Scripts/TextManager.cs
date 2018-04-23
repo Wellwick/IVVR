@@ -168,11 +168,10 @@ public class TextManager : MonoBehaviour {
 		positionEngineText.text = "pos: {" + Math.Round(enginePosition.x, 2) + ", " + Math.Round(enginePosition.y, 2) + ", " + Math.Round(enginePosition.z, 2) + "}";
 		rotationEngineText.text = "rot: {" + Math.Round(engineRotation.x, 2) + ", " + Math.Round(engineRotation.y, 2) + ", " + Math.Round(engineRotation.z, 2) + "}";
 		*/
-		positionARKitText.text = "pos: {}";
-		rotationARKitText.text = "rot: {" + Math.Round(ARKitRotation.x, 2) + ", " + Math.Round(ARKitRotation.y, 2) + ", " + Math.Round(ARKitRotation.z, 2) + "}";
-		positionEngineText.text = "pos: {" + Math.Round(enginePosition.x, 2) + ", " + Math.Round(enginePosition.y, 2) + ", " + Math.Round(enginePosition.z, 2) + "}";
-		rotationEngineText.text = "rot: {" + Math.Round(engineRotation.x, 2) + ", " + Math.Round(engineRotation.y, 2) + ", " + Math.Round(engineRotation.z, 2) + "}";
-		
+		positionARKitText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", ARKitPosition.x, ARKitPosition.y, ARKitPosition.z);
+		rotationARKitText.text = String.Format("rot: ({0:000}, {1:000}, {2:000})", ARKitRotation.x, ARKitRotation.y, ARKitRotation.z);
+		positionEngineText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", enginePosition.x, enginePosition.y, enginePosition.z);
+		rotationEngineText.text = String.Format("rot: ({0:000}, {1:000}, {2:000})", engineRotation.x, engineRotation.y, engineRotation.z);
 	}
 	public void updateLatency(int latency) {
 		this.latency = latency;
@@ -190,11 +189,10 @@ public class TextManager : MonoBehaviour {
 		networkStatus = networkString;
 	}
 	public void updateTrackerRotationString(Quaternion rot) {
-
-		rotationTrackerText.text = "rot: {" + Math.Round (rot.x, 2) + ", " + Math.Round (rot.y, 2) + ", " + Math.Round (rot.z, 2) + ", " + Math.Round (rot.w, 2) + "}";
+		Vector3 rotVec = rot.eulerAngles;
+		rotationTrackerText.text = String.Format("pos: ({0:000}, {1:000}, {2:000})", rotVec.x, rotVec.y, rotVec.z);
 	}
 	public void updateTrackerPositionString(Vector3 pos) {
-
-		positionTrackerText.text = "rot: {" + Math.Round (pos.x, 2) + ", " + Math.Round (pos.y, 2) + ", " + Math.Round (pos.z, 2) + "}";
+		positionTrackerText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", pos.x, pos.y, pos.z);
 	}
 }
