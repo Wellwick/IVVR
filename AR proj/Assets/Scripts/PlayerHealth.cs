@@ -21,7 +21,6 @@ public class PlayerHealth : MonoBehaviour
 
     //a handle to get at tracker position
     public GameObject ARcameraManager;
-    private UnityARCameraManager UnityARCameraManager;
 
     //gameobject for bars to be childed to - allows manipulations in normal space, so bars are horizontal
     public GameObject Indicator;
@@ -35,7 +34,7 @@ public class PlayerHealth : MonoBehaviour
         //get private variables - instantiated materials and script
         indicatorMaterial = healthIndicator.GetComponent<MeshRenderer>().material;
         indicatorMaterialinv = healthIndicatorinv.GetComponent<MeshRenderer>().material;
-        UnityARCameraManager = ARcameraManager.GetComponent<UnityARCameraManager>();
+        //UnityARCameraManager = ARcameraManager.GetComponent<UnityARCameraManager>();
 
         //setup health
         SetHealth(maxHealth);

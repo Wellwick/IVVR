@@ -1519,6 +1519,47 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 507814024}
+--- !u!1 &514017415
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 514017417}
+  - component: {fileID: 514017416}
+  m_Layer: 0
+  m_Name: VR-Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &514017416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 514017415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd1a16c03bd54111a177ac43fe833dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &514017417
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 514017415}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 805992766}
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &514511765
 GameObject:
   m_ObjectHideFlags: 0
@@ -2984,7 +3025,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &964820049
 Transform:
   m_ObjectHideFlags: 0
@@ -3490,7 +3531,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1257786579
 GameObject:
@@ -3523,6 +3564,7 @@ MonoBehaviour:
   startAlignment: 0
   planeDetection: 0
   tracking: 2
+  VRPlayer: {fileID: 0}
   tracker_position: {x: 0, y: 0, z: 0, w: 1}
   tracker_rotation: {x: 1, y: 0, z: 0, w: 0}
   headset_position: {x: 0, y: 0, z: 0, w: 1}
@@ -5283,7 +5325,7 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 514017417}
     m_Modifications:
     - target: {fileID: 4636715352303282, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
       propertyPath: m_LocalPosition.x
@@ -5295,7 +5337,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4636715352303282, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4636715352303282, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
       propertyPath: m_LocalRotation.x
@@ -5315,7 +5357,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4636715352303282, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
       propertyPath: m_RootOrder
-      value: 12
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114967709742746540, guid: 7b431e96edc534d6aa15d9a185f92a84,
         type: 2}
@@ -5346,7 +5388,8 @@ Prefab:
       propertyPath: m_Radius
       value: 0.3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114682012429862166, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 7b431e96edc534d6aa15d9a185f92a84, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &2135483410
@@ -5417,6 +5460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HealBeamObject: {fileID: 1882428750}
   DamageBeamObject: {fileID: 1674495527}
+  VRPlayer: {fileID: 514017415}
   IPinputFieldObject: {fileID: 1237412149}
 --- !u!4 &2144854953 stripped
 Transform:

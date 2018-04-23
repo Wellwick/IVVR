@@ -31,6 +31,7 @@ public class UnityARCameraManager : MonoBehaviour {
 	
 	
 	public TrackingType tracking;
+	public GameObject VRPlayer;
 
 	//These may be used later if camera control (setting position and rotation equal to the tracker infromation) is done through this class
 	public Vector4 tracker_position = new Vector4 (0, 0, 0, 1);
@@ -112,6 +113,7 @@ public class UnityARCameraManager : MonoBehaviour {
 
 	//Edited by Chris 21/01/2018
 	void Update () {
+		updateHeadsetPose();
 		
         if (m_camera != null)
         {
@@ -192,6 +194,10 @@ public class UnityARCameraManager : MonoBehaviour {
 		//Make sure target_position and lastPosARKit both have w set to 1.
 		offset_position = target_position - lastPosARKit;
 		offset_rotation = target_rotation * Quaternion.Inverse(lastRotARKit);
+
+	}
+
+	private void updateHeadsetPose() {
 
 	}
 

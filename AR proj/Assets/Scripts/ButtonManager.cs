@@ -84,7 +84,7 @@ public class ButtonManager : MonoBehaviour {
 	}
 
 	public void changeOcclusion() {
-		Debug.Log("Changing occlusion to: " + !OcclusionObject.activeSelf);
+		//Debug.Log("Changing occlusion to: " + !OcclusionObject.activeSelf);
 		OcclusionObject.SetActive(!OcclusionObject.activeSelf);
 	}
 

@@ -7,6 +7,7 @@ public class NetworkInterface : MonoBehaviour {
 
 	public GameObject HealBeamObject;
 	public GameObject DamageBeamObject;
+	public GameObject VRPlayer;
 	public Text IPinputFieldObject;
 
 	private static Text IPinputField;
@@ -27,7 +28,7 @@ public class NetworkInterface : MonoBehaviour {
 	}
 
 	void Update() {
-
+		
 	}
 
 	public static int getBeamType(){
@@ -97,6 +98,19 @@ public class NetworkInterface : MonoBehaviour {
 
 			textManager.updateTrackerPositionString (pos);
 			textManager.updateTrackerRotationString (rot);
+
+		} else {
+
+			Debug.LogError ("Attempting to update tracker pose but ARCameraManager is null.");
+
+		}
+	}
+	public static void UpdateHeadsetPose(Vector3 pos, Quaternion rot) {
+
+		if (ARCameraManager != null) {
+
+			ARCameraManager.updateHeadsetPosition (pos);
+			ARCameraManager.updateHeadsetRotation (rot);
 
 		} else {
 
