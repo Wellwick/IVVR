@@ -29,17 +29,15 @@ public class UnityARCameraManager : MonoBehaviour {
 	//public bool htcTrackerOffsetEnabled = true;
 
 	
-	
 	public TrackingType tracking;
-	public GameObject VRPlayer;
 
 	//These may be used later if camera control (setting position and rotation equal to the tracker infromation) is done through this class
-	public Vector4 tracker_position = new Vector4 (0, 0, 0, 1);
-	public Quaternion tracker_rotation = new Quaternion (1, 0, 0, 0); // 0,1,0,0 is equal to pi rotation around X axis
-	public Vector4 headset_position = new Vector4(0,0,0,1);
-	public Quaternion headset_rotation = new Quaternion(1,0,0,0);
-	public Vector4 arkit_position;
-	public Quaternion arkit_rotation;
+	private Vector4 tracker_position = new Vector4 (0, 0, 0, 1);
+	private Quaternion tracker_rotation = new Quaternion (1, 0, 0, 0); // 0,1,0,0 is equal to pi rotation around X axis
+	private Vector4 headset_position = new Vector4(0,0,0,1);
+	private Quaternion headset_rotation = new Quaternion(1,0,0,0);
+	private Vector4 arkit_position;
+	private Quaternion arkit_rotation;
 	private Vector4 offset_position = new Vector4 (0, 0, 0, 0);
 	private Quaternion offset_rotation = new Quaternion();
 
@@ -113,7 +111,6 @@ public class UnityARCameraManager : MonoBehaviour {
 
 	//Edited by Chris 21/01/2018
 	void Update () {
-		updateHeadsetPose();
 		
         if (m_camera != null)
         {
@@ -135,24 +132,34 @@ public class UnityARCameraManager : MonoBehaviour {
 			//Debug.Log(tracking);
 
 			if (tracking == TrackingType.TrackerRelay) {
+				resetCameraParent();
 				unityCameraPosition = tracker_position;
 				unityCameraRotation = tracker_rotation;
 			} else if (tracking == TrackingType.HeadsetRelay) {
+				resetCameraParent();
 				unityCameraPosition = headset_position;
 				unityCameraRotation = headset_rotation;
+
+				/* OLD METHOD FOR CALIBRATION 
 			} else if ((tracking == TrackingType.TrackerCalibration) || (tracking == TrackingType.HeadsetCalibration)) {
 				//Take care to multiply offset_rotation * tracker_rotation, and not other way around
 				//This is because quaternion multiplication is not commutative.
 				//arkit_position.z = -arkit_position.z;
 				unityCameraPosition = offset_position + arkit_position;
 				unityCameraRotation = offset_rotation * arkit_rotation;
-			} else { //if (tracking == TrackingType.ARKit) {
+				*/
+
+			} else if (tracking == TrackingType.ARKit) {
 				//Setting the Unity camera pose to purely ARKit's pose estimation
+				resetCameraParent();
+				unityCameraPosition = arkit_position;
+				unityCameraRotation = arkit_rotation;
+			} else {
+				//NEW CALIBRATION
+				//do not reset camera parent
 				unityCameraPosition = arkit_position;
 				unityCameraRotation = arkit_rotation;
 			}
-
-
 
 			m_camera.transform.localPosition = unityCameraPosition;
 			m_camera.transform.localRotation = unityCameraRotation;
@@ -163,7 +170,8 @@ public class UnityARCameraManager : MonoBehaviour {
         }
 
 	}
-
+	/*
+	//OLD CALIBRATION METHOD
 	//calls the appropriate UnityARSessionNativeInterface method which attempts 
 	//to calibrate the camera using the last known tracker position and rotation.
 	//It would make sense to update tracker position before performing the offset calculations.
@@ -194,10 +202,50 @@ public class UnityARCameraManager : MonoBehaviour {
 		//Make sure target_position and lastPosARKit both have w set to 1.
 		offset_position = target_position - lastPosARKit;
 		offset_rotation = target_rotation * Quaternion.Inverse(lastRotARKit);
+	}
+	*/
 
+	private void resetCameraParent() {
+		m_camera.transform.parent.position = new Vector3();
+		m_camera.transform.parent.rotation = new Quaternion();
 	}
 
-	private void updateHeadsetPose() {
+	//NEW CALIBRATION METHOD
+	public void calibrate() {
+		//Debug.Log("Attempting to calibrate");
+		Matrix4x4 matrix = m_session.GetCameraPose();
+		Handheld.Vibrate();
+
+		Vector4 lastPosARKit = UnityARMatrixOps.GetPosition (matrix);
+		Quaternion lastRotARKit = UnityARMatrixOps.GetRotation (matrix);
+		Vector4 target_position;
+		Quaternion target_rotation;
+
+		if (tracking == TrackingType.TrackerCalibration) {
+			target_position = tracker_position;
+			target_rotation = tracker_rotation;
+		} else {//if (tracking == TrackingType.HeadsetCalibration) {
+			target_position = headset_position;
+			target_rotation = headset_rotation;
+			//Quaternion.Euler(-headset_rotation.eulerAngles);
+			//Must rotate around y axis as phone and headset will face in opposite Z directions
+			//When placed opposite each other for calibration.
+		}
+
+		//Debug.Log(string.Format("Target pos: ({0:0.0}, {1:0.0}, {2:0.0})", target_position.x, target_position.y, target_position.z));
+		//Debug.Log(string.Format("Target rot: ({0:000}, {1:000}, {2:000})", target_rotation.eulerAngles.x, target_rotation.eulerAngles.y, target_rotation.eulerAngles.z));
+		
+
+
+		//The offsets for position and rotation are trivially calculated.
+		//Make sure target_position and lastPosARKit both have w set to 1.
+		Vector3 cppos = target_position - lastPosARKit;
+		Quaternion cprot =  target_rotation * Quaternion.Inverse(lastRotARKit);
+		
+		m_camera.transform.parent.position = cppos;
+		m_camera.transform.parent.rotation = cprot;
+		//Debug.Log(string.Format("Target pos: ({0:0.0}, {1:0.0}, {2:0.0})", cp.x, cp.y, cp.z));
+		//Debug.Log(string.Format("Target rot: ({0:000}, {1:000}, {2:000})", cr.eulerAngles.x, cr.eulerAngles.y, cr.eulerAngles.z));
 
 	}
 
@@ -222,7 +270,6 @@ public class UnityARCameraManager : MonoBehaviour {
 	public Quaternion getARKitRotation(){
 		return arkit_rotation;
 	}
-
 
 	public Vector3 getUnityCameraPosition() {
 		if (m_camera != null) {

@@ -95,7 +95,7 @@ public class Henge : MonoBehaviour {
 			}
 			if (states[i]) runeCount++;
 		}
-		Debug.Log("There are currently " + runeCount + " total runes");
+		//Debug.Log("There are currently " + runeCount + " total runes");
 	}
 
 	public int getSize() {

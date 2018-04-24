@@ -1,5 +1,5 @@
 iOS
-d1dd355c5aec1112f3d0516fd6b07859 Assembly-CSharp.dll:.TextManager
+f6acfd1b4af8c41d7d47016c34fa8b2a Assembly-CSharp.dll:.TextManager
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:UnityEngine.XR.iOS.UnityARKitControl
 12096ddf91bc99172a48b0419861fd00 Assembly-CSharp.dll:.PointCloudParticleExample
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
@@ -80,7 +80,7 @@ c63db43c730fa2cbb8ca07de15898cb6 UnityEngine.UI.dll:UnityEngine.UI.Toggle
 f61c0793411f10cf5fbfa1473fef5ef2 UnityEngine.UI.dll:UnityEngine.UI.ToggleGroup
 86d36c43c53541d667100dc90b89cfba UnityEngine.UI.dll:UnityEngine.EventSystems.TouchInputModule
 1b8c02d0aa82fbf036a2b9b2d713eec3 UnityEngine.UI.dll:UnityEngine.UI.VerticalLayoutGroup
-cbbf9c30e923f208d1a7e25a05f6984c Assembly-CSharp.dll:.UnityARCameraManager
+cc5e0e24332126dafbc92d92a4b5af66 Assembly-CSharp.dll:.UnityARCameraManager
 b2b5dfc66d77944e92530f0a64f822fa Assembly-CSharp.dll:.EnemyHealth
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 970a95104359198fe1a98ef48655de8c UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack
@@ -161,6 +161,6 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 5f331c27d89f9342d51f70e948d0a16f Assembly-CSharp.dll:.UI_Dropdown
 0a4f4a0540ae9a5a1027d87773e89c16 Assembly-CSharp.dll:.Beam
 20f6fc2f97acb2a653a4d4f87e187d96 Assembly-CSharp.dll:.PlayerHealth
-d7690923a765ab6617c72d58d95a0e08 Assembly-CSharp.dll:.NetworkInterface
+a7da0cd33c1656e23b5e430136a0e76a Assembly-CSharp.dll:.NetworkInterface
 391d84b859f3b155fe38f54bfce79162 Assembly-CSharp.dll:.UnityPointCloudExample
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.UnityARCameraNearFar

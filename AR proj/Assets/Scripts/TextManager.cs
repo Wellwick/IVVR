@@ -18,6 +18,8 @@ public class TextManager : MonoBehaviour {
 	public GameObject rotationTrackerObject;
 	public GameObject positionEngineObject;
 	public GameObject rotationEngineObject;
+	public GameObject positionCParentObject;
+	public GameObject rotationCParentObject;
 
 	public GameObject playerHealthObject;
 	public GameObject hengeObject;
@@ -36,6 +38,8 @@ public class TextManager : MonoBehaviour {
 	private Text rotationTrackerText;
 	private Text positionEngineText;
 	private Text rotationEngineText;
+	private Text positionCParentText;
+	private Text rotationCParentText;
 
 	//Queue<float> frameTimes;
 	//public int FrameQueueSize;
@@ -63,6 +67,8 @@ public class TextManager : MonoBehaviour {
 		rotationTrackerText = rotationTrackerObject.GetComponent<Text> ();
 		positionEngineText = positionEngineObject.GetComponent<Text> ();
 		rotationEngineText = rotationEngineObject.GetComponent<Text> ();
+		positionCParentText = positionCParentObject.GetComponent<Text>();
+		rotationCParentText = rotationCParentObject.GetComponent<Text>();
 
 		positionARKitText.text = "ARKit Pos";
 		rotationARKitText.text = "ARKit Rot";
@@ -161,6 +167,8 @@ public class TextManager : MonoBehaviour {
 		//Quaternion ARKitRotation = ARManager.getARKitRotation ();
 		Vector3 engineRotation = ARManager.getUnityCameraRotation ().eulerAngles;
 		Vector3 ARKitRotation = ARManager.getARKitRotation ().eulerAngles;
+		Vector3 cparentPosition = ARManager.m_camera.gameObject.transform.parent.transform.position;
+		Quaternion cparentRotation = ARManager.m_camera.gameObject.transform.parent.transform.rotation;
 
 		/*
  		positionARKitText.text = "pos: {" + Math.Round(ARKitPosition.x, 2) + ", " + Math.Round(ARKitPosition.y, 2) + ", " + Math.Round(ARKitPosition.z, 2) + "}";
@@ -172,6 +180,8 @@ public class TextManager : MonoBehaviour {
 		rotationARKitText.text = String.Format("rot: ({0:000}, {1:000}, {2:000})", ARKitRotation.x, ARKitRotation.y, ARKitRotation.z);
 		positionEngineText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", enginePosition.x, enginePosition.y, enginePosition.z);
 		rotationEngineText.text = String.Format("rot: ({0:000}, {1:000}, {2:000})", engineRotation.x, engineRotation.y, engineRotation.z);
+		positionCParentText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", cparentPosition.x, cparentPosition.y, cparentPosition.z);
+		rotationCParentText.text = String.Format("rot: ({0:000}, {1:000}, {2:000})", cparentRotation.x, cparentRotation.y, cparentRotation.z);
 	}
 	public void updateLatency(int latency) {
 		this.latency = latency;
