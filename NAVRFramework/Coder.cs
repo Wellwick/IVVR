@@ -158,8 +158,8 @@ public class Coder{
         //move the index to correct position
         index = 1 + (index*49);
 
-        //we already have the array
-        //sort out in a sec
+        // Already have the array, so read out the floats
+        // and create the Vector3
         float posX = readOutFloat(index+9);
         float posY = readOutFloat(index+13);
         float posZ = readOutFloat(index+17);
@@ -168,11 +168,18 @@ public class Coder{
 
     // Method to get Rotation of an item, given an item index
     public Quaternion GetRotation(int index) {
+        if (illegalVal(index)) {
+            return new Quaternion(0,0,0,0);
+        }
+        // Get the correct index value
         index = 1 + (index*49);
+
+        // Collect the correct rotation values
         float rotX = readOutFloat(index+21);
         float rotY = readOutFloat(index+25);
         float rotZ = readOutFloat(index+29);
         float rotW = readOutFloat(index+33);
+        // Return a new Quaternion
         return new Quaternion(rotX, rotY, rotZ, rotW);
 
     }
@@ -182,10 +189,11 @@ public class Coder{
         if(illegalVal(index)){
             return new Vector3(0,0,0);
         }
-        //move the index to correct position
+        // Move the index to correct position
         index = 1 + (index*49);
 
-        //once again, already have the array
+        // Once again, already have the array
+        // Create the correct Vector3 and return
         float velX = readOutFloat(index+37);
         float velY = readOutFloat(index+41);
         float velZ = readOutFloat(index+45);
