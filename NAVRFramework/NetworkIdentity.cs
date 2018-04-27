@@ -20,23 +20,31 @@ public class NetworkIdentity : MonoBehaviour {
 	private bool watched = false;
 	private Vector3 previousPos;
 	private Quaternion previousRot;
-	private NetworkManager networkManager;
+	public NetworkManager networkManager;
 
 
-	// Use this for initialization
+	//called when a new object with this script acttached is spawned
 	void Awake () {
-		networkManager = GameObject.FindObjectOfType<NetworkManager>();
 		if(networkManager.isHost){
-			//Debug.Log("This objects id is " + objectId);
+
+			// set the localId to the current value of the counter and then increment it 
 			objectId = objectCount;
 			Interlocked.Increment(ref objectCount);
+
+			//keep track of the last known position and rotation
 			previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 			previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
+
+			//add object to the dictionary of existing networked objects
 			networkManager.networkedObjects.Add(objectId, gameObject);
+
+			//if there is a connection then spawn the new object
 			if(networkManager.isConnection()){
 				networkManager.SendSpawn(gameObject);
 			}
 		} else {
+
+			//if the current application is not the host then do not set an id and only add it to the dictionary
 			networkManager.networkedObjects.Add(objectId, gameObject);
 		}
 
@@ -46,7 +54,12 @@ public class NetworkIdentity : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+
+		// if the currect application is the host
 		if(networkManager.isHost){
+
+			// if the position or rotation has changed between frames then add object to the watchlist
+			// else, if the object was currently being watched, remove the object from the watch list
 			if((!previousPos.Equals(this.transform.position) || !previousRot.Equals(this.transform.rotation))){
 				if(!networkManager.watchList.ContainsKey(objectId)){
 					//Debug.Log("Adding to the watchlist");
@@ -59,12 +72,15 @@ public class NetworkIdentity : MonoBehaviour {
 					watched = false;
 				}
 		}
+
+		//update last tracked location and rotation
 		previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 		previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
 		}
 
 	}
 
+	//If the object is destroyed and this is the host, then send a remove command to all clients and remove traces of object from dictionaries
 	void OnDestroy(){
 		if(networkManager.isHost){
 			networkManager.SendRemove(objectId);

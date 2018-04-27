@@ -6,9 +6,10 @@ using UnityEngine.UI;
 /* 
  * NETWORKINTERFACE.CS
  * ----------------------------
- * This script must acts as an interface between the AR scene and native ARKit functions.
- * It must be attached to a GameObject in the AR scene, and provides static functions 
- * that AR NetworkManager can easily access.
+ * This script acts as an interface between the AR scene, native ARKit functions and
+ * NetworkManager. It must be attached to a GameObject in the AR scene, and provides
+ * static functions that AR NetworkManager can easily access. Generally speaking, it
+ * is a helper class
  *
  * ----------------------------
  * EXAMPLES
