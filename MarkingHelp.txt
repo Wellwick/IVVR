@@ -1,0 +1,5 @@
+All VR Code can be found in VR Proj/Assets/Scripts
+
+All AR Code can be found in AR Proj/Assets/Scripts
+
+For the lightweight networking framework, see NAVRFramework
