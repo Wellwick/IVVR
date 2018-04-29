@@ -10,6 +10,7 @@ public class NetworkInterface : MonoBehaviour {
 	public GameObject VRPlayer;
 	public Text IPinputFieldObject;
 
+	private static Shooting shooting;
 	private static Text IPinputField;
 	private static UnityARCameraManager ARCameraManager;
 	private static TextManager textManager;
@@ -23,6 +24,8 @@ public class NetworkInterface : MonoBehaviour {
 		//Debug.Log ("Starting Network Interface... <TextManager found>:" + (textManager != null) + " <ARCameraManager found>:" + (ARCameraManager != null));
 		HealBeam = HealBeamObject.GetComponent<Beam>();
 		DamageBeam = DamageBeamObject.GetComponent<Beam>();
+
+		shooting = GameObject.FindObjectOfType<Shooting>();
 
 		IPinputField = IPinputFieldObject;
 	}
@@ -40,6 +43,15 @@ public class NetworkInterface : MonoBehaviour {
 			return 0;
 		}
 
+	}
+
+	public static void Pause() {
+		shooting.Pause();
+		textManager.Resume();
+	}
+	public static void Resume() {
+		shooting.Resume();
+		textManager.Resume();
 	}
 
 	public static void UpdateNetworkStatus(string status) {

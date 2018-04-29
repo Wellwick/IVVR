@@ -4,42 +4,50 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour {
 
-	public GameObject beamDamage;
-	public GameObject beamHealing;
+	public GameObject damageBeamObject;
+	public GameObject healingBeamObject;
 
+	private Beam damageBeam;
+	private Beam healingBeam;
+	private bool paused;
 
 	// Use this for initialization
 	void Start () {
-
+		damageBeam = damageBeamObject.GetComponent<Beam>();
+		healingBeam = healingBeamObject.GetComponent<Beam>();
 	}
 
 	void Update () {
 		
 	}
+	public void Pause() {
+		damageBeam.Pause();
+		healingBeam.Pause();
+		paused = true;
+	}
+	public void Resume() {
 
-	public void StartDamage() {
-		if (!beamHealing.GetComponent<Beam>().isEmitting()) {
-			beamDamage.GetComponent<Beam>().StartEmitting();
-		}
-
+		paused = false;
 	}
 
-	public void StartHeal() {
-		
-		if (!beamDamage.GetComponent<Beam>().isEmitting()) {
-			beamHealing.GetComponent<Beam>().StartEmitting();
+	public void startDamage() {
+		if (!damageBeam.isEmitting() && !paused ) {
+			damageBeam.StartEmitting();
 		}
-
 	}
+	public void startHeal() {
+		if (!healingBeam.isEmitting() && !paused) {
+			healingBeam.StartEmitting();
+		}
+	}
+
 	public void StopDamage() {
-
-		beamDamage.GetComponent<Beam>().StopEmitting();
-
+		damageBeam.StopEmitting();
 	}
 
 	public void StopHeal() {
-		
-		beamHealing.GetComponent<Beam>().StopEmitting();
-
+		healingBeam.StopEmitting();
 	}
+
 }
+

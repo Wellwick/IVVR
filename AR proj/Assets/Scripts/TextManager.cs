@@ -11,6 +11,7 @@ public class TextManager : MonoBehaviour {
 	public GameObject networkTextObject;
 	public GameObject framerateTextObject;
 	public GameObject gameStateTextObject;
+	public GameObject pausedTextPanel;
 
 	public GameObject positionARKitObject;
 	public GameObject rotationARKitObject;
@@ -204,5 +205,12 @@ public class TextManager : MonoBehaviour {
 	}
 	public void updateTrackerPositionString(Vector3 pos) {
 		positionTrackerText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", pos.x, pos.y, pos.z);
+	}
+
+	public void Pause() {
+		pausedTextPanel.SetActive(true);
+	}
+	public void Resume() {
+		pausedTextPanel.SetActive(false);
 	}
 }

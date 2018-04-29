@@ -40,6 +40,9 @@ public class Beam : MonoBehaviour {
 
 	}
 
+	public void Pause() {
+		particleSys.Pause(true);
+	}
 
 	public void StartEmitting() {
 		//Debug.Log("STarting Emmission");
