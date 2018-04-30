@@ -9,15 +9,28 @@ public class MoveTo : MonoBehaviour {
 	private float damageTimer;
 	public GameObject healthSprite;
 
+    private GameManager gameManager;
+
 	void Start () {
 		agent = GetComponent<NavMeshAgent>();
 		agent.destination = goal.position; 
 		damageTimer = 0.0f;
+
+        gameManager = FindObjectOfType<GameManager>();
 	}
 
 	void Update() {
-		agent.destination = goal.position;
-		GetComponent<Transform>().LookAt(goal);
+
+        if (gameManager.GetGameState() == GameState.Paused) {
+            agent.isStopped = true;
+            return;
+        } else {
+            agent.isStopped = false;
+        }
+
+        agent.destination = goal.position;
+
+        GetComponent<Transform>().LookAt(goal);
 
 
 		if (damageTimer > 0.0f) damageTimer -= Time.deltaTime;

@@ -292,6 +292,7 @@
     <Compile Include="Assets\Scripts\DemoCoder.cs" />
     <Compile Include="Assets\Scripts\EnemyHealth.cs" />
     <Compile Include="Assets\Scripts\EnemyManager.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Grappler.cs" />
     <Compile Include="Assets\Scripts\HealthParticle.cs" />
     <Compile Include="Assets\Scripts\Henge.cs" />

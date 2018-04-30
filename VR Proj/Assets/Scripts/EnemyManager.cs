@@ -8,17 +8,40 @@ public class EnemyManager : MonoBehaviour
 	public GameObject Enemy;                // The enemy prefab to be spawned
 	public GameObject camera;
 	public GameObject healthSprite;
-	public float spawnTime = 50f;           // How long between each spawn
-	public int enemyCount;
-	public int maxEnemies = 10;
+    public GameObject parentObject;         // Enemies will spawn as children of this gameobject
+
+	public float spawnInterval = 10f;           // How long between each spawn
+    public int startingHealth = 1000;
+    public int maxEnemies = 10;
+    public int enemyCount;
+
+
+    private bool spawning = false;
 
 	void Start () {
-		// Call the Spawn function after a delay of the spawnTime and then continue to call after the same amount of time.
-		InvokeRepeating ("Spawn", spawnTime, spawnTime);
-		enemyCount = 0;
+		enemyCount = FindObjectsOfType<EnemyHealth>().Length;
 	}
 
-	void Spawn ()
+    public void StartSpawning()
+    {
+        // Call the Spawn function after a delay of the spawnInterval and then continue to call after the same amount of time.
+        CancelInvoke("Spawn");
+        InvokeRepeating("Spawn", spawnInterval, spawnInterval);
+    }
+    public void PauseSpawning()
+    {
+
+        // This may not be the best solution, as it will reset the timer
+        // This could be abused; pause the game just before enemies spawn, then unpause
+        CancelInvoke("Spawn");
+    }
+
+    public bool IsSpawning()
+    {
+        return spawning;
+    }
+
+    void Spawn ()
 	{
 		// If the player has no health left...
 		// if(playerHealth.currentHealth <= 0f) return; 
@@ -33,7 +56,7 @@ public class EnemyManager : MonoBehaviour
 
 		loc = calculateHitLocation (loc, 2.5f);
 	
-		GameObject go = (GameObject)Instantiate (Enemy, loc, rot);
+		GameObject go = Instantiate (Enemy, loc, rot, parentObject.transform);
 		NavMeshAgent agent = go.GetComponent<NavMeshAgent> ();
 		go.GetComponent<MoveTo>().healthSprite = healthSprite;
 		go.GetComponent<MoveTo>().goal = camera.transform;

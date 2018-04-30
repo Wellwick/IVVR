@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
 
@@ -8,28 +7,43 @@ public class MenuManager : MonoBehaviour {
 	public int difficulty;
 
 	public GameObject mainPanel;
-	public GameObject optionPanel;
+	public GameObject optionsMenu;
+    public GameObject difficultyTextObject;
+
+    private Text difficultyText;
+    private GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
-		optionPanel.SetActive (optionShowing);
+		optionsMenu.SetActive (optionShowing);
+        difficultyText = difficultyTextObject.GetComponent<Text>();
+        gameManager = FindObjectOfType<GameManager>();
+
+        ChangeDifficulty(1);
 	}
 
-	public void PlayGame() {
-		// Needs to get option settings and send them to relevant places
-
-		Quit ();
-	}
+    
 
 	public void ToggleOptions() {
 		optionShowing = !optionShowing;
-		optionPanel.SetActive (optionShowing);
+		optionsMenu.SetActive (optionShowing);
 	}
 
 	public void ChangeDifficulty (int i) {
-		// 0: Easy; 1:Medium; 2:Hard
-		difficulty = i;	
-		Debug.Log (difficulty);
+		// 1: Easy; 2:Medium; 3:Hard
+		difficulty = i;
+        string diffstr;
+        switch (difficulty)
+        {
+            case 1: diffstr = "Easy";       break;
+            case 2: diffstr = "Medium";     break;
+            case 3: diffstr = "Hard";       break;
+            default: diffstr = "Unknown";   break;
+        }
+		Debug.Log ("Difficulty changed to " + diffstr);
+        difficultyText.text = "Difficulty: " + diffstr;
+
+        gameManager.ChangeDifficulty(i);
 	}
 
 	public void Quit() {

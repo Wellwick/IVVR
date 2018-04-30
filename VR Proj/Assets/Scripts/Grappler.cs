@@ -12,6 +12,7 @@ public class Grappler : MonoBehaviour {
 	public LayerMask grappleMask;
 	private bool shouldPull;
 
+    private GameManager gameManager;    //Need this to know whether game is paued
 	private GameObject pullObject;
 	private bool pull = false;
 	private bool holding = false;
@@ -20,6 +21,8 @@ public class Grappler : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+        gameManager = FindObjectOfType<GameManager>();
+
 		grapple = Instantiate(grapplePrefab);
 		grappleTransform = grapple.transform;
 	}
@@ -89,6 +92,9 @@ public class Grappler : MonoBehaviour {
 	}
 
 	private void GrabObject() {
+
+        if (gameManager.GetGameState() == GameState.Paused) { return; }
+
 		var joint = AddFixedJoint();
 		joint.connectedBody = pullObject.GetComponent<Rigidbody>();
 		holding = true;

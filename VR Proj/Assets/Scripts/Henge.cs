@@ -18,52 +18,70 @@ public class Henge : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		// figure out how many runes we have in total
-		totalRunes = smallRunes.Length + largeRunes.Length;
-		// start off all of them false
-		for (int i=0; i<smallRunes.Length; i++) {
-			smallRunes[i].GetComponent<Rune>().active = false;
-		}
-		for (int i=0; i<largeRunes.Length; i++) {
-			largeRunes[i].GetComponent<Rune>().active = false;
-		}
-		// randomise which runes are already placed
-		int tempCounter = totalRunes;
-		while (startingRunes > 0) {
-			int selection = (int)Random.Range(0.0f, tempCounter-0.1f);
-			Debug.Log("Selection value was set to " + selection);
-			//step through and reduce until we reach the selection value
-			for (int i=0; i<smallRunes.Length; i++) {
-				if (selection == 0 && smallRunes[i].GetComponent<Rune>().active == false) {
-					Activate(smallRunes[i]);
-					selection--;
-					break;
-				} else {
-					if (smallRunes[i].GetComponent<Rune>().active == false) {
-						selection--;
-					}
-				}
-			}
-
-			for (int i=0; i<largeRunes.Length; i++) {
-				if (selection == -1) break;
-				if (selection == 0 && largeRunes[i].GetComponent<Rune>().active == false) {
-					Activate(largeRunes[i]);
-					break;
-				} else {
-					if (largeRunes[i].GetComponent<Rune>().active == false) {
-						selection--;
-					}
-				}
-			}
-			startingRunes--;
-			tempCounter--;
-		}
-		portal.SetActive(false);
+        Reset();
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    public void Reset()
+    {
+        // figure out how many runes we have in total
+        totalRunes = smallRunes.Length + largeRunes.Length;
+        // start off all of them false
+        for (int i = 0; i < smallRunes.Length; i++)
+        {
+            smallRunes[i].GetComponent<Rune>().active = false;
+        }
+        for (int i = 0; i < largeRunes.Length; i++)
+        {
+            largeRunes[i].GetComponent<Rune>().active = false;
+        }
+        // randomise which runes are already placed
+        int tempCounter = totalRunes;
+        while (startingRunes > 0)
+        {
+            int selection = (int)Random.Range(0.0f, tempCounter - 0.1f);
+            Debug.Log("Selection value was set to " + selection);
+            //step through and reduce until we reach the selection value
+            for (int i = 0; i < smallRunes.Length; i++)
+            {
+                if (selection == 0 && smallRunes[i].GetComponent<Rune>().active == false)
+                {
+                    Activate(smallRunes[i]);
+                    selection--;
+                    break;
+                }
+                else
+                {
+                    if (smallRunes[i].GetComponent<Rune>().active == false)
+                    {
+                        selection--;
+                    }
+                }
+            }
+
+            for (int i = 0; i < largeRunes.Length; i++)
+            {
+                if (selection == -1) break;
+                if (selection == 0 && largeRunes[i].GetComponent<Rune>().active == false)
+                {
+                    Activate(largeRunes[i]);
+                    break;
+                }
+                else
+                {
+                    if (largeRunes[i].GetComponent<Rune>().active == false)
+                    {
+                        selection--;
+                    }
+                }
+            }
+            startingRunes--;
+            tempCounter--;
+        }
+        portal.SetActive(false);
+    }
+
+    // Update is called once per frame
+    void Update () {
 		if (totalRunes == activeRunes) {
 			// Activate the portal!
 			MeshRenderer mr = baseRune.GetComponent<MeshRenderer>();
@@ -87,8 +105,12 @@ public class Henge : MonoBehaviour {
 		rune.GetComponent<Rune>().active = true;
 	}
 
+    public bool IsComplete()
+    {
+        return (activeRunes == totalRunes);
+    }
 
-	public bool[] GetRuneState() {
+    public bool[] GetRuneState() {
 		int count = 0;
 		bool[] states = new bool[smallRunes.Length+largeRunes.Length];
 		for (int i = 0; i<smallRunes.Length; i++) {

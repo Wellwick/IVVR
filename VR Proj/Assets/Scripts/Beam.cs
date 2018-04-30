@@ -48,4 +48,15 @@ public class Beam : MonoBehaviour {
 		particleSys.Stop(false, ParticleSystemStopBehavior.StopEmitting);
 		//Debug.Log("Stopping Emmission");
 	}
+
+    public void PauseEmitting()
+    {
+        particleSys.Pause(true);
+    }
+    public void ResumeEmitting()
+    {
+        //Must think about how to handle this, but for now this should work.
+        particleSys.Play(true);
+        particleSys.Stop(true);
+    }
 }
