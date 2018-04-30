@@ -13,11 +13,13 @@ public class ButtonManager : MonoBehaviour {
 	public GameObject optionsPanelObject;
 	public GameObject poseEstimationDropdownObject;
 	public GameObject optionsButton;
+
 	public GameObject OcclusionObject;
+	public GameObject TerrainObject;
 
 	private UnityARCameraManager ARCameraManager;
 
-	public Text selectedObjectText;
+	//public Text selectedObjectText;
 
 	//List<string> poseEstimationTechniques = new List<string>() { "ARKit","Attached Tracker","Calibration" };
 
@@ -83,9 +85,13 @@ public class ButtonManager : MonoBehaviour {
 		Debug.Log("Changing pose estimation method: " + index+ " - " + ARCameraManager.tracking.ToString());
 	}
 
-	public void changeOcclusion() {
+	public void ToggleOcclusion() {
 		//Debug.Log("Changing occlusion to: " + !OcclusionObject.activeSelf);
 		OcclusionObject.SetActive(!OcclusionObject.activeSelf);
+	}
+
+	public void ToggleTerrain() {
+		TerrainObject.SetActive(!TerrainObject.activeSelf);
 	}
 
 

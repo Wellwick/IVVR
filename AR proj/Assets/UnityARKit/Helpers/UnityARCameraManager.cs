@@ -22,6 +22,11 @@ public class UnityARCameraManager : MonoBehaviour {
 	public UnityARAlignment startAlignment = UnityARAlignment.UnityARAlignmentGravity;
 	public UnityARPlaneDetection planeDetection = UnityARPlaneDetection.None;
 
+	[Header("AR Quality Options")]
+	public float farClipDist = 45.0f;
+	public float fovAngle = 90.0f;
+
+
 	//htcTrackerRelayEnabled = true => Unity camera pose will be set to tracker pose every frame
 	//public bool htcTrackerRelayEnabled = false;
 	//htcTrackerOffsetEnabled = true => Unity camera pose will be set to ARKit pose + offset
@@ -71,7 +76,7 @@ public class UnityARCameraManager : MonoBehaviour {
 		//put some defaults so that it doesnt complain
 		UnityARCamera scamera = new UnityARCamera ();
 		scamera.worldTransform = new UnityARMatrix4x4 (new Vector4 (1, 0, 0, 0), new Vector4 (0, 1, 0, 0), new Vector4 (0, 0, 1, 0), new Vector4 (0, 0, 0, 1));
-		Matrix4x4 projMat = Matrix4x4.Perspective (60.0f, 1.33f, 0.1f, 30.0f);
+		Matrix4x4 projMat = Matrix4x4.Perspective (fovAngle, 1.33f, 0.1f, farClipDist);
 		scamera.projectionMatrix = new UnityARMatrix4x4 (projMat.GetColumn(0),projMat.GetColumn(1),projMat.GetColumn(2),projMat.GetColumn(3));
 
 		UnityARSessionNativeInterface.SetStaticCamera (scamera);
@@ -142,7 +147,7 @@ public class UnityARCameraManager : MonoBehaviour {
 				unityCameraRotation = headset_rotation;
 
 				//Spectating mode - AR camera behind and above VR, looking down at scene
-				CalculateSpectatePose(headset_position, headset_rotation, 10.0f, 30.0f,
+				CalculateSpectatePose(headset_position, headset_rotation, 8.0f, 30.0f,
 										out unityCameraPosition, out unityCameraRotation);
 				
 
@@ -169,9 +174,14 @@ public class UnityARCameraManager : MonoBehaviour {
 	}
 
 
-	//angle: angle in degrees between horizontal plane and (SpectatePosition - VRPosition) 
-	//dist: how far behind the VR player the camera will be
-	//these two variables control how far behind the VR player the camera is, and how high it is.
+	/*
+	 * calculates the position of the spectate camera - this is behind the VR player, looking down at him from an angle.
+	 *
+	 * angle: angle in degrees between horizontal plane and (SpectatePosition - VRPosition) 
+	 * dist: how far behind the VR player the camera will be
+	 *
+	 * these two variables control how far behind the VR player the camera is, and how high it is.
+	 */
 	private void CalculateSpectatePose(Vector3 vrPos, Quaternion vrRot, float dist, float angle, out Vector4 spectatePosOut, out Quaternion spectateRotOut) {
 
 		//Mathf works in radians 
@@ -238,7 +248,9 @@ public class UnityARCameraManager : MonoBehaviour {
 	public void calibrate() {
 		//Debug.Log("Attempting to calibrate");
 		Matrix4x4 matrix = m_session.GetCameraPose();
+#if !UNITY_EDITOR
 		Handheld.Vibrate();
+#endif
 
 		Vector4 lastPosARKit = UnityARMatrixOps.GetPosition (matrix);
 		Quaternion lastRotARKit = UnityARMatrixOps.GetRotation (matrix);
