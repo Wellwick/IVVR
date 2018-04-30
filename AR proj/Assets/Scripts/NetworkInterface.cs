@@ -46,13 +46,22 @@ public class NetworkInterface : MonoBehaviour {
 	}
 	public static void UpdateGameState(GameState gameState) {
 		switch (gameState) {
+			case GameState.NoGame :
+				
+				break;
 			case GameState.Paused :
 				Pause();
 				break;
 			case GameState.Active :
 				Resume();
 				break;
+			case GameState.Won :
+
+				break;
+			case GameState.Lost :
+				break;
 		}
+		UpdateNetworkStatus(gameState.ToString());
 	}
 
 

@@ -201,7 +201,6 @@ public class NetworkManager : MonoBehaviour {
                                 HandleVREyeUpdate(decoder.getVRHealth(i), decoder.GetPosition(i), decoder.GetRotation(i));
                                 break;
                             case (byte)MessageIdentity.Type.GameState:
-                            Debug.Log("GameState received");
                                 HandleGameStateUpdate(decoder.GetGameState(i));
                                 break;
 
@@ -548,6 +547,7 @@ public class NetworkManager : MonoBehaviour {
         player.currentHealth = health;
     }
     private void HandleGameStateUpdate(GameState gameState) {
+        Debug.Log("GameState received " + gameState);
         NetworkInterface.UpdateGameState(gameState);
     }
 

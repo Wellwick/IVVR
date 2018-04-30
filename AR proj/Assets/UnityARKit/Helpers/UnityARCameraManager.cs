@@ -137,17 +137,14 @@ public class UnityARCameraManager : MonoBehaviour {
 				unityCameraRotation = tracker_rotation;
 			} else if (tracking == TrackingType.HeadsetRelay) {
 				resetCameraParent();
+
 				unityCameraPosition = headset_position;
 				unityCameraRotation = headset_rotation;
 
-				/* OLD METHOD FOR CALIBRATION 
-			} else if ((tracking == TrackingType.TrackerCalibration) || (tracking == TrackingType.HeadsetCalibration)) {
-				//Take care to multiply offset_rotation * tracker_rotation, and not other way around
-				//This is because quaternion multiplication is not commutative.
-				//arkit_position.z = -arkit_position.z;
-				unityCameraPosition = offset_position + arkit_position;
-				unityCameraRotation = offset_rotation * arkit_rotation;
-				*/
+				//Spectating mode - AR camera behind and above VR, looking down at scene
+				CalculateSpectatePose(headset_position, headset_rotation, 10.0f, 30.0f,
+										out unityCameraPosition, out unityCameraRotation);
+				
 
 			} else if (tracking == TrackingType.ARKit) {
 				//Setting the Unity camera pose to purely ARKit's pose estimation
@@ -170,6 +167,33 @@ public class UnityARCameraManager : MonoBehaviour {
         }
 
 	}
+
+
+	//angle: angle in degrees between horizontal plane and (SpectatePosition - VRPosition) 
+	//dist: how far behind the VR player the camera will be
+	//these two variables control how far behind the VR player the camera is, and how high it is.
+	private void CalculateSpectatePose(Vector3 vrPos, Quaternion vrRot, float dist, float angle, out Vector4 spectatePosOut, out Quaternion spectateRotOut) {
+
+		//Mathf works in radians 
+		angle = angle * (Mathf.PI / 180);
+
+		// These are back and up offsets
+		float back = Mathf.Cos(angle) * dist;
+		float up = Mathf.Sin(angle) * dist;
+		Debug.Log("back" + back);
+		Debug.Log("up" + up);
+
+		//First get the y rotation of the angle and add 180 to it, construct a look vector from it.
+		Quaternion lookToSpec = Quaternion.Euler(0.0f, vrRot.eulerAngles.y + 180.0f, 0.0f);
+		//translate back behind the camera, translate up 
+		Vector3 spectatePos = vrPos + (lookToSpec * (Vector3.forward * back)) + (Vector3.up * up);
+		
+		spectatePosOut = new Vector4(spectatePos.x, spectatePos.y, spectatePos.z, 1.0f);
+		spectateRotOut = Quaternion.LookRotation(vrPos - spectatePos, Vector3.up);
+	}
+
+
+
 	/*
 	//OLD CALIBRATION METHOD
 	//calls the appropriate UnityARSessionNativeInterface method which attempts 
