@@ -21,7 +21,7 @@ public class MoveTo : MonoBehaviour {
 
 	void Update() {
 
-        if (gameManager.IsPaused()) {
+        if (gameManager.GetGameState() == GameState.Paused) {
             agent.isStopped = true;
             return;
         } else {

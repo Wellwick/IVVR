@@ -37,6 +37,12 @@ public class DemoCoder : Coder {
         addSerial(type, -1, heal, null); //doesn't need a transform
     }
 
+    public void addGameState(GameState gameState)
+    {
+        byte type = (byte)NetworkManager.MessageIdentity.Type.GameState;
+        addSerial(type, -1, (int)gameState, null);
+    }
+
     public void addPortal(bool[] runes, Transform transform) {
         byte type = (byte)NetworkManager.MessageIdentity.Type.GeneralUpdate;
         int value = 0;
@@ -57,6 +63,11 @@ public class DemoCoder : Coder {
         // Do not need id
         // Use assetId as health
         addSerial(type, -1, health, transform);
+    }
+
+    public GameState GetGameState(int index)
+    {
+        return (GameState)GetAssetID(index);
     }
 
     public int GetShootEnum(int index) {

@@ -7,17 +7,31 @@ using UnityEngine;
  * but it should work fine nonetheless
  * This may be because of a native Unity script somewhere 
  */
+
+
+public enum GameState : byte
+{
+    NoGame = 0,
+    Paused = 1,
+    Active = 2,
+    Won = 3,
+    Lost = 4
+}
+
 public class GameManager : MonoBehaviour
 {
     public GameObject hengeObject;
 
+    private NetworkManager networkManager;
     private EnemyManager enemyManager;
     private Henge henge;
-    private bool paused = false;
+    private GameState gameState;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         enemyManager = FindObjectOfType<EnemyManager>();
+        networkManager = FindObjectOfType<NetworkManager>();
+        henge = hengeObject.GetComponent<Henge>();
 	}
 	
 	// Update is called once per frame
@@ -26,13 +40,14 @@ public class GameManager : MonoBehaviour
         if (henge.IsComplete())
         {
             //we won the game
-
+            KillEnemies();
         }
 	}
 
     public void ChangeDifficulty(int difficulty)
     {
         //Difficulty depends on enemy spawn rate and health
+        enemyManager = FindObjectOfType<EnemyManager>();
 
         switch (difficulty)
         {
@@ -57,7 +72,9 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("starting new game");
         //Reset Henge
-        //Delete active enemies
+
+        KillEnemies();
+        henge.Reset();
         
 
 
@@ -66,13 +83,20 @@ public class GameManager : MonoBehaviour
 
     public void TogglePause()
     {
-        if (paused) {
-            ResumeGame();
-            paused = false;
-        } else {
-            PauseGame();
-            paused = true;
+       switch (gameState)
+        {
+            case GameState.NoGame:
+                break;
+            case GameState.Paused:
+                ResumeGame();
+                break;
+            case GameState.Active:
+                PauseGame();
+                break;
+            
         }
+
+        BroadCastGameStateInfo();
     }
 
     private void PauseGame()
@@ -80,15 +104,21 @@ public class GameManager : MonoBehaviour
         enemyManager.PauseSpawning();
         PauseBeams();
 
+        gameState = GameState.Paused;
 
-        Debug.Log("Pausing game");
     }
     private void ResumeGame()
     {
         enemyManager.StartSpawning();
         ResumeBeams();
 
-        Debug.Log("Resuminmg game");
+        gameState = GameState.Active;
+
+    }
+
+    public void BroadCastGameStateInfo()
+    {
+        networkManager.BroadcastGameStateInfo(gameState);
     }
 
     private void KillEnemies()
@@ -118,8 +148,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool IsPaused()
+    public GameState GetGameState()
     {
-        return paused;
+        return gameState;
     }
 }

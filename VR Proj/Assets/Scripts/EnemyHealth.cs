@@ -4,17 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 [System.Serializable]
 public class EnemyHealth : MonoBehaviour {
-
-    // Use this for initialization
+    
     public int maxHealth = 100;
     public int currentHealth;
-    //public Color color;
     public int transientHealthLoss;
-    private float alpha;
     public GameObject cloak;
     public GameObject[] drops;
-    
-    //private MeshRenderer meshRenderer; 
+
+    private float alpha;
+    private GameManager gameManager; 
 
 
     private void Awake()
@@ -22,6 +20,8 @@ public class EnemyHealth : MonoBehaviour {
         currentHealth = maxHealth;
         //color = gameObject.GetComponent<Renderer>().material.color;
         cloak = gameObject.transform.Find("Cloak").gameObject;
+
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     public int GetHealth()
@@ -38,6 +38,10 @@ public class EnemyHealth : MonoBehaviour {
 
     public void Damage(int damage) 
     {
+        // This is probably not needed; if AR is able to transmit damage messages
+        // then that means it is connected, therefore it should have received pause update
+        if (gameManager.GetGameState() == GameState.Paused) { return; }
+
         //colour will change on update anyway
         currentHealth -= damage;
     }

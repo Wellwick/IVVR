@@ -354,6 +354,24 @@ public class NetworkManager : MonoBehaviour {
         
     }
 
+    // Broadcast Game State (NoGame/Paused/Won)
+    public void BroadcastGameStateInfo(GameState gameState)
+    {
+        // This should be done whenever a new player connects or when gamestate changes
+        if (isConnection())
+        {
+            DemoCoder encoder = new DemoCoder(50);
+
+            encoder.addGameState(gameState);
+
+            byte error3;
+            foreach (KeyValuePair<int, GameObject> kvp in ARPlayers)
+            {
+                NetworkTransport.Send(socketId, kvp.Key, myUpdateChannelId, encoder.getArray(), 50, out error3);
+            }
+        }
+    }
+
     /*
     private void SendPing(int connectionId){
         byte error;
@@ -393,6 +411,9 @@ public class NetworkManager : MonoBehaviour {
             }
         }
         NetworkTransport.Send(socketId, connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
+
+        //update all players on game state
+        FindObjectOfType<GameManager>().BroadCastGameStateInfo();
         return true;
     }
 
@@ -505,6 +526,8 @@ public class NetworkManager : MonoBehaviour {
     public bool isConnection(){
         return clientsConnected > 0;
     }
+    
+
 
     #endregion
 
@@ -527,7 +550,8 @@ public class NetworkManager : MonoBehaviour {
             HealPlayer = 8,
             GeneralUpdate = 9,
             VREyeUpdate = 10,
-            Ping = 11
+            Ping = 11,
+            GameState = 12,
         }
     }
 
