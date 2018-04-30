@@ -87,8 +87,12 @@ public class Henge : MonoBehaviour {
 		rune.GetComponent<Rune>().active = true;
 	}
 
+    public bool IsComplete()
+    {
+        return (activeRunes == totalRunes);
+    }
 
-	public bool[] GetRuneState() {
+    public bool[] GetRuneState() {
 		int count = 0;
 		bool[] states = new bool[smallRunes.Length+largeRunes.Length];
 		for (int i = 0; i<smallRunes.Length; i++) {

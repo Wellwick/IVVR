@@ -9,7 +9,10 @@ using UnityEngine;
  */
 public class GameManager : MonoBehaviour
 {
+    public GameObject hengeObject;
+
     private EnemyManager enemyManager;
+    private Henge henge;
     private bool paused = false;
 
 	// Use this for initialization
@@ -20,6 +23,11 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
 		//check winning condition
+        if (henge.IsComplete())
+        {
+            //we won the game
+
+        }
 	}
 
     public void ChangeDifficulty(int difficulty)
@@ -50,6 +58,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("starting new game");
         //Reset Henge
         //Delete active enemies
+        
 
 
         enemyManager.StartSpawning();
@@ -82,6 +91,15 @@ public class GameManager : MonoBehaviour
         Debug.Log("Resuminmg game");
     }
 
+    private void KillEnemies()
+    {
+        EnemyHealth[] enemies = FindObjectsOfType<EnemyHealth>();
+        foreach (EnemyHealth enemy in enemies)
+        {
+            //Set all enemies to die smoothly in one second
+            enemy.SlowDeath();
+        }
+    }
     private void PauseBeams()
     {
         Beam[] beams = FindObjectsOfType<Beam>();

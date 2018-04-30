@@ -62,6 +62,17 @@ public class EnemyHealth : MonoBehaviour {
 
     }
 
+    private void DamageSelf()
+    {
+        Damage(maxHealth/20);
+    }
+
+    public void SlowDeath () 
+    {
+        float interval = 0.05f;                 // rate at which the enemy's health will drop
+        InvokeRepeating("DamageSelf", 0.0f, interval);
+    }
+
     void Death(){
 		int selection = Random.Range(0,drops.Length);
         GameObject drop = GameObject.FindObjectOfType<Henge>().GetItemDrop();
