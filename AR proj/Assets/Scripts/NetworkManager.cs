@@ -14,6 +14,15 @@ using UnityEngine.Networking;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
+
+public enum GameState : byte {
+    NoGame = 0,
+    Paused = 1,
+    Active = 2,
+    Won = 3,
+    Lost = 4
+}
+
 public class NetworkManager : MonoBehaviour {
 
     #region Inspector_vars
@@ -190,6 +199,10 @@ public class NetworkManager : MonoBehaviour {
 								break;
                             case (byte)MessageIdentity.Type.VREyeUpdate:
                                 HandleVREyeUpdate(decoder.getVRHealth(i), decoder.GetPosition(i), decoder.GetRotation(i));
+                                break;
+                            case (byte)MessageIdentity.Type.GameState:
+                            Debug.Log("GameState received");
+                                HandleGameStateUpdate(decoder.GetGameState(i));
                                 break;
 
                         }
@@ -534,6 +547,9 @@ public class NetworkManager : MonoBehaviour {
         player.gameObject.transform.parent.rotation = rot;
         player.currentHealth = health;
     }
+    private void HandleGameStateUpdate(GameState gameState) {
+        NetworkInterface.UpdateGameState(gameState);
+    }
 
     #endregion
 
@@ -568,8 +584,10 @@ public class NetworkManager : MonoBehaviour {
             HealPlayer = 8,
             GeneralUpdate = 9,
             VREyeUpdate = 10,
-            //Ping = 11
+            Ping = 11,
+            GameState,
         }
+
     }
 
     

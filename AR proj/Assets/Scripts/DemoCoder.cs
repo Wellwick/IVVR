@@ -73,6 +73,9 @@ public class DemoCoder : Coder {
     public int GetHealPlayer(int index) {
         return GetAssetID(index);
     }
+    public GameState GetGameState(int index) {
+        return (GameState)GetAssetID(index);
+    }
 
     // Deserializes runes out of an int and into a boolean array of given size
     public bool[] GetPortalRunes(int index, int size) {

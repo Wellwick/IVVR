@@ -44,15 +44,28 @@ public class NetworkInterface : MonoBehaviour {
 		}
 
 	}
+	public static void UpdateGameState(GameState gameState) {
+		switch (gameState) {
+			case GameState.Paused :
+				Pause();
+				break;
+			case GameState.Active :
+				Resume();
+				break;
+		}
+	}
 
-	public static void Pause() {
+
+	
+	private static void Pause() {
 		shooting.Pause();
 		textManager.Resume();
 	}
-	public static void Resume() {
+	private static void Resume() {
 		shooting.Resume();
 		textManager.Resume();
 	}
+	
 
 	public static void UpdateNetworkStatus(string status) {
 
