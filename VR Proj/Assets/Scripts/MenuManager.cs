@@ -17,15 +17,12 @@ public class MenuManager : MonoBehaviour {
 	void Start () {
 		optionsMenu.SetActive (optionShowing);
         difficultyText = difficultyTextObject.GetComponent<Text>();
-        gameManager = GameObject.FindObjectOfType<GameManager>();
+        gameManager = FindObjectOfType<GameManager>();
+
+        ChangeDifficulty(1);
 	}
 
-
-	public void PlayGame() {
-		// Needs to get option settings and send them to relevant places
-
-		Quit ();
-	}
+    
 
 	public void ToggleOptions() {
 		optionShowing = !optionShowing;
@@ -33,7 +30,7 @@ public class MenuManager : MonoBehaviour {
 	}
 
 	public void ChangeDifficulty (int i) {
-		// 0: Easy; 1:Medium; 2:Hard
+		// 1: Easy; 2:Medium; 3:Hard
 		difficulty = i;
         string diffstr;
         switch (difficulty)
