@@ -23,11 +23,12 @@ public class EnemyManager : MonoBehaviour
     //Kinda wanna make this private, add getter method, calculate how many enemies exist in scene manually
     public int enemyCount;
 
-
+    private GameManager gameManager;
     private bool spawning = false;
 
 	void Start () {
 		enemyCount = FindObjectsOfType<EnemyHealth>().Length;
+        gameManager = FindObjectOfType<GameManager>();
 	}
 
 
@@ -38,17 +39,10 @@ public class EnemyManager : MonoBehaviour
         CancelInvoke("Spawn");
         InvokeRepeating("Spawn", 0, spawnInterval);
     }
-    public void PauseSpawning()
-    {
-
-        // This may not be the best solution, as it will reset the timer
-        // This could be abused; pause the game just before enemies spawn, then unpause
-        CancelInvoke("Spawn");
-    }
 
     public bool IsSpawning()
     {
-        return spawning;
+        return (gameManager.GetGameState() == GameState.Active);
     }
 
     void Spawn ()
@@ -56,10 +50,9 @@ public class EnemyManager : MonoBehaviour
 		// If the player has no health left...
 		// if(playerHealth.currentHealth <= 0f) return; 
 
-		if (enemyCount >= maxEnemies) return;	// Ensures not too many enemies are in the game // 
+		if (enemyCount >= maxEnemies && IsSpawning()) return;	// Ensures not too many enemies are in the game // 
 
-		// Calculate spawn location and necessary rotation  // 
-
+		// Calculate spawn location and necessary rotation 
 
 		Vector3 spawnPos = GetRandomSpawnLocation();
         Quaternion rot = Quaternion.LookRotation(parentObject.transform.position - spawnPos, Vector3.up);

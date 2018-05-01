@@ -35,6 +35,11 @@ public class PlayerHealth : MonoBehaviour
         indicatorMaterialinv = healthIndicatorinv.GetComponent<MeshRenderer>().material;
 
         //setup health
+        Reset();
+    }
+
+    //Heal to full
+    public void Reset() {
         SetHealth(maxHealth);
     }
 
@@ -45,6 +50,11 @@ public class PlayerHealth : MonoBehaviour
         //indicatorMaterialinv = healthIndicatorinv.GetComponent<MeshRenderer>().material;
         //UnityARCameraManager = ARcameraManager.GetComponent<UnityARCameraManager>();
         //SetHealth(maxHealth);
+    }
+
+    public bool IsAlive() {
+        //you never know, this could somehow become more complex like idk
+        return currentHealth > 0;
     }
 
     public int GetHealth()
