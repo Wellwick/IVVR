@@ -12,7 +12,7 @@ public class Grappler : MonoBehaviour {
 	public LayerMask grappleMask;
 	private bool shouldPull;
 
-    private GameManager gameManager;    //Need this to know whether game is paued
+    private GameManager gameManager;    //Need this to know whether game is pasued
 	private GameObject pullObject;
 	private bool pull = false;
 	private bool holding = false;
@@ -44,8 +44,9 @@ public class Grappler : MonoBehaviour {
 				grapple.SetActive(false);
 				shouldPull = false;
 			}
-			
-			if (Controller.GetHairTriggerDown() && shouldPull) {
+
+            //Only allow pulling objects when game is active
+            if (Controller.GetHairTriggerDown() && shouldPull && gameManager.GetGameState() == GameState.Active) {
 				pull = true;
 			}
 			if (pull) {
@@ -93,9 +94,10 @@ public class Grappler : MonoBehaviour {
 
 	private void GrabObject() {
 
-        if (gameManager.GetGameState() == GameState.Paused) { return; }
+        //Only allow grabbing objects when gamestate is active
+        if (gameManager.GetGameState() != GameState.Active) { return; }
 
-		var joint = AddFixedJoint();
+        var joint = AddFixedJoint();
 		joint.connectedBody = pullObject.GetComponent<Rigidbody>();
 		holding = true;
 	}

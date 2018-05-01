@@ -39,7 +39,7 @@ public class UI_Input : MonoBehaviour
 		if (button != null)
 		{
 			button.Select();
-			Debug.Log("HandlePointerIn", e.target.gameObject);
+			//Debug.Log("HandlePointerIn", e.target.gameObject);
 		}
 	}
 
@@ -50,7 +50,7 @@ public class UI_Input : MonoBehaviour
 		if (button != null)
 		{
 			EventSystem.current.SetSelectedGameObject(null);
-			Debug.Log("HandlePointerOut", e.target.gameObject);
+			//Debug.Log("HandlePointerOut", e.target.gameObject);
 		}
 	}
 }

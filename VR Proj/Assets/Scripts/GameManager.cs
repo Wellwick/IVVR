@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * This script has a cog icon instead of a script icon in unity
- * but it should work fine nonetheless
- * This may be because of a native Unity script somewhere 
- */
 
 
+public enum Difficulty : byte
+{
+    Easy = 1,
+    Medium = 2,
+    Hard = 3,
+    Impossible = 4
+}
 public enum GameState : byte
 {
     NoGame = 0,
@@ -18,9 +20,15 @@ public enum GameState : byte
     Lost = 4
 }
 
+/*
+ * This script has a cog icon instead of a script icon in unity
+ * but it should work fine nonetheless
+ * This may be because of a native Unity script somewhere 
+ */
 public class GameManager : MonoBehaviour
 {
     public GameObject hengeObject;
+    public Difficulty difficulty;
 
     private NetworkManager networkManager;
     private EnemyManager enemyManager;
@@ -44,24 +52,28 @@ public class GameManager : MonoBehaviour
         }
 	}
 
-    public void ChangeDifficulty(int difficulty)
+    public void ChangeDifficulty(Difficulty difficulty)
     {
-        //Difficulty depends on enemy spawn rate and health
+        //Difficulty depends on enemy spawn rate and health and starting runes
         enemyManager = FindObjectOfType<EnemyManager>();
+        this.difficulty = difficulty;
 
         switch (difficulty)
         {
-            case 1:
-                enemyManager.startingHealth = 800;
+            case Difficulty.Easy:
+                enemyManager.enemyStartingHealth = 800;
                 enemyManager.spawnInterval = 10.0f;
+                henge.startingRunes = 12;
                 break;
-            case 2:
-                enemyManager.startingHealth = 1200;
+            case Difficulty.Medium:
+                enemyManager.enemyStartingHealth = 1200;
                 enemyManager.spawnInterval = 8.0f;
+                henge.startingRunes = 6;
                 break;
-            case 3:
-                enemyManager.startingHealth = 1600;
-                enemyManager.spawnInterval = 6.0f;
+            case Difficulty.Hard:
+                enemyManager.enemyStartingHealth = 1600;
+                enemyManager.spawnInterval = 4.0f;
+                henge.startingRunes = 0;
                 break;
         }
 
@@ -71,7 +83,8 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         Debug.Log("starting new game");
-        //Reset Henge
+
+        gameState = GameState.Active;
 
         KillEnemies();
         henge.Reset();
@@ -95,8 +108,7 @@ public class GameManager : MonoBehaviour
                 break;
             
         }
-
-        BroadCastGameStateInfo();
+        
     }
 
     private void PauseGame()
@@ -115,11 +127,7 @@ public class GameManager : MonoBehaviour
         gameState = GameState.Active;
 
     }
-
-    public void BroadCastGameStateInfo()
-    {
-        networkManager.BroadcastGameStateInfo(gameState);
-    }
+    
 
     private void KillEnemies()
     {
