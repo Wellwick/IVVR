@@ -16,19 +16,18 @@ public class MenuManager : MonoBehaviour {
     //We will display the menu in front of the player
     
     private Text difficultyText;
-    private GameManager gameManager;
     private bool mainMenuShowing = false;
     private bool optionsMenuShowing = false;
     private bool lastMenuButtonState = false;
 
     // Use this for initialization
-    void Start () {
-		optionsMenu.SetActive (optionsMenuShowing);
+    void Start ()
+    {
+        optionsMenu.SetActive(optionsMenuShowing);
         difficultyText = difficultyTextObject.GetComponent<Text>();
-        gameManager = FindObjectOfType<GameManager>();
-
         ChangeDifficulty((int)Difficulty.Medium);
 	}
+
 
     private void Update()
     {
@@ -97,14 +96,15 @@ public class MenuManager : MonoBehaviour {
 		optionsMenu.SetActive (optionsMenuShowing);
 	}
 
-	public void ChangeDifficulty (int i) {
+	public void ChangeDifficulty (int i)
+    {
         Difficulty difficulty = (Difficulty)i;
 
-		Debug.Log ("Difficulty changed to " + difficulty.ToString());
-        difficultyText.text = "Difficulty: " + difficulty.ToString();
+        FindObjectOfType<GameManager>().ChangeDifficulty(difficulty);
+        difficultyTextObject.GetComponent<Text>().text = "Difficulty: " + difficulty.ToString();
 
-        gameManager.ChangeDifficulty(difficulty);
-	}
+        Debug.Log("Difficulty changed to " + difficulty.ToString());
+    }
     
 		
 }

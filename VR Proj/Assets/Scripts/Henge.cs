@@ -19,7 +19,7 @@ public class Henge : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+        gameObject.SetActive(false);
 	}
 
     public void Reset()
@@ -29,6 +29,8 @@ public class Henge : MonoBehaviour {
 
     public void Reset(int startingRunes)
     {
+        gameObject.SetActive(true);
+
         Log("Resetting Runes: Starting with already active: " + startingRunes);
 
         // figure out how many runes we have in total
