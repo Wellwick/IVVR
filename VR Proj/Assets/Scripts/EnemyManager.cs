@@ -5,14 +5,22 @@ using UnityEngine.AI;
 public class EnemyManager : MonoBehaviour
 {
 	//public PlayerHealth playerHealth;     // Reference to the player's heatlh
-	public GameObject Enemy;                // The enemy prefab to be spawned
-	public GameObject camera;
-	public GameObject healthSprite;
-    public GameObject parentObject;         // Enemies will spawn as children of this gameobject
+    [Header("VR Scene")]
+    public GameObject camera;
 
+    [Header("Enemy Settings")]
+    public GameObject enemyPrefab;                // The enemy prefab to be spawned
+    public GameObject healthSpritePrefab;
+    public int enemyStartingHealth = 1000;
+    
+    [Header("Spawn Settings")]
+    public GameObject parentObject;         // Enemies will spawn as children of this gameobject
+    public float minSpawnDistance = 30.0f;
+    public float maxSpawnDistance = 40.0f; 
 	public float spawnInterval = 10f;           // How long between each spawn
-    public int startingHealth = 1000;
     public int maxEnemies = 10;
+    
+    //Kinda wanna make this private, add getter method, calculate how many enemies exist in scene manually
     public int enemyCount;
 
 
@@ -22,11 +30,13 @@ public class EnemyManager : MonoBehaviour
 		enemyCount = FindObjectsOfType<EnemyHealth>().Length;
 	}
 
+
     public void StartSpawning()
     {
-        // Call the Spawn function after a delay of the spawnInterval and then continue to call after the same amount of time.
+        // Call the Spawn function after a delay of the spawnInterval // or dont
+        // and then continue to call after the same amount of time.
         CancelInvoke("Spawn");
-        InvokeRepeating("Spawn", spawnInterval, spawnInterval);
+        InvokeRepeating("Spawn", 0, spawnInterval);
     }
     public void PauseSpawning()
     {
@@ -52,13 +62,13 @@ public class EnemyManager : MonoBehaviour
 
 		Quaternion rot = new Quaternion(0f, 0f, 0f, 0f);
 
-		Vector3 loc = calculateSpawn();
+		Vector3 loc = GetRandomSpawnLocation();
 
 		loc = calculateHitLocation (loc, 2.5f);
 	
-		GameObject go = Instantiate (Enemy, loc, rot, parentObject.transform);
+		GameObject go = Instantiate (enemyPrefab, loc, rot, parentObject.transform);
 		NavMeshAgent agent = go.GetComponent<NavMeshAgent> ();
-		go.GetComponent<MoveTo>().healthSprite = healthSprite;
+		go.GetComponent<MoveTo>().healthSprite = healthSpritePrefab;
 		go.GetComponent<MoveTo>().goal = camera.transform;
 		agent.Warp (loc);
 		enemyCount++;
@@ -70,7 +80,9 @@ public class EnemyManager : MonoBehaviour
 		// This is done in the MoveTo script
 	}
 
-	Vector3 calculateSpawn() {
+    // Old method of calculating new spawns. Use new method
+	/*
+     * Vector3 calculateSpawn() {
 		int section = Random.Range(0,2);
 		float xLoc = 238.0f;
 		float yLoc = 110.0f;
@@ -87,12 +99,35 @@ public class EnemyManager : MonoBehaviour
 			break;
 		}
 		return new Vector3(xLoc, yLoc, zLoc);
-	}
+	}*/
+
+    /*
+     * Gets circumferrence of VR scene, spawns a random location between
+     * 
+     *
+     */
+    private Vector3 GetRandomSpawnLocation()
+    {
+        // Get random angle between 0 and 360
+        float angle = Random.Range(0, 360.0f);
+
+        // Get random distance between minSpawnDist and maxSpawnDist
+        float dist = Random.Range(minSpawnDistance, maxSpawnDistance);
+
+        return ((Quaternion.Euler(0.0f, angle, 0.0f) * Vector3.forward) * dist) + parentObject.transform.position;
+        
+    }
 
 	Vector3 calculateHitLocation(Vector3 loc, float range) {
 		NavMeshHit hit;
-		if (NavMesh.SamplePosition (loc, out hit, range, NavMesh.AllAreas)) loc = hit.position;
-		else Debug.Log (loc);
+        if (NavMesh.SamplePosition(loc, out hit, range, NavMesh.AllAreas))
+        {
+            loc = hit.position;
+        } 
+        else
+        {
+            //Debug.Log(loc);
+        }
 		return loc;
 	}
 

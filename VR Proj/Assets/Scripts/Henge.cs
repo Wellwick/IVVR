@@ -12,17 +12,25 @@ public class Henge : MonoBehaviour {
 	public GameObject smallDrop;
 
 	public Material properMaterial;
-	public int startingRunes = 3;
+	public int startingRunes = 6;
+    public int verbose = 0;
 	private int activeRunes = 0;
 	private int totalRunes;
 
 	// Use this for initialization
 	void Start () {
-        Reset();
+
 	}
 
     public void Reset()
     {
+        Reset(startingRunes);
+    }
+
+    public void Reset(int startingRunes)
+    {
+        Log("Resetting Runes: Starting with already active: " + startingRunes);
+
         // figure out how many runes we have in total
         totalRunes = smallRunes.Length + largeRunes.Length;
         // start off all of them false
@@ -34,13 +42,14 @@ public class Henge : MonoBehaviour {
         {
             largeRunes[i].GetComponent<Rune>().active = false;
         }
+
         // randomise which runes are already placed
         int tempCounter = totalRunes;
         while (startingRunes > 0)
         {
             int selection = (int)Random.Range(0.0f, tempCounter - 0.1f);
-            Debug.Log("Selection value was set to " + selection);
-            //step through and reduce until we reach the selection value
+            Log("Selection value was set to " + selection);
+            // step through and reduce until we reach the selection value
             for (int i = 0; i < smallRunes.Length; i++)
             {
                 if (selection == 0 && smallRunes[i].GetComponent<Rune>().active == false)
@@ -93,9 +102,11 @@ public class Henge : MonoBehaviour {
 	}
 
 	//should only need to be called once per rune
-	public void Activate(GameObject rune) {
-		//activation is simply changing the material
-		MeshRenderer mr = rune.GetComponent<MeshRenderer>();
+	public void Activate(GameObject rune)
+    {
+        Log("Activating Rune");
+        //activation is simply changing the material
+        MeshRenderer mr = rune.GetComponent<MeshRenderer>();
 		//need to change the array, instead of a single value
 		Material[] mats = mr.materials;
 		mats[0] = properMaterial;
@@ -166,4 +177,12 @@ public class Henge : MonoBehaviour {
 			}
 		}
 	}
+
+    private void Log(string s)
+    {
+        if (verbose > 0)
+        {
+            Debug.Log(s);
+        }
+    }
 }

@@ -17,16 +17,16 @@ using System.IO;
 public class NetworkManager : MonoBehaviour {
 
     #region Inspector_vars
-    [Header("Server Setttings")]
+    [Header("Server Settings")]
     public int MAX_CONNECTIONS = 1;
     public string connection_ip = "137.205.112.42";
     public int connection_port = 9090;
+    public bool showPing = false;
+    public bool isHost = true;
 
     [Header("Spawning")]
     public GameObject[] spawnables = new GameObject[0];
-
     public GameObject playerModel;
-
     public GameObject VREye;
 
     //todo
@@ -42,21 +42,20 @@ public class NetworkManager : MonoBehaviour {
 	public GameObject rightController;
     public GameObject tracker;
 
-    [Header("Debug")]
-    public bool showPing = false;
-
     #endregion
 
     #region Global_vars
     private int socketId;
     public static bool serverHosted = false;
-    public bool isHost = true;
 	private bool networkInitialised = false;
     private int clientsConnected = 0;
 
     private int hostId;
     private bool pingSent = false;
     private float pingTime;
+
+    private GameManager gameManager;
+    private GameState lastGameState;
 
     #endregion
 
@@ -84,7 +83,14 @@ public class NetworkManager : MonoBehaviour {
 
 	void Start () {
 
+        if (isHost)
+        {
+            gameManager = FindObjectOfType<GameManager>();
+            lastGameState = gameManager.GetGameState();
+        }
+
         if (!networkInitialised){
+
             NetworkTransport.Init();
             Debug.Log("Host Started");
             ConnectionConfig config = new ConnectionConfig();
@@ -132,6 +138,13 @@ public class NetworkManager : MonoBehaviour {
                 case NetworkEventType.Nothing:
                     //because nothing is happening, let's try and update the AR on positions
                     if(isHost){
+
+                        if (gameManager.GetGameState() != lastGameState)
+                        {
+                            BroadcastGameStateInfo(gameManager.GetGameState());
+                            lastGameState = gameManager.GetGameState();
+                        }
+
                         SendGeneralUpdate();
                         SendVRBroadcast();
                     }
@@ -147,7 +160,7 @@ public class NetworkManager : MonoBehaviour {
 
                     break;
                 case NetworkEventType.DataEvent:
-                    Debug.Log("Data Received");
+                    //Debug.Log("Data Received");
                     DemoCoder decoder = new DemoCoder(recBuffer);
                     for(int i = 0; i < decoder.getCount(); i++){
                         switch (decoder.GetType(i)){
@@ -277,7 +290,7 @@ public class NetworkManager : MonoBehaviour {
 
     public void SendGeneralUpdate(){
         if (isConnection()/* && Input.GetKeyDown(KeyCode.U)*/) {
-            Debug.Log("Trying to update client on " + watchList.Count + " objects");
+            //Debug.Log("Trying to update client on " + watchList.Count + " objects");
 
             //we have switched to a watch list instead of a queue
             //since this is a dictionary element we need to iterate through
@@ -341,7 +354,7 @@ public class NetworkManager : MonoBehaviour {
             }
 
             encoder.addVREyeUpdate(VREye.GetComponent<PlayerHealth>().currentHealth, VREye.transform);
-            Debug.Log("Sending Tracker info to client " + kvp.Key);
+            //Debug.Log("Sending Tracker info to client " + kvp.Key);
             foreach(KeyValuePair<int, GameObject> kvp2 in ARPlayers){
                 if(kvp2.Key != kvp.Key){
                     encoder.addARUpdate(kvp2.Key, (int)kvp2.Value.GetComponent<ARClient>().fireType, kvp2.Value.transform);
@@ -365,9 +378,11 @@ public class NetworkManager : MonoBehaviour {
             encoder.addGameState(gameState);
 
             byte error3;
+
+            Debug.Log("Broadcasting Game State");
             foreach (KeyValuePair<int, GameObject> kvp in ARPlayers)
             {
-                NetworkTransport.Send(socketId, kvp.Key, myUpdateChannelId, encoder.getArray(), 50, out error3);
+                NetworkTransport.Send(socketId, kvp.Key, myReliableChannelId, encoder.getArray(), 50, out error3);
             }
         }
     }
@@ -401,7 +416,7 @@ public class NetworkManager : MonoBehaviour {
         DemoCoder encoder = new DemoCoder(1024);
         NetworkIdentity[] networkIdentities = getNetworkIdentities();
         foreach(NetworkIdentity identity in networkIdentities){
-            Debug.Log("Sending spawn state of enemies");
+            //Debug.Log("Sending spawn state of enemies");
             int assetid;
             spawnAssets.TryGetValue(NetworkTransport.GetAssetId(identity.gameObject), out assetid);
             encoder.addSerial((Byte)MessageIdentity.Type.Initialise, identity.getObjectId(), assetid, identity.gameObject.transform);
@@ -413,7 +428,7 @@ public class NetworkManager : MonoBehaviour {
         NetworkTransport.Send(socketId, connectionId, myReliableChannelId, encoder.getArray(), 1024, out error2);
 
         //update all players on game state
-        FindObjectOfType<GameManager>().BroadCastGameStateInfo();
+        BroadcastGameStateInfo(gameManager.GetGameState());
         return true;
     }
 
@@ -449,7 +464,7 @@ public class NetworkManager : MonoBehaviour {
         GameObject gameObject;
         networkedObjects.TryGetValue(id, out gameObject);
         //ALTER HEALTH OF ENEMY MAN
-        Debug.Log("Has damaged enemy " + id);
+        //Debug.Log("Has damaged enemy " + id);
         EnemyHealth eh = gameObject.GetComponent<EnemyHealth>();
         if (eh != null) {
             //just use damage, that's fine
