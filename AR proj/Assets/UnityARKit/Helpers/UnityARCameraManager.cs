@@ -22,10 +22,13 @@ public class UnityARCameraManager : MonoBehaviour {
 	public UnityARAlignment startAlignment = UnityARAlignment.UnityARAlignmentGravity;
 	public UnityARPlaneDetection planeDetection = UnityARPlaneDetection.None;
 
-	[Header("AR Quality Options")]
-	public float farClipDist = 45.0f;
+	[Header("Camera Settings Options")]
+	public float farClipDist = 90.0f;
 	public float fovAngle = 90.0f;
 
+	[Header("Spectate Camera Options")]
+	public float spectateCameraDistance = 8.0f;
+	public float spectateCameraAngle = 30.0f;
 
 	//htcTrackerRelayEnabled = true => Unity camera pose will be set to tracker pose every frame
 	//public bool htcTrackerRelayEnabled = false;
@@ -68,7 +71,7 @@ public class UnityARCameraManager : MonoBehaviour {
 		}
 #else
 		//UNITY EDITOR
-		tracking = TrackingType.TrackerRelay;
+		tracking = TrackingType.HeadsetRelay;
 
 		ARKitSessionConfiguration sessionConfig = new ARKitSessionConfiguration (startAlignment, true, true);
 		m_session.RunWithConfig(sessionConfig);
@@ -147,7 +150,7 @@ public class UnityARCameraManager : MonoBehaviour {
 				unityCameraRotation = headset_rotation;
 
 				//Spectating mode - AR camera behind and above VR, looking down at scene
-				CalculateSpectatePose(headset_position, headset_rotation, 8.0f, 30.0f,
+				CalculateSpectatePose(headset_position, headset_rotation, spectateCameraDistance, spectateCameraAngle,
 										out unityCameraPosition, out unityCameraRotation);
 				
 
@@ -190,8 +193,6 @@ public class UnityARCameraManager : MonoBehaviour {
 		// These are back and up offsets
 		float back = Mathf.Cos(angle) * dist;
 		float up = Mathf.Sin(angle) * dist;
-		Debug.Log("back" + back);
-		Debug.Log("up" + up);
 
 		//First get the y rotation of the angle and add 180 to it, construct a look vector from it.
 		Quaternion lookToSpec = Quaternion.Euler(0.0f, vrRot.eulerAngles.y + 180.0f, 0.0f);
@@ -248,9 +249,9 @@ public class UnityARCameraManager : MonoBehaviour {
 	public void calibrate() {
 		//Debug.Log("Attempting to calibrate");
 		Matrix4x4 matrix = m_session.GetCameraPose();
-#if !UNITY_EDITOR
-		Handheld.Vibrate();
-#endif
+		#if !UNITY_EDITOR
+			Handheld.Vibrate();
+		#endif
 
 		Vector4 lastPosARKit = UnityARMatrixOps.GetPosition (matrix);
 		Quaternion lastRotARKit = UnityARMatrixOps.GetRotation (matrix);

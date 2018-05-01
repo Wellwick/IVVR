@@ -10,6 +10,7 @@ public class NetworkInterface : MonoBehaviour {
 	public GameObject VRPlayer;
 	public Text IPinputFieldObject;
 
+	private static GameManager gameManager;
 	private static Shooting shooting;
 	private static Text IPinputField;
 	private static UnityARCameraManager ARCameraManager;
@@ -19,13 +20,13 @@ public class NetworkInterface : MonoBehaviour {
 
 	void Start() {
 
-		ARCameraManager = GameObject.FindObjectOfType<UnityARCameraManager>();
-		textManager = GameObject.FindObjectOfType<TextManager> ();
 		//Debug.Log ("Starting Network Interface... <TextManager found>:" + (textManager != null) + " <ARCameraManager found>:" + (ARCameraManager != null));
 		HealBeam = HealBeamObject.GetComponent<Beam>();
 		DamageBeam = DamageBeamObject.GetComponent<Beam>();
 
-		shooting = GameObject.FindObjectOfType<Shooting>();
+		gameManager = FindObjectOfType<GameManager>();
+		ARCameraManager = FindObjectOfType<UnityARCameraManager>();
+		textManager = FindObjectOfType<TextManager> ();
 
 		IPinputField = IPinputFieldObject;
 	}
@@ -45,35 +46,12 @@ public class NetworkInterface : MonoBehaviour {
 
 	}
 	public static void UpdateGameState(GameState gameState) {
-		switch (gameState) {
-			case GameState.NoGame :
-				
-				break;
-			case GameState.Paused :
-				Pause();
-				break;
-			case GameState.Active :
-				Resume();
-				break;
-			case GameState.Won :
-
-				break;
-			case GameState.Lost :
-				break;
-		}
-		UpdateNetworkStatus(gameState.ToString());
+		
+		gameManager.HandleGameStateChanged(gameState);
 	}
 
 
-	
-	private static void Pause() {
-		shooting.Pause();
-		textManager.Resume();
-	}
-	private static void Resume() {
-		shooting.Resume();
-		textManager.Resume();
-	}
+
 	
 
 	public static void UpdateNetworkStatus(string status) {
@@ -124,6 +102,10 @@ public class NetworkInterface : MonoBehaviour {
 		return new Quaternion();
 	}
 	public static void UpdateTrackerPose(Vector3 pos, Quaternion rot) {
+
+		if (ARCameraManager == null) {
+			ARCameraManager = FindObjectOfType<UnityARCameraManager>();
+		}
 
 		if (ARCameraManager != null) {
 

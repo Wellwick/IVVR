@@ -297,16 +297,16 @@ namespace UnityEngine.XR.iOS {
 		//If false, these values will not be used, but the calibrate function can be called to calculate the offset which is ALWAYS added.
 		//Later a third state could be added, in which the offsets will not be added to the ARKit position.
 		//This option however, would only be needed if the user needed to remove the offset after calibration using the tracker.
-		private static Boolean tracker_enabled = false;
-		private static Vector4 tracker_position = new Vector4 (0, 0, 0, 1);
-		private static Quaternion tracker_rotation = new Quaternion (0, 0, 0, 1);
-		private static Vector4 offset_position = new Vector4 (0, 0, 0, 1);
-		private static Quaternion offset_rotation = new Quaternion (0, 0, 0, 0);
+		//private static Boolean tracker_enabled = false;
+		//private static Vector4 tracker_position = new Vector4 (0, 0, 0, 1);
+		//private static Quaternion tracker_rotation = new Quaternion (0, 0, 0, 1);
+		//private static Vector4 offset_position = new Vector4 (0, 0, 0, 1);
+		//private static Quaternion offset_rotation = new Quaternion (0, 0, 0, 0);
 
 		//Possibly will need to initialise these matrices.
 		//Is there a quicker way of initialising to an identity matrix?
-		private static UnityARMatrix4x4 lastARKitWorldTransform; // = new UnityARMatrix4x4 (new Vector4 (1, 0, 0, 0), new Vector4 (0, 1, 0, 0), new Vector4 (0, 0, 1, 0), new Vector4 (0, 0, 0, 1));
-		private static UnityARMatrix4x4 customWorldTransform; // = new UnityARMatrix4x4(new Vector4(1,0,0,0), new Vector4(0,1,0,0), new Vector4(0,0,1,0), new Vector4(0,0,0,1));
+		//private static UnityARMatrix4x4 lastARKitWorldTransform; // = new UnityARMatrix4x4 (new Vector4 (1, 0, 0, 0), new Vector4 (0, 1, 0, 0), new Vector4 (0, 0, 1, 0), new Vector4 (0, 0, 0, 1));
+		//private static UnityARMatrix4x4 customWorldTransform; // = new UnityARMatrix4x4(new Vector4(1,0,0,0), new Vector4(0,1,0,0), new Vector4(0,0,1,0), new Vector4(0,0,0,1));
 		
 
 		private static UnityARCamera s_Camera;
@@ -486,14 +486,10 @@ namespace UnityEngine.XR.iOS {
 		//At the moment, this function never gets called.
 		[MonoPInvokeCallback(typeof(ARFrameUpdate))]
 		static void _frame_update2(UnityARCamera camera) {
-			Debug.Log ("External frame update " + camera.worldTransform.column3.ToString());
-			//if (ARFrameUpdatedEvent != null)
-			//{
-			//	ARFrameUpdatedEvent(s_Camera);
-			//}
+			
 		}
 
-
+		/* 
 		//If TRUE is passed in, the 
 		public static void useTrackerPosition(Boolean use_tracker) {
 			tracker_enabled = use_tracker;
@@ -510,7 +506,7 @@ namespace UnityEngine.XR.iOS {
 		public static void updateTrackerRotation(float x, float y, float z, float w) {
 			tracker_rotation = new Quaternion (x, y, z, w);
 			customWorldTransform = UnityARMatrixOps.InsertRotation (customWorldTransform, tracker_rotation);
-		}
+		}*/
 
 
 		//THIS HAS BEEN EDITED TO CHANGE THE POSITION OF THE CAMERA TO THE POSITION OF THE TRACKER

@@ -9,34 +9,26 @@ public class Shooting : MonoBehaviour {
 
 	private Beam damageBeam;
 	private Beam healingBeam;
-	private bool paused;
+	private GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
 		damageBeam = damageBeamObject.GetComponent<Beam>();
 		healingBeam = healingBeamObject.GetComponent<Beam>();
+		gameManager = FindObjectOfType<GameManager>();
 	}
 
 	void Update () {
 		
 	}
-	public void Pause() {
-		damageBeam.Pause();
-		healingBeam.Pause();
-		paused = true;
-	}
-	public void Resume() {
-
-		paused = false;
-	}
 
 	public void startDamage() {
-		if (!damageBeam.isEmitting() && !paused ) {
+		if (!damageBeam.isEmitting() && gameManager.GetGameState() == GameState.Active) {
 			damageBeam.StartEmitting();
 		}
 	}
 	public void startHeal() {
-		if (!healingBeam.isEmitting() && !paused) {
+		if (!healingBeam.isEmitting() && gameManager.GetGameState() == GameState.Active) {
 			healingBeam.StartEmitting();
 		}
 	}

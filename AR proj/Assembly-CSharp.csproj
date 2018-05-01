@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\DemoCoder.cs" />
      <Compile Include="Assets\Scripts\EnemyHealth.cs" />
      <Compile Include="Assets\Scripts\Eyeball.cs" />
+     <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Henge.cs" />
      <Compile Include="Assets\Scripts\NetworkIdentity.cs" />
      <Compile Include="Assets\Scripts\NetworkInterface.cs" />

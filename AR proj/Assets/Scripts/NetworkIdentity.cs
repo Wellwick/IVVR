@@ -29,7 +29,7 @@ public class NetworkIdentity : MonoBehaviour {
 		if(networkManager.isHost){
 			Interlocked.Increment(ref objectCount);
 			objectId = objectCount;
-			Debug.Log("This objects id is " + objectId);
+			//Debug.Log("This objects id is " + objectId);
 			previousPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
 			previousRot = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w);
 			networkManager.networkedObjects.Add(objectId, gameObject);

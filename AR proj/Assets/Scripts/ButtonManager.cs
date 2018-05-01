@@ -31,7 +31,7 @@ public class ButtonManager : MonoBehaviour {
 	}
 
 	public void ToggleOptions() {
-		Debug.Log("Toggle Options");
+		//Debug.Log("Toggle Options");
 
 		showingOptions = !showingOptions;
 		optionsPanelObject.SetActive (showingOptions);

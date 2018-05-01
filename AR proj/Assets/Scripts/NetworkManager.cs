@@ -154,11 +154,12 @@ public class NetworkManager : MonoBehaviour {
                     }
                     break;
                 case NetworkEventType.ConnectEvent: //AR connects
-                    Debug.Log("Connection request from id: " + connectionId + " Received");
+                    //Debug.Log("Connection request from id: " + connectionId + " Received");
                     if(isHost){
                         HandleConnect(connectionId);
                     } else {
-						Debug.Log ("ConnectEvent triggered on AR side");
+						//Debug.Log ("ConnectEvent triggered on AR side");
+                        NetworkInterface.UpdateNetworkStatus("Connected!");
                         InvokeRepeating("SendEnemyDamage", 0.1f, 0.1f);
                         InvokeRepeating("SendARUpdate", 0.1f, 0.1f);
                         InvokeRepeating("SendPlayerHeal", 0.1f, 0.1f);
@@ -460,7 +461,8 @@ public class NetworkManager : MonoBehaviour {
     }
 
     private void HandleSpawnRequest(int assetId, Vector3 pos, Quaternion rot, Vector3 vel){
-        GameObject instance = Instantiate(spawnables[assetId], pos, rot);
+        //GameObject instance = 
+        Instantiate(spawnables[assetId], pos, rot);
     }
 
 
@@ -547,7 +549,7 @@ public class NetworkManager : MonoBehaviour {
         player.currentHealth = health;
     }
     private void HandleGameStateUpdate(GameState gameState) {
-        Debug.Log("GameState received " + gameState);
+        Debug.Log(Time.time + ": GameState received " + gameState);
         NetworkInterface.UpdateGameState(gameState);
     }
 

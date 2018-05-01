@@ -28,6 +28,7 @@ public class TextManager : MonoBehaviour {
 	private PlayerHealth playerHealth;
 	private Henge henge;
 	private UnityARCameraManager ARManager;
+	private GameManager gameManager;
 	
 	private Text networkText;
 	private Text framerateText;
@@ -83,6 +84,7 @@ public class TextManager : MonoBehaviour {
 		ARManager = GameObject.FindObjectOfType<UnityARCameraManager>();
 		playerHealth = playerHealthObject.GetComponent<PlayerHealth>();
 		henge = hengeObject.GetComponent<Henge>();
+		gameManager = FindObjectOfType<GameManager>();
 
 		//frameTimes = new Queue<float>();
 	}
@@ -107,7 +109,7 @@ public class TextManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Arrays of strings displayed as debug information
-		String[] psDebug = new String[3];	//performance stats debug
+		String[] psDebug = new String[4];	//performance stats debug
 		String[] gsDebug = new String[4];	//game state debug
 
 		deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
@@ -140,6 +142,7 @@ public class TextManager : MonoBehaviour {
 		//psDebug[1] = String.Format("{0}\t{1})", frametimetotal, frametimecount);
 		psDebug[1] = String.Format("{0,-12}{1:0.0}/{2:0.0}/{3:0.0}"  ,"Min/Avg/Max:", fpsmin, fpsavg, fpsmax);
 		psDebug[2] = String.Format("{0,-12}{1}", "Network:", networkStatus);
+		psDebug[3] = String.Format("{0,-12}{1}", "GameState:", gameManager.GetGameState().ToString());
 
 
 		//Update Player health, Rune completion, Allies, Enemies debug text
@@ -156,7 +159,7 @@ public class TextManager : MonoBehaviour {
 		gsDebug[2] = String.Format("Allies:{0,5}", allies);
 		gsDebug[3] = String.Format("Enemies:{0,5}", enemies);
 
-		changeFramerateString(psDebug[0] + "\n" + psDebug[1] + "\n" + psDebug[2]);//+ "\n" + psDebug[3]);
+		changeFramerateString(psDebug[0] + "\n" + psDebug[1] + "\n" + psDebug[2] + "\n" + psDebug[3]);
 		changeGameStatusString(gsDebug[0] + "\n" + gsDebug[1] + "\n" + gsDebug[2] + "\n" + gsDebug[3]);
 
 
@@ -207,10 +210,8 @@ public class TextManager : MonoBehaviour {
 		positionTrackerText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", pos.x, pos.y, pos.z);
 	}
 
-	public void Pause() {
-		pausedTextPanel.SetActive(true);
-	}
-	public void Resume() {
-		pausedTextPanel.SetActive(false);
+	public void UpdatePanelText(string statusText, bool active) {
+		pausedTextPanel.GetComponentInChildren<Text>().text = statusText;
+		pausedTextPanel.SetActive(active);
 	}
 }

@@ -25,8 +25,6 @@ public class UnityARCameraNearFar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log(currentFarZ);
-		Debug.Log(attachedCamera.farClipPlane);
 		if (currentNearZ != attachedCamera.nearClipPlane || currentFarZ != attachedCamera.farClipPlane) {
 			UpdateCameraClipPlanes ();
 		}
