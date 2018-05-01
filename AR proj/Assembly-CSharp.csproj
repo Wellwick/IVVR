@@ -66,6 +66,7 @@
      <Compile Include="Assets\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\Rune.cs" />
      <Compile Include="Assets\Scripts\Shooting.cs" />
+     <Compile Include="Assets\Scripts\SunController.cs" />
      <Compile Include="Assets\Scripts\TextManager.cs" />
      <Compile Include="Assets\Scripts\UI_Dropdown.cs" />
      <Compile Include="Assets\UnityARKit\ARKitRemote\ARKitRemoteConnection.cs" />
