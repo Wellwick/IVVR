@@ -16,8 +16,9 @@ public class Rune : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		henge = GameObject.Find("Henge").GetComponent<Henge>();
-		if (henge == null) {
+        //henge = GameObject.Find("Henge").GetComponent<Henge>();
+        henge = FindObjectOfType<Henge>();
+        if (henge == null) {
 			Debug.LogError("Couldn't find the Henge for " + gameObject);
 		}
 	}

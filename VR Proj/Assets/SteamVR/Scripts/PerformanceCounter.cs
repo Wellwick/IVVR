@@ -31,6 +31,10 @@ public class PerformanceCounter : MonoBehaviour
             if (fps2 < minfps)  {
                 minfps = fps2;
             }
+            if (fps2 > maxfps)
+            {
+                maxfps = fps2;
+            }
         }
 
     }
@@ -48,6 +52,7 @@ public class PerformanceCounter : MonoBehaviour
         float msec = deltaTime * 1000.0f;
         float fps = 1.0f / deltaTime;
         string text = string.Format("{0:0.0} ms ({1:0.} fps), ({2:0.} fps)", msec, fps, fps2);
+        //text = text + "\n" + string.Format("min/max {0:0.}/{1:0.} fps", minfps, maxfps);
         GUI.Label(rect, text, style);
     }
 }

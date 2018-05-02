@@ -10,6 +10,7 @@ public class EnemyHealth : MonoBehaviour {
     public int transientHealthLoss;
     public GameObject cloak;
     public GameObject[] drops;
+    private bool runeDrop = true;
 
     private float alpha;
     private GameManager gameManager; 
@@ -22,6 +23,7 @@ public class EnemyHealth : MonoBehaviour {
         cloak = gameObject.transform.Find("Cloak").gameObject;
 
         gameManager = FindObjectOfType<GameManager>();
+        runeDrop = true;
     }
 
     public int GetHealth()
@@ -75,12 +77,13 @@ public class EnemyHealth : MonoBehaviour {
     {
         float interval = 0.05f;                 // rate at which the enemy's health will drop
         InvokeRepeating("DamageSelf", 0.0f, interval);
+        runeDrop = false;
     }
 
     void Death(){
 		int selection = Random.Range(0,drops.Length);
         GameObject drop = GameObject.FindObjectOfType<Henge>().GetItemDrop();
-        if (drop != null)
+        if (drop != null && runeDrop)
             GameObject.Instantiate(drop, transform.position, transform.rotation);
         GameObject.FindObjectOfType<EnemyManager>().enemyCount--;
         Destroy(gameObject);
