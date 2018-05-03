@@ -12,6 +12,7 @@ public class Henge : MonoBehaviour {
 	public GameObject smallDrop;
 
 	public Material properMaterial;
+    public Material transparentMaterial;
 	public int startingRunes = 6;
     public int verbose = 0;
 	private int activeRunes = 0;
@@ -19,7 +20,6 @@ public class Henge : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        gameObject.SetActive(false);
 	}
 
     public void Reset()
@@ -29,9 +29,16 @@ public class Henge : MonoBehaviour {
 
     public void Reset(int startingRunes)
     {
+        // Deactivate the portal!
+        MeshRenderer mr = baseRune.GetComponent<MeshRenderer>();
+        Material[] mats = mr.materials;
+        mats[0] = transparentMaterial;
+        mr.materials = mats;
+        portal.SetActive(false);
+
         gameObject.SetActive(true);
 
-        Log("Resetting Runes: Starting with already active: " + startingRunes);
+        Debug.Log("Resetting Runes: Starting with already active: " + startingRunes);
 
         // figure out how many runes we have in total
         totalRunes = smallRunes.Length + largeRunes.Length;
@@ -156,6 +163,12 @@ public class Henge : MonoBehaviour {
 	}
 
 	public GameObject GetItemDrop() {
+        /* Removed this because a death during pause means that an enemy should drop a rune
+         * This likely means that transient damage arrived after a pause had been started
+        if (GameObject.FindObjectOfType<GameManager>().GetGameState() != GameState.Active)
+            return null;
+        */
+
 		int smallDrops = 0;
 		int largeDrops = 0;
 

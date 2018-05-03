@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
 
     // Use this for initialization
     void Start () {
+        Debug.Log("difficulty: " + gameState);
         enemyManager = FindObjectOfType<EnemyManager>();
         networkManager = FindObjectOfType<NetworkManager>();
         henge = hengeObject.GetComponent<Henge>();
@@ -116,7 +117,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void TogglePause()
+    public void Pause()
     {
        switch (gameState)
         {
@@ -127,12 +128,27 @@ public class GameManager : MonoBehaviour
                 gameState = GameState.Paused;
                 break;
             case GameState.Paused:
+                //ResumeBeams();
+                //gameState = GameState.Active;
+                break;
+        }
+    }
+
+    public void Resume()
+    {
+        switch (gameState)
+        {
+            case GameState.NoGame:
+                break;
+            case GameState.Active:
+                //PauseBeams();
+                //gameState = GameState.Paused;
+                break;
+            case GameState.Paused:
                 ResumeBeams();
                 gameState = GameState.Active;
                 break;
-            
         }
-        
     }
 
     private void KillEnemies()

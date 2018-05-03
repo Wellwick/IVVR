@@ -3,18 +3,18 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
 
-	public Difficulty difficulty;
-
-    private SteamVR_TrackedController trackedObj;
+    public Difficulty difficulty;
     public GameObject mainMenu;
-	public GameObject optionsMenu;
+    public GameObject optionsMenu;
     public GameObject difficultyTextObject;
     public GameObject VRHeadset;
-
-    
     //Need the VRHeadset object so that we can query its position
     //We will display the menu in front of the player
-    
+    public float dist = 0.5f; //How far from the player the menu should be
+    public Vector3 menuOffset = new Vector3(0.0f, -0.25f, 0.0f); //menu should not be in a vertical plane imo
+
+    private SteamVR_TrackedController trackedObj;
+    private GameManager gameManager;
     private Text difficultyText;
     private bool mainMenuShowing = false;
     private bool optionsMenuShowing = false;
@@ -23,16 +23,21 @@ public class MenuManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        lastMenuButtonState = false;
+        mainMenuShowing = false;
+        optionsMenuShowing = false;
+
         optionsMenu.SetActive(optionsMenuShowing);
         difficultyText = difficultyTextObject.GetComponent<Text>();
         ChangeDifficulty((int)Difficulty.Medium);
+        gameManager = FindObjectOfType<GameManager>();
 	}
 
 
     private void Update()
     {
         if (WasMenuClicked()) {
-            //Debug.Log("Menu button pressed");
+            Debug.Log("Menu button pressed");
             if (mainMenuShowing) {
                 HideMenu();
             } else { 
@@ -56,8 +61,6 @@ public class MenuManager : MonoBehaviour {
     //Calculate where the menu should appear then toggle its parent gameobject
     private void ShowMenu()
     {
-        float dist = 4.0f; //How far from the player the menu should be
-        Vector3 menuOffset = new Vector3(0.0f, 1.0f, 0.0f); //menu should not be in a vertical plane imo
 
         Vector3 forward = Quaternion.Euler(0.0f, VRHeadset.transform.rotation.eulerAngles.y, 0.0f) * Vector3.forward;
         Vector3 menuPos = forward * dist + VRHeadset.transform.position + menuOffset;
@@ -72,6 +75,8 @@ public class MenuManager : MonoBehaviour {
         mainMenuShowing = true;
         mainMenu.SetActive(true);
 
+        gameManager.Pause();
+
     }
     private void HideMenu()
     {
@@ -80,6 +85,8 @@ public class MenuManager : MonoBehaviour {
 
         optionsMenuShowing = false;
         optionsMenu.SetActive(false);
+
+        gameManager.Resume();
     }
 
     void Awake()
@@ -105,6 +112,11 @@ public class MenuManager : MonoBehaviour {
 
         Debug.Log("Difficulty changed to " + difficulty.ToString());
     }
-    
+      
+    public void StartGameClicked()
+    {
+        gameManager.StartGame();
+        HideMenu();
+    }
 		
 }
