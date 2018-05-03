@@ -18,6 +18,11 @@ public class NetworkInterface : MonoBehaviour {
 	private static Beam HealBeam;
 	private static Beam DamageBeam;
 
+	private static Vector3 headsetPos;
+	private static Vector3 trackerPos;
+	private static Quaternion headsetRot;
+	private static Quaternion trackerRot;
+
 	void Start() {
 
 		//Debug.Log ("Starting Network Interface... <TextManager found>:" + (textManager != null) + " <ARCameraManager found>:" + (ARCameraManager != null));
@@ -112,8 +117,8 @@ public class NetworkInterface : MonoBehaviour {
 			ARCameraManager.updateTrackerPosition (pos);
 			ARCameraManager.updateTrackerRotation (rot);
 
-			textManager.updateTrackerPositionString (pos);
-			textManager.updateTrackerRotationString (rot);
+			textManager.updateTrackerPositionString (pos, headsetPos);
+			textManager.updateTrackerRotationString (rot, headsetRot);
 
 		} else {
 
@@ -127,6 +132,9 @@ public class NetworkInterface : MonoBehaviour {
 
 			ARCameraManager.updateHeadsetPosition (pos);
 			ARCameraManager.updateHeadsetRotation (rot);
+
+			headsetPos = pos;
+			headsetRot = rot;
 
 		} else {
 

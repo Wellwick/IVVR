@@ -43,6 +43,9 @@ public class TextManager : MonoBehaviour {
 	private Text positionCParentText;
 	private Text rotationCParentText;
 
+	private Vector3 tPos;
+	private Quaternion tRot;
+
 	//Queue<float> frameTimes;
 	//public int FrameQueueSize;
 
@@ -173,19 +176,25 @@ public class TextManager : MonoBehaviour {
 		Vector3 ARKitRotation = ARManager.getARKitRotation ().eulerAngles;
 		Vector3 cparentPosition = ARManager.m_camera.gameObject.transform.parent.transform.position;
 		Quaternion cparentRotation = ARManager.m_camera.gameObject.transform.parent.transform.rotation;
-
+		Vector3 cparentRotationE = ARManager.m_camera.gameObject.transform.parent.transform.rotation.eulerAngles;
 		/*
  		positionARKitText.text = "pos: {" + Math.Round(ARKitPosition.x, 2) + ", " + Math.Round(ARKitPosition.y, 2) + ", " + Math.Round(ARKitPosition.z, 2) + "}";
 		rotationARKitText.text = "rot: {" + Math.Round(ARKitRotation.x, 2) + ", " + Math.Round(ARKitRotation.y, 2) + ", " + Math.Round(ARKitRotation.z, 2) + "}";
 		positionEngineText.text = "pos: {" + Math.Round(enginePosition.x, 2) + ", " + Math.Round(enginePosition.y, 2) + ", " + Math.Round(enginePosition.z, 2) + "}";
 		rotationEngineText.text = "rot: {" + Math.Round(engineRotation.x, 2) + ", " + Math.Round(engineRotation.y, 2) + ", " + Math.Round(engineRotation.z, 2) + "}";
 		*/
+
+		Vector3 offsetPos= tPos - ARManager.gameObject.transform.position;
+		Vector3 offsetRot = (tRot * Quaternion.Inverse(ARManager.gameObject.transform.rotation)).eulerAngles;
+
 		positionARKitText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", ARKitPosition.x, ARKitPosition.y, ARKitPosition.z);
 		rotationARKitText.text = String.Format("rot: ({0:000}, {1:000}, {2:000})", ARKitRotation.x, ARKitRotation.y, ARKitRotation.z);
 		positionEngineText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", enginePosition.x, enginePosition.y, enginePosition.z);
 		rotationEngineText.text = String.Format("rot: ({0:000}, {1:000}, {2:000})", engineRotation.x, engineRotation.y, engineRotation.z);
-		positionCParentText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", cparentPosition.x, cparentPosition.y, cparentPosition.z);
-		rotationCParentText.text = String.Format("rot: ({0:000}, {1:000}, {2:000})", cparentRotation.x, cparentRotation.y, cparentRotation.z);
+		positionCParentText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", cparentPosition.x, cparentPosition.y, cparentPosition.z) +
+								String.Format("\nfP: ({0:0.0}, {1:0.0}, {2:0.0})", offsetPos.x, offsetPos.y, offsetPos.z);
+		rotationCParentText.text = String.Format("rot: ({0:000}, {1:000}, {2:000})", cparentRotationE.x, cparentRotationE.y, cparentRotationE.z) +
+								String.Format("\nofR: ({0:0.0}, {1:0.0}, {2:0.0})", offsetRot.x, offsetRot.y, offsetRot.z);
 	}
 	public void updateLatency(int latency) {
 		this.latency = latency;
@@ -202,12 +211,18 @@ public class TextManager : MonoBehaviour {
 		networkText.text = networkString;
 		networkStatus = networkString;
 	}
-	public void updateTrackerRotationString(Quaternion rot) {
-		Vector3 rotVec = rot.eulerAngles;
-		rotationTrackerText.text = String.Format("pos: ({0:000}, {1:000}, {2:000})", rotVec.x, rotVec.y, rotVec.z);
+	public void updateTrackerRotationString(Quaternion tRot, Quaternion hRot) {
+		this.tRot = tRot;
+
+		Vector3 tRotVec = tRot.eulerAngles;
+		Vector3 hRotVec = hRot.eulerAngles;
+		rotationTrackerText.text = String.Format("tRot: ({0:000}, {1:000}, {2:000})", tRotVec.x, tRotVec.y, tRotVec.z) +
+					String.Format("\nhRot: ({0:000}, {1:000}, {2:000})", hRotVec.x, hRotVec.y, hRotVec.z);
 	}
-	public void updateTrackerPositionString(Vector3 pos) {
-		positionTrackerText.text = String.Format("pos: ({0:0.0}, {1:0.0}, {2:0.0})", pos.x, pos.y, pos.z);
+	public void updateTrackerPositionString(Vector3 tPos, Vector3 hPos) {
+		this.tPos = tPos;
+		positionTrackerText.text = String.Format("tPos: ({0:0.0}, {1:0.0}, {2:0.0})", tPos.x, tPos.y, tPos.z) +
+					String.Format("\nhPos: ({0:0.0}, {1:0.0}, {2:0.0})", hPos.x, hPos.y, hPos.z);
 	}
 
 	public void UpdatePanelText(string statusText, bool active) {

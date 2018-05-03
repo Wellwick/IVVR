@@ -224,6 +224,21 @@ public class NetworkManager : MonoBehaviour {
 
     /* So, I figure that this might be necessary for this network manager, if it wants to work for AR as well */
     #region Request Functions
+
+/* 
+    // Wrapper for NetworkTransport.Send (to avoid warnings coming up in the form)
+    // Attempting to send to not connected connection
+    private bool TrySend(int socketId, int connectionId, int myReliableChannelId, Byte[] data, int size, out byte error2) {
+        try {
+            return NetworkTransport.Send(socketId, connectionId, myReliableChannelId, data, 1024, out error2);
+        } catch (Exception e) {
+
+        }
+        return false;
+
+    }*/
+
+
     public bool RequestSpawn(int assetId, Transform transform, int hostId){
         byte error;
         DemoCoder encoder = new DemoCoder(50);
@@ -545,7 +560,7 @@ public class NetworkManager : MonoBehaviour {
 
         PlayerHealth player = GameObject.FindObjectOfType<PlayerHealth>();
         player.gameObject.transform.parent.position = pos;
-        player.gameObject.transform.parent.rotation = rot;
+        player.gameObject.transform.parent.rotation = new Quaternion(rot.x, rot.y, rot.z, rot.w);
         player.currentHealth = health;
     }
     private void HandleGameStateUpdate(GameState gameState) {
