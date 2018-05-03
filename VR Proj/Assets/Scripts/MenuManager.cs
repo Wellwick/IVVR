@@ -10,6 +10,8 @@ public class MenuManager : MonoBehaviour {
     public GameObject VRHeadset;
     //Need the VRHeadset object so that we can query its position
     //We will display the menu in front of the player
+    public float dist = 0.5f; //How far from the player the menu should be
+    public Vector3 menuOffset = new Vector3(0.0f, -0.25f, 0.0f); //menu should not be in a vertical plane imo
 
     private SteamVR_TrackedController trackedObj;
     private GameManager gameManager;
@@ -59,8 +61,6 @@ public class MenuManager : MonoBehaviour {
     //Calculate where the menu should appear then toggle its parent gameobject
     private void ShowMenu()
     {
-        float dist = 4.0f; //How far from the player the menu should be
-        Vector3 menuOffset = new Vector3(0.0f, 1.0f, 0.0f); //menu should not be in a vertical plane imo
 
         Vector3 forward = Quaternion.Euler(0.0f, VRHeadset.transform.rotation.eulerAngles.y, 0.0f) * Vector3.forward;
         Vector3 menuPos = forward * dist + VRHeadset.transform.position + menuOffset;

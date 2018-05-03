@@ -70,11 +70,11 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SunStrength: 15.9
+    - _SunStrength: 15.92
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.5813148, g: 0.79346144, b: 0.8235294, a: 0.816}
+    - _Color: {r: 0.065743946, g: 0.11660846, b: 0.453, a: 0.597}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GroundColor: {r: 0.33823526, g: 0.6764706, b: 0.59249496, a: 1}
-    - _SunTint: {r: 0.77205884, g: 0.011353771, b: 0.011353771, a: 1}
+    - _GroundColor: {r: 0.24532424, g: 0.16663063, b: 0.49264705, a: 1}
+    - _SunTint: {r: 0.6522312, g: 0.40830448, b: 0.86764705, a: 1}
