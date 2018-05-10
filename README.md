@@ -1,3 +1,7 @@
+# Networked Virtual and Augmented Reality Framework
+
+This is developed framework and example demo implementation for a networked virtual and augmented reality framework, making use of the iOS ARKit and the SteamVR plugins. Below is some critical information which was required for developing on our system of choice, Linux!
+
 # Starting SteamVR
 
 Steam VR can be booted with the aliased command `VR`. Make sure that you always run Room Setup when you set up the lighthouses again and make sure to have the tracker's dongle attached to the machine which is running SteamVR. Also make sure that you run VR before you run any VR programs, or it will break!
@@ -9,11 +13,7 @@ Steam VR can be booted with the aliased command `VR`. Make sure that you always 
 > DO NOT RUN STEAM IF YOU DON'T KNOW WHAT YOU ARE DOING!
 
 To boot Steam from the terminal type `steam`.
-Either provide your own personal login, or use the group account:
-
-> Username: ivvrgrp
-
-> Password: r3a7itY#
+Either provide your own personal login, or use the group account
 
 ## SteamVR additional information
 
