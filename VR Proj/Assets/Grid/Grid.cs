@@ -71,8 +71,14 @@ public class Grid : MonoBehaviour {
         }
     }
 
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	public bool CubeExists(int x, int y, int z)
+    {
+        if (x < width && x >= 0 && y < height && y >= -1 && z < depth && z >= 0)
+        {
+            return cubes[x, y, z] != null;
+        } else
+        {
+            return false;
+        }
+    }
 }
