@@ -62,10 +62,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Grid\AimSpawn.cs" />
+    <Compile Include="Assets\Grid\BuildCoder.cs" />
     <Compile Include="Assets\Grid\BuildNetwork.cs" />
     <Compile Include="Assets\Grid\Cube.cs" />
     <Compile Include="Assets\Grid\Grid.cs" />
-    <Compile Include="Assets\Grid\MiniCoder.cs" />
     <Compile Include="Assets\Scripts\ARClient.cs" />
     <Compile Include="Assets\Scripts\Beam.cs" />
     <Compile Include="Assets\Scripts\Coder.cs" />

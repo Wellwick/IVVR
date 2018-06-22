@@ -65,6 +65,20 @@ public class DemoCoder : Coder {
         addSerial(type, -1, health, transform);
     }
 
+    public void addLeftController(Transform transform)
+    {
+        byte type = (byte)NetworkManager.MessageIdentity.Type.LeftController;
+
+        addSerial(type, -1, -1, transform);
+    }
+
+    public void addRightController(Transform transform)
+    {
+        byte type = (byte)NetworkManager.MessageIdentity.Type.RightController;
+
+        addSerial(type, -1, -1, transform);
+    }
+
     public GameState GetGameState(int index)
     {
         return (GameState)GetAssetID(index);

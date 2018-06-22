@@ -354,6 +354,8 @@ public class NetworkManager : MonoBehaviour {
             }
 
             encoder.addVREyeUpdate(VREye.GetComponent<PlayerHealth>().currentHealth, VREye.transform);
+            encoder.addLeftController(leftController.transform);
+            encoder.addRightController(rightController.transform);
             //Debug.Log("Sending Tracker info to client " + kvp.Key);
             foreach(KeyValuePair<int, GameObject> kvp2 in ARPlayers){
                 if(kvp2.Key != kvp.Key){
@@ -567,6 +569,9 @@ public class NetworkManager : MonoBehaviour {
             VREyeUpdate = 10,
             Ping = 11,
             GameState = 12,
+            LeftController = 13,
+            RightController = 14,
+
         }
     }
 

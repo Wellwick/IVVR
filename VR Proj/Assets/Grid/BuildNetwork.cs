@@ -143,22 +143,25 @@ public class BuildNetwork : MonoBehaviour
                     Debug.Log("Data Received");
 
                     //create coder for the purpose of decoding
-                    MiniCoder decoder = new MiniCoder(recBuffer);
+                    BuildCoder decoder = new BuildCoder(recBuffer);
                     if (channelId == myReliableChannelId)
                     {
-                        int x = decoder.GetX();
-                        int y = decoder.GetY();
-                        int z = decoder.GetZ();
-
-                        if (!grid.CubeExists(x, y, z))
+                        for (int i = 0; i < decoder.getCount(); i++)
                         {
-                            grid.AddCube(x, y, z);
-                            if (isHost) SendSpawn(x, y, z);
+                            int x = decoder.GetX(i);
+                            int y = decoder.GetY(i);
+                            int z = decoder.GetZ(i);
+
+                            if (!grid.CubeExists(x, y, z))
+                            {
+                                grid.AddCube(x, y, z);
+                                if (isHost) SendSpawn(x, y, z);
+                            }
                         }
                     }
                     else
                     { // It's info on AR player pos
-                        HandleARPosition(connectionId, decoder.getPos(), decoder.getRot());
+                        HandleARPosition(connectionId, decoder.GetPosition(1), decoder.GetRotation(1));
                     }
 
                     break;
@@ -179,8 +182,9 @@ public class BuildNetwork : MonoBehaviour
     {
         if (!isHost)
         {
-            MiniCoder encoder = new MiniCoder(x, y, z);
-            Send(hostId, myReliableChannelId, encoder.GetArray());         // Send message to VR server
+            BuildCoder encoder = new BuildCoder(1);
+            encoder.AddCube(x, y, z);
+            Send(hostId, myReliableChannelId, encoder.getArray());         // Send message to VR server
             return true;
         }
         return false;
@@ -212,10 +216,11 @@ public class BuildNetwork : MonoBehaviour
     // Send spawn command to AR players
     public void SendSpawn(int x, int y, int z)
     {
-        MiniCoder encoder = new MiniCoder(x, y, z);
+        BuildCoder encoder = new BuildCoder(1);
+        encoder.AddCube(x, y, z);
         foreach (KeyValuePair<int, GameObject> player in ARPlayers)
         {
-            Send(player.Key, myReliableChannelId, encoder.GetArray());                                      // Send serialized information down the reliable channel
+            Send(player.Key, myReliableChannelId, encoder.getArray());                                      // Send serialized information down the reliable channel
         }
     }
 
@@ -256,8 +261,9 @@ public class BuildNetwork : MonoBehaviour
                 {
                     if (grid.CubeExists(x,y,z))
                     {
-                        MiniCoder encoder = new MiniCoder(x, y, z);
-                        Send(connectionId, myReliableChannelId, encoder.GetArray());
+                        BuildCoder encoder = new BuildCoder(1);
+                        encoder.AddCube(x, y, z);
+                        Send(connectionId, myReliableChannelId, encoder.getArray());
                     }
                 }
             }
@@ -426,7 +432,7 @@ public class BuildNetwork : MonoBehaviour
             Remove = 3,
             Request = 4,
             ARPosition = 6,
-            VRPosition = 7,
+            VRPosition = 7
         }
     }
 

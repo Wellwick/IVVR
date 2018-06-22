@@ -68,7 +68,7 @@ public class Coder{
 
     }
 
-    private void writeIn(int value, int pos) {
+    public void writeIn(int value, int pos) {
         byte[] writeIn = BitConverter.GetBytes(value);
         for (int i = 0; i < writeIn.Length; i++) {
             buff[i+pos] = writeIn[i];
