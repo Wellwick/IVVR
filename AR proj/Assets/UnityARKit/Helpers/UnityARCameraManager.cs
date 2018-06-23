@@ -271,21 +271,19 @@ public class UnityARCameraManager : MonoBehaviour {
 		arkitPosAC = lastPosARKit;
 		arkitRotAC = lastRotARKit;
 
-		Debug.Log("headset position: " + headset_position);
-		Debug.Log("headset rotation: " + headset_rotation);
-
 		Vector4 target_position;
 		Quaternion target_rotation;
 
 		if (tracking == TrackingType.TrackerCalibration) {
-			target_position = tracker_position ;
+			target_position = tracker_position;
 			target_rotation = tracker_rotation;
 		} else {//if (tracking == TrackingType.HeadsetCalibration) {
 
 			//Must flip rotation because phone and headset are placed opposite each other for calibration.
-			//target_rotation = headset_rotation;
-			target_rotation = headset_rotation; //Quaternion.Euler(-headset_rotation.eulerAngles);
-			target_position = headset_position ;
+			//do this by constructing a quaternion with up vector and reversed forward vector of the headset.
+			Debug.Log("Attempting to perform headset calibration");
+			target_rotation = Quaternion.LookRotation(headset_rotation * -Vector3.forward , headset_rotation * Vector3.up); 
+			target_position = headset_position;
 
 		}
 

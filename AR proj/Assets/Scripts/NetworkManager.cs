@@ -50,6 +50,7 @@ public class NetworkManager : MonoBehaviour {
     public GameObject throwBall;
     public GameObject wallDemo;
     public GameObject tracker;
+    public bool lightsabreState = false;
 
     [Header("Debug")]
     //public bool showPing = false;
@@ -99,7 +100,21 @@ public class NetworkManager : MonoBehaviour {
 
     #region Start
 
+    private void SetLightsabres(bool lightsabreState) {
+        leftController.GetComponentInChildren<MeshRenderer>().enabled = lightsabreState;
+        rightController.GetComponentInChildren<MeshRenderer>().enabled = lightsabreState;
+    }
+
+    public void ToggleLightsabres() {
+        lightsabreState = !lightsabreState;
+        SetLightsabres(lightsabreState);
+    }
+
+
 	void Start () {
+        SetLightsabres(lightsabreState);
+
+
         if(isHost){
             clientIds = new int[MAX_CONNECTIONS];
         }
@@ -159,6 +174,7 @@ public class NetworkManager : MonoBehaviour {
                         HandleConnect(connectionId);
                     } else {
 						//Debug.Log ("ConnectEvent triggered on AR side");
+                        NetworkInterface.HandleConnected();
                         NetworkInterface.UpdateNetworkStatus("Connected!");
                         InvokeRepeating("SendEnemyDamage", 0.1f, 0.1f);
                         InvokeRepeating("SendARUpdate", 0.1f, 0.1f);
@@ -172,6 +188,8 @@ public class NetworkManager : MonoBehaviour {
                     for(int i = 0; i < decoder.getCount(); i++){
                         switch (decoder.GetType(i)){
                             case (byte)MessageIdentity.Type.Initialise:
+                                //AR player receives initial message, consider connected
+                                NetworkInterface.HandleConnected();
                                 HandleClientSpawn(decoder.GetAssetID(i),decoder.GetID(i),decoder.GetPosition(i), decoder.GetRotation(i), decoder.GetVelocity(i));
                                 break;
                             case (byte)MessageIdentity.Type.Update:
@@ -204,11 +222,20 @@ public class NetworkManager : MonoBehaviour {
                             case (byte)MessageIdentity.Type.GameState:
                                 HandleGameStateUpdate(decoder.GetGameState(i));
                                 break;
+                            case (byte)MessageIdentity.Type.LeftController:
+                                leftController.transform.rotation = decoder.GetRotation(i);
+                                leftController.transform.position = decoder.GetPosition(i);
+                                break;
+                            case (byte)MessageIdentity.Type.RightController:
+                                rightController.transform.rotation = decoder.GetRotation(i);
+                                rightController.transform.position = decoder.GetPosition(i);
+                                break;
 
                         }
                     }
                     break;
                 case NetworkEventType.DisconnectEvent: //AR disconnects
+                    NetworkInterface.HandleDisconnected();
                     clientsConnected--;
                     networkInitialised = false;
 					Debug.Log("Disconnect Received");
@@ -602,7 +629,9 @@ public class NetworkManager : MonoBehaviour {
             GeneralUpdate = 9,
             VREyeUpdate = 10,
             Ping = 11,
-            GameState,
+            GameState = 12,
+            LeftController = 13,
+            RightController = 14
         }
 
     }

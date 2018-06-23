@@ -8,11 +8,13 @@ public class NetworkInterface : MonoBehaviour {
 	public GameObject HealBeamObject;
 	public GameObject DamageBeamObject;
 	public GameObject VRPlayer;
+	public Button ConnectButtonObject;
 	public Text IPinputFieldObject;
 
 	private static GameManager gameManager;
 	private static Shooting shooting;
 	private static Text IPinputField;
+	private static Button ConnectButton;
 	private static UnityARCameraManager ARCameraManager;
 	private static TextManager textManager;
 	private static Beam HealBeam;
@@ -29,6 +31,7 @@ public class NetworkInterface : MonoBehaviour {
 		HealBeam = HealBeamObject.GetComponent<Beam>();
 		DamageBeam = DamageBeamObject.GetComponent<Beam>();
 
+		ConnectButton = ConnectButtonObject;
 		gameManager = FindObjectOfType<GameManager>();
 		ARCameraManager = FindObjectOfType<UnityARCameraManager>();
 		textManager = FindObjectOfType<TextManager> ();
@@ -56,6 +59,13 @@ public class NetworkInterface : MonoBehaviour {
 	}
 
 
+	public static void HandleConnected() {
+		Debug.Log("handle connected event!");
+		ConnectButton.interactable = false;
+	}
+	public static void HandleDisconnected() {
+		ConnectButton.interactable = false;
+	}
 
 	
 
