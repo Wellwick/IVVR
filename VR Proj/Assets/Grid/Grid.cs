@@ -15,17 +15,19 @@ public class Grid : MonoBehaviour {
         for (int x = 0; x < width; x++) {
             for (int z = 0; z < depth; z++)
             {
-                AddCube(x, 0, z);
+                AddCube(x, 0, z, 0.0f, 0.0f);
             }
         }
 
 	}
 	
-    public void AddCube(int x, int y, int z)
+    public void AddCube(int x, int y, int z, float r, float gb)
     {
         if (x < width && x >= 0 && y < height && y >= -1 && z < depth && z >= 0)
         {
             GameObject cell = GameObject.Instantiate(cube, new Vector3(transform.position.x + (0.2f * x), transform.position.y + (0.2f * y), transform.position.z + (0.2f * z)), new Quaternion());
+            if (r != 0.0f) cell.GetComponent<MeshRenderer>().materials[0].color = new Color(r, gb, gb);
+            FindObjectOfType<BuildNetwork>().SendSpawn(x, y, z);
             if (y >= 0)
                 cubes[x, y, z] = cell;
 

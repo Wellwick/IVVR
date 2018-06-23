@@ -5,6 +5,7 @@ using UnityEngine;
 public class AimSpawn : MonoBehaviour {
     
     private SteamVR_TrackedController trackedObj;
+    public float x;
     public GameObject aimPrefab;
     public Grid grid;
     private GameObject aim;
@@ -24,6 +25,9 @@ public class AimSpawn : MonoBehaviour {
 	void Update () {
         try
         {
+            x = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x;
+            float r = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x;
+            float gb = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y;
             if (Controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad))
             {
                 RaycastHit hit;
@@ -50,12 +54,12 @@ public class AimSpawn : MonoBehaviour {
             {
                 // TODO spawn the object
                 // choose which of the sides it is
-                if (spawning == spawnFrom.right)            grid.AddCube(spawnFrom.GetX() + 1, spawnFrom.GetY(), spawnFrom.GetZ());
-                else if (spawning == spawnFrom.left)       grid.AddCube(spawnFrom.GetX() - 1, spawnFrom.GetY(), spawnFrom.GetZ());
-                else if (spawning == spawnFrom.front)       grid.AddCube(spawnFrom.GetX(), spawnFrom.GetY(), spawnFrom.GetZ() + 1);
-                else if (spawning == spawnFrom.back)        grid.AddCube(spawnFrom.GetX(), spawnFrom.GetY(), spawnFrom.GetZ() - 1);
-                else if (spawning == spawnFrom.above)       grid.AddCube(spawnFrom.GetX(), spawnFrom.GetY() + 1, spawnFrom.GetZ());
-                else if (spawning == spawnFrom.below)        grid.AddCube(spawnFrom.GetX(), spawnFrom.GetY() - 1, spawnFrom.GetZ());
+                if (spawning == spawnFrom.right)            grid.AddCube(spawnFrom.GetX() + 1, spawnFrom.GetY(), spawnFrom.GetZ(), r, gb);
+                else if (spawning == spawnFrom.left)        grid.AddCube(spawnFrom.GetX() - 1, spawnFrom.GetY(), spawnFrom.GetZ(), r, gb);
+                else if (spawning == spawnFrom.front)       grid.AddCube(spawnFrom.GetX(), spawnFrom.GetY(), spawnFrom.GetZ() + 1, r, gb);
+                else if (spawning == spawnFrom.back)        grid.AddCube(spawnFrom.GetX(), spawnFrom.GetY(), spawnFrom.GetZ() - 1, r, gb);
+                else if (spawning == spawnFrom.above)       grid.AddCube(spawnFrom.GetX(), spawnFrom.GetY() + 1, spawnFrom.GetZ(), r, gb);
+                else if (spawning == spawnFrom.below)       grid.AddCube(spawnFrom.GetX(), spawnFrom.GetY() - 1, spawnFrom.GetZ(), r, gb);
             }
         }
         catch (MissingReferenceException e)

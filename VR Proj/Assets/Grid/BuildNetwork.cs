@@ -60,7 +60,7 @@ public class BuildNetwork : MonoBehaviour
     private int selfId;                         // Own socket Id
     private bool networkInitialised = false;    // True if the network setup has completed
     private int clientsConnected = 0;           // Tracks the number of clients connected
-    private int hostId;
+    public int hostId;
 
 
 
@@ -119,7 +119,7 @@ public class BuildNetwork : MonoBehaviour
             int recHostId;                          // Own id
             int connectionId;                       // sender Id
             int channelId;                          // channel Id
-            int bufferSize = 28;                  // buffer size
+            int bufferSize = 52;                  // buffer size
             byte[] recBuffer = new byte[bufferSize]; //Receiving buffer
             int dataSize;                           //data size
             byte error;                             // error byte
@@ -154,7 +154,7 @@ public class BuildNetwork : MonoBehaviour
 
                             if (!grid.CubeExists(x, y, z))
                             {
-                                grid.AddCube(x, y, z);
+                                grid.AddCube(x, y, z, 0.0f, 0.0f);
                                 if (isHost) SendSpawn(x, y, z);
                             }
                         }
@@ -182,7 +182,7 @@ public class BuildNetwork : MonoBehaviour
     {
         if (!isHost)
         {
-            BuildCoder encoder = new BuildCoder(1);
+            BuildCoder encoder = new BuildCoder(52);
             encoder.AddCube(x, y, z);
             Send(hostId, myReliableChannelId, encoder.getArray());         // Send message to VR server
             return true;
@@ -216,8 +216,9 @@ public class BuildNetwork : MonoBehaviour
     // Send spawn command to AR players
     public void SendSpawn(int x, int y, int z)
     {
-        BuildCoder encoder = new BuildCoder(1);
+        BuildCoder encoder = new BuildCoder(52);
         encoder.AddCube(x, y, z);
+        Debug.Log("There are now " + encoder.getCount() + " items");
         foreach (KeyValuePair<int, GameObject> player in ARPlayers)
         {
             Send(player.Key, myReliableChannelId, encoder.getArray());                                      // Send serialized information down the reliable channel
@@ -261,9 +262,9 @@ public class BuildNetwork : MonoBehaviour
                 {
                     if (grid.CubeExists(x,y,z))
                     {
-                        BuildCoder encoder = new BuildCoder(1);
-                        encoder.AddCube(x, y, z);
-                        Send(connectionId, myReliableChannelId, encoder.getArray());
+                        //BuildCoder encoder = new BuildCoder(52);
+                        //encoder.AddCube(x, y, z);
+                        //Send(connectionId, myReliableChannelId, encoder.getArray());
                     }
                 }
             }
