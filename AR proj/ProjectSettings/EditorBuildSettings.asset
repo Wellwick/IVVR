@@ -11,6 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/UnityARKit/ARKitRemote/UnityARKitRemote.unity
     guid: 3ed73c0c9d4b76a418a0541c0cefd3ac
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Demo.unity
     guid: dd506e77790d54a698e9031c405ab647
+  m_configObjects: {}

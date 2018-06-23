@@ -21,7 +21,7 @@ public class DemoCoder : Coder {
     //updates on the enemy health
     public void addEnemyUpdate(int id, int health, Transform transform) {
         byte type = (byte)NetworkManager.MessageIdentity.Type.GeneralUpdate;
-        //replace assetId again with current health
+        //replace assetId again with current health..
         addSerial(type, id, health, transform);
     }
 

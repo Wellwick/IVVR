@@ -30,6 +30,10 @@ public class ButtonManager : MonoBehaviour {
 		//selectedObjectText = poseEstimationDropdownObject.GetComponentInChildren<Text>();
 	}
 
+	public void ToggleLightsabres() {
+		FindObjectOfType<NetworkManager>().ToggleLightsabres();
+	}
+
 	public void ToggleOptions() {
 		//Debug.Log("Toggle Options");
 
